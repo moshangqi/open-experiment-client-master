@@ -69,7 +69,7 @@ class BasicForm extends Component {
         delete payload.keys;
         delete payload.time;
 
-        //payload.anotherTeacherCodes为''，删除payload.anotherTeacherCodes这一属性
+        //payload.anotherTeacherCodes为''，删除payload.anotherTeacherCodes
         if (!payload.anotherTeacherCodes) {
           delete payload.anotherTeacherCodes;
         }
