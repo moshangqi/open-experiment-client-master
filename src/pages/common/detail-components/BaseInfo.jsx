@@ -3,7 +3,13 @@ import { RouteContext } from '@ant-design/pro-layout';
 import {Descriptions} from 'antd'
 import {experimentType,suggestGroupType,majorCollege,major, openType} from '@/utils/constant'
 import moment from 'moment'
-export default ({detail})=>(
+import { isEmpty } from '@/utils/utils';
+
+export default ({detail})=>{
+  if(isEmpty(detail)){
+    return <></>
+  }
+  return(
       <Descriptions  size="small" column={3} >
         <Descriptions.Item label="创建人">{detail.list.find(item=>item.code===detail.creatorId).realName}</Descriptions.Item>
         <Descriptions.Item label="开放实验室">{detail.labName}</Descriptions.Item>
@@ -35,4 +41,4 @@ export default ({detail})=>(
         <Descriptions.Item label="开放实验条件">{detail.experimentCondition}</Descriptions.Item>
         <Descriptions.Item label="是否开放选题">{openType[detail.isOpenTopic]}</Descriptions.Item>
       </Descriptions>
-);
+)};

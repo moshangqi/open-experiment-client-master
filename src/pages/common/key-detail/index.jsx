@@ -34,6 +34,7 @@ import Process from '../detail-components/Process'
 import { statusType, operationType, operationUnit, suggestGroupType } from '@/utils/constant';
 import Preview from '../detail-components/Preview';
 import History from '../detail-components/History'
+import { isEmpty } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -70,6 +71,21 @@ class Advanced extends Component {
     approvalType: 1,
     isPreview: false,
   };
+
+  componentWillMount(){
+    if(!isEmpty(this.props.detail)){
+      return
+    }
+    const {dispatch} = this.props
+    dispatch({
+      type:'detail/fetchNewDetail',
+      payload: JSON.parse(localStorage.getItem('payload-d'))
+    })
+    dispatch({
+      type:'detail/fetchNewProcess',
+      payload: JSON.parse(localStorage.getItem('payload-p'))
+    })
+  }
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -254,7 +270,7 @@ class Advanced extends Component {
             <div className={styles.main}>
               <GridContent>
                 {/* <Process/> */}
-                <Preview fileUrl={detail.fileUrl}/>
+                {isEmpty(detail)?<></>:<Preview fileUrl={detail.fileUrl}/>}
                 <Member memberList={detail.list} />
                 <Advice process={process} />
                 <History process={process}/>

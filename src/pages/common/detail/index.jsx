@@ -30,6 +30,7 @@ import Member from '../detail-components/Member';
 import Process from '../detail-components/Process'
 import History from '../detail-components/History'
 import { json } from 'body-parser';
+import {isEmpty} from '@/utils/utils'
 
 import {statusType,major,experimentType,suggestGroupType,operationType,operationUnit} from '@/utils/constant'
 
@@ -85,10 +86,22 @@ class Advanced extends Component {
     approvalType:1
   };
 
-  componentDidMount() {
-    const { dispatch } = this.props;
- 
+  componentWillMount(){
+    console.log('???'+isEmpty(this.props.detail))
+    if(!isEmpty(this.props.detail)){
+      return
+    }
+    const {dispatch} = this.props;
+    dispatch({
+      type:'detail/fetchNewDetail',
+      payload: JSON.parse(localStorage.getItem('payload-d'))
+    })
+    dispatch({
+      type:'detail/fetchNewProcess',
+      payload: JSON.parse(localStorage.getItem('payload-p'))
+    })
   }
+
   handleModalOk = ()=>{
     const {dispatch,role,detail:{id},unit} = this.props
     const {approvalType} = this.state

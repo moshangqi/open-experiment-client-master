@@ -38,6 +38,7 @@ import Fileview from "@/pages/project-s/manage/overproject/components/Fileview";
 import Picview from "./components/Picview";
 import Equipmentview from "./components/Equipmentview";
 import OutCome from "./components/OutCome";
+import { isEmpty } from '@/utils/utils';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -75,6 +76,21 @@ class OverProject extends Component {
     approvalType: 1,
     isPreview: false,
   };
+
+  componentWillMount(){
+    if(!isEmpty(this.props.detail)){
+      return
+    }
+    const {dispatch} = this.props;
+    dispatch({
+      type:'detail/fetchNewDetail',
+      payload: JSON.parse(localStorage.getItem('payload-d'))
+    })
+    dispatch({
+      type:'detail/fetchNewProcess',
+      payload: JSON.parse(localStorage.getItem('payload-p'))
+    })
+  }
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -360,11 +376,11 @@ class OverProject extends Component {
                   {/* <span>服务器数据异常，正在紧急修复中...</span> */}
 
                 </Card>
-                <Preview/>
-                <Fileview fileUrl={detail.overurl}/>
-                <Equipmentview/>
+                {isEmpty(detail)?<></>:<Preview/>}
+                {isEmpty(detail)?<></>:<Fileview fileUrl={detail.overurl}/>}
+                {isEmpty(detail)?<></>:<Equipmentview/>}
                 <Picview />
-                <OutCome />
+                {isEmpty(detail)?<></>:<OutCome />}
                 <Member memberList={detail.list} />
                 <Advice process={process} />
                 <History process={process}/>

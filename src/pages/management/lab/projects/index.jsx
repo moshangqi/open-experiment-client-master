@@ -26,6 +26,7 @@ import StandardTable from './components/StandardTable';
 import {experimentType, openType} from '@/utils/constant'
 import {projectType} from '@/utils/constant'
 import styles from './style.less';
+import { isEmpty } from '@/utils/utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;

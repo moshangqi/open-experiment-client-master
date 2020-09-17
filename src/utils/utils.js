@@ -21,3 +21,11 @@ export const isAntDesignProOrDev = () => {
   return isAntDesignPro();
 };
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
+
+
+export const isEmpty = (obj) =>{
+  if(Object.keys(obj).length === 0){
+    return true //如果对象为空返回true
+  }
+  return false
+}
