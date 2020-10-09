@@ -9,7 +9,7 @@ const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
 const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 
 //开发模式代理
-const proxyURL = 'http://192.168.1.100:8083'; //'http://220.167.105.201:8083'//172.23.252.212 //'http://192.168.43.153:8083' //'http://10.20.0.77:8083'
+const proxyURL = 'http://192.168.1.112:8083'; //'http://220.167.105.201:8083'//172.23.252.212 //'http://192.168.43.153:8083' //'http://10.20.0.77:8083'
 const proxyKeys = [
   '/anon',
   '/user/getMyInfo',
@@ -89,6 +89,9 @@ const proxyKeys = [
   '/project/getConclusionProject',
   '/project/selectConclusionKeyProjectByKeyword',
   '/project/selectConclusionByKeyword',
+  '/collegeReview/getCollegeReview',
+  '/collegeReview/collegeSetUpReview',
+  '/collegeReview/deleteCollegeReview',
 ];
 const proxyOptions = {
   target: proxyURL,
@@ -826,9 +829,22 @@ export default {
             //   authority:[5,6,7],
             //   routes: [
             {
-              name: '基本设置',
-              path: '/settings/basic',
-              component: './settings/basic',
+              name: '设置',
+              path: '/settings-s',
+              routes: [
+                {
+                  name: '基本设置',
+                  path: '/settings-s/basic',
+                  component: './settings/basic',
+                  icon: 'solution',
+                },
+                {
+                  name: '立项审批设置',
+                  path: '/settings-s/approval-c',
+                  component: './settings/approval-c',
+                  icon: 'solution',
+                },
+              ],
               icon: 'profile',
               authority: [6, 7],
             },
