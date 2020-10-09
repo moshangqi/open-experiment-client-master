@@ -31,7 +31,7 @@ import styles from './style.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const {confirm} = Modal
+const { confirm } = Modal;
 
 const getValue = obj =>
   Object.keys(obj)
@@ -59,7 +59,7 @@ class TableList extends Component {
     detailModalVisible: false,
     apply: {},
     setLeaderModalVisible: false,
-    role:'3'
+    role: '3',
   };
 
   columns = [
@@ -135,7 +135,9 @@ class TableList extends Component {
     // dispatch({
     //   type: 'applyStudents/fetch',
     // });
-    this.handleFilter();
+
+    //取消成员审批的第一次默认加载  this.handleFilter();
+    // this.handleFilter();
     dispatch({
       type: 'tprojects/fetch',
       payload: {},
@@ -327,11 +329,11 @@ class TableList extends Component {
     const { selectedRows } = this.state;
     confirm({
       title: '确认拒绝以下成员申请?',
-      content: `${selectedRows.map(item=>item.realName).join('、')}`,
+      content: `${selectedRows.map(item => item.realName).join('、')}`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk:()=> {
+      onOk: () => {
         let payload = selectedRows.map(item => {
           return {
             projectGroupId: item.id,
@@ -350,70 +352,65 @@ class TableList extends Component {
           selectedRows: [],
         });
       },
-      onCancel:()=> {
+      onCancel: () => {
         this.setState({
           selectedRows: [],
         });
       },
     });
-    
-    
   };
   handleRemove = () => {
     const { selectedRows } = this.state;
-    const { form,dispatch } = this.props;
+    const { form, dispatch } = this.props;
     confirm({
       title: `确定删除成员${selectedRows[0].realName}?`,
       content: `${selectedRows[0].projectName}`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk:()=>{
-        
+      onOk: () => {
         if (selectedRows.length > 1) {
-          message.warning('不能批量移除成员')
+          message.warning('不能批量移除成员');
           return;
+        }
+        let payload = {
+          projectId: selectedRows[0].id,
+          userId: selectedRows[0].code,
         };
-          let payload = {
-            projectId: selectedRows[0].id,
-            userId: selectedRows[0].code,
-          };
-          form.validateFields((err, values) => {
-            dispatch({
-              type: 'applyStudents/remove',
-              payload,
-              filterData: values,
-            });
+        form.validateFields((err, values) => {
+          dispatch({
+            type: 'applyStudents/remove',
+            payload,
+            filterData: values,
           });
-          this.setState({
-            selectedRows: [],
-          });
+        });
+        this.setState({
+          selectedRows: [],
+        });
       },
-      onCancel:()=> {
+      onCancel: () => {
         this.setState({
           selectedRows: [],
         });
       },
     });
-    
-    
   };
   handleSetLeader = () => {
     const { form } = this.props;
-    const { selectedRows,role } = this.state;
+    const { selectedRows, role } = this.state;
     if (selectedRows.length > 1) {
       message.warning('该操作不能批量进行');
       this.setState({
         selectedRows: [],
-        setLeaderModalVisible:false
+        setLeaderModalVisible: false,
       });
       return;
     }
-    if(!role){
-      message.warning('请选择角色')
+    if (!role) {
+      message.warning('请选择角色');
       this.setState({
         selectedRows: [],
-        setLeaderModalVisible:false
+        setLeaderModalVisible: false,
       });
       return;
     }
@@ -434,7 +431,7 @@ class TableList extends Component {
     });
     this.setState({
       selectedRows: [],
-      setLeaderModalVisible:false
+      setLeaderModalVisible: false,
     });
   };
   handleSearch = value => {
@@ -556,7 +553,7 @@ class TableList extends Component {
           </div>
           <Modal
             visible={setLeaderModalVisible}
-            onOk={()=>this.handleSetLeader()}
+            onOk={() => this.handleSetLeader()}
             onCancel={this.hideSetLeaderModal}
             width="400px"
           >

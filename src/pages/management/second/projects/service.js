@@ -1,11 +1,17 @@
 import request from '@/utils/request';
-const projectsUrl = ['/project/getPendingApprovalProjectBySecondaryUnit','/project/getToBeReportedProjectBySecondaryUnit','/project/getHistoricalProjectInfoByUnitAndOperation','/project/getHistoricalProjectInfoByUnitAndOperation']
+const projectsUrl = [
+  '/project/getPendingApprovalProjectBySecondaryUnit',
+  '/project/getToBeReportedProjectBySecondaryUnit',
+  '/project/getHistoricalProjectInfoByUnitAndOperation',
+  '/project/getHistoricalProjectInfoByUnitAndOperation',
+];
 
 export async function reqSecondProjects(payload) {
-  return request(projectsUrl[payload.status],{
-    method:+payload.status<=1?'get':'post',
-    data:payload.data
-  })
+  console.log(projectsUrl[payload.status], payload.status, payload);
+  return request(projectsUrl[payload.status], {
+    method: +payload.status <= 1 ? 'get' : 'post',
+    data: payload.data,
+  });
 }
 export async function reqUpdateFunds(params) {
   return request('/funds/updateProjectApplyFundsBySecondaryUnit', {
@@ -16,12 +22,12 @@ export async function reqUpdateFunds(params) {
 export async function reqExportApplyExcel() {
   return request('/file/generateEstablishExcel', {
     method: 'POST',
-    responseType:'blob'
+    responseType: 'blob',
   });
 }
 export async function reqExportProjectInfoExcel() {
   return request('/file/generateProjectInfoExcel', {
     method: 'POST',
-    responseType:'blob'
+    responseType: 'blob',
   });
 }

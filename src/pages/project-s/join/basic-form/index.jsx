@@ -10,16 +10,16 @@ import {
   Select,
   Tooltip,
   TreeSelect,
-  Descriptions
-
+  Descriptions,
 } from 'antd';
 import React, { Component } from 'react';
-import BaseInfo from './cpmponents/BaseInfo'
-import { PageHeaderWrapper,RouteContext } from '@ant-design/pro-layout';
+import BaseInfo from './cpmponents/BaseInfo';
+import { PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import styles from './style.less';
 import { projectType, suggestGroupType, major, experimentType } from '@/utils/constant';
-import moment from 'moment'
+import moment from 'moment';
+import { isEmpty } from '@/utils/utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -29,7 +29,19 @@ const { TreeNode } = TreeSelect;
 let id = 0;
 
 class BasicForm extends Component {
-  state={}
+  state = {};
+
+  componentWillMount() {
+    if (!isEmpty(this.props.detail)) {
+      return;
+    }
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'detail/fetchDetail',
+      payload: JSON.parse(localStorage.getItem('payload-d')),
+    });
+  }
+
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
@@ -72,21 +84,20 @@ class BasicForm extends Component {
       keys: nextKeys,
     });
   };
-  handleApply = ()=>{
-    const { dispatch,detail, form } = this.props;
+  handleApply = () => {
+    const { dispatch, detail, form } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        values.projectGroupId = detail.id
+        values.projectGroupId = detail.id;
         dispatch({
           type: 'studentProjects/join',
           payload: values,
         });
       }
     });
-
-  }
+  };
   render() {
-    const { submitting,detail } = this.props;
+    const { submitting, detail } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -166,51 +177,79 @@ class BasicForm extends Component {
     //       />
     //     ) : null}
     //   </Form.Item>
-      
+
     // ));
     const content = (
       <RouteContext.Consumer>
         {({ isMobile }) => (
           <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
             <Descriptions.Item label="项目名称">{detail.projectName}</Descriptions.Item>
-            <Descriptions.Item label="指导老师">{detail.list.find(item=>item.code===detail.creatorId).realName}</Descriptions.Item>
+            <Descriptions.Item label="指导老师">
+              {detail.list.find(item => item.code === detail.creatorId).realName}
+            </Descriptions.Item>
             <Descriptions.Item label="开放实验室">{detail.labName}</Descriptions.Item>
             <Descriptions.Item label="地点">{detail.address}</Descriptions.Item>
             <Descriptions.Item label="实验类型">
               {experimentType[detail.experimentType]}
             </Descriptions.Item>
-            <Descriptions.Item label="实验时间">{moment(detail.startTime).format('YYYY-MM-DD')+'~'+moment(detail.endTime).format('YYYY-MM-DD')}</Descriptions.Item>
-            <Descriptions.Item label="项目级别">{detail.projectType===1?"重点":"普通"}</Descriptions.Item>
-            <Descriptions.Item label="建议审分组">{suggestGroupType[detail.suggestGroupType]}</Descriptions.Item>
+            <Descriptions.Item label="实验时间">
+              {moment(detail.startTime).format('YYYY-MM-DD') +
+                '~' +
+                moment(detail.endTime).format('YYYY-MM-DD')}
+            </Descriptions.Item>
+            <Descriptions.Item label="项目级别">
+              {detail.projectType === 1 ? '重点' : '普通'}
+            </Descriptions.Item>
+            <Descriptions.Item label="建议审分组">
+              {suggestGroupType[detail.suggestGroupType]}
+            </Descriptions.Item>
             {/* <Descriptions.Item label="适应专业">{JSON.parse(detail.limitMajor).map(item=>major[item-1].mName).join('、')}</Descriptions.Item> */}
             <Descriptions.Item label="限定人数">{detail.fitPeopleNum}</Descriptions.Item>
             <Descriptions.Item label="成果及考核方式">{detail.achievementCheck}</Descriptions.Item>
             <Descriptions.Item label="计划实验小时">{detail.totalHours}</Descriptions.Item>
             <Descriptions.Item label="开放实验条件">{detail.experimentCondition}</Descriptions.Item>
-           
           </Descriptions>
         )}
       </RouteContext.Consumer>
     );
-    const Label = ({children})=><span><span style={{color:'red'}}>*</span>{children}</span>
+    const Label = ({ children }) => (
+      <span>
+        <span style={{ color: 'red' }}>*</span>
+        {children}
+      </span>
+    );
     return (
       <PageHeaderWrapper
-      content={<BaseInfo detail={detail}/>}
-      extra={<Button onClick={()=>{this.props.history.goBack()}}>返回</Button>}
+        content={<BaseInfo detail={detail} />}
+        extra={
+          <Button
+            onClick={() => {
+              this.props.history.goBack();
+            }}
+          >
+            返回
+          </Button>
+        }
       >
         <Card
-        bordered={false}
-        title='项目主要内容'
-        style={{
-          marginBottom:25
-        }}
+          bordered={false}
+          title="项目主要内容"
+          style={{
+            marginBottom: 25,
+          }}
         >
           {detail.mainContent}
-
         </Card>
-        <Card 
-        bordered={false}
-        title={<span>申请表 <span style={{fontSize:14,color:'#aaa',marginLeft:10}}>(申请前请先完善个人信息)</span></span>}
+        <Card
+          bordered={false}
+          title={
+            <span>
+              申请表{' '}
+              <span style={{ fontSize: 14, color: '#aaa', marginLeft: 10 }}>
+                (申请前请先完善个人信息)
+              </span>
+            </span>
+          }
         >
           <Form
             onSubmit={this.handleSubmit}
@@ -219,7 +258,6 @@ class BasicForm extends Component {
               marginTop: 8,
             }}
           >
-            
             {/* <FormItem {...formItemLayout} label="姓名">
               {getFieldDecorator('projectName', {
                 rules: [
@@ -294,7 +332,7 @@ class BasicForm extends Component {
                 ],
               })(<Input placeholder="请输入联系电话" />)}
             </FormItem> */}
-            
+
             <FormItem {...formItemLayout} label={<Label>个人特长</Label>}>
               {getFieldDecorator('personalJudge', {
                 rules: [
@@ -303,23 +341,17 @@ class BasicForm extends Component {
                     message: '请输入个人特长',
                   },
                   {
-                    min:10,
-                    message:"字数不能少于10"
+                    min: 10,
+                    message: '字数不能少于10',
                   },
                   {
-                    max:199,
-                    message:"字数不能超过200"
+                    max: 199,
+                    message: '字数不能超过200',
                   },
                 ],
-              })(
-                <TextArea
-      
-                  placeholder="请输入个人特长"
-                  rows={6}
-                />,
-              )}
+              })(<TextArea placeholder="请输入个人特长" rows={6} />)}
             </FormItem>
-            
+
             {/* <FormItem {...formItemLayout} label={<Label>已修课程及具备知识</Label>}>
               {getFieldDecorator('technicalRole', {
                 rules: [
@@ -545,7 +577,7 @@ class BasicForm extends Component {
               {getFieldDecorator('weight')(<InputNumber placeholder="请输入" min={0} max={100} />)}
               <span className="ant-form-text">%</span>
             </FormItem> */}
-            
+
             {/* <FormItem
             {...formItemLayout}
             label="已修课程成绩"
@@ -580,8 +612,8 @@ class BasicForm extends Component {
 }
 
 export default Form.create()(
-  connect(({ loading,detail }) => ({
+  connect(({ loading, detail }) => ({
     submitting: loading.effects['formBasicForm/submitRegularForm'],
-    detail:detail.baseInfo
+    detail: detail.baseInfo,
   }))(BasicForm),
 );

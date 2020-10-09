@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row,Select } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
 import React, { Component } from 'react';
 import omit from 'omit.js';
 import ItemMap from './map';
@@ -117,8 +117,6 @@ class WrapFormItem extends Component {
     const options = this.getFormItemOptions(this.props);
     const otherProps = restProps || {};
 
-
-
     if (type === 'Captcha') {
       const inputProps = omit(otherProps, ['onGetCaptcha', 'countDown']);
       return (
@@ -147,7 +145,7 @@ class WrapFormItem extends Component {
         <FormItem>
           <Row gutter={8}>
             <Col span={8}>
-              <img onClick={handleCaptchaPClick} src={imgSrc} alt=""/>
+              <img onClick={handleCaptchaPClick} src={imgSrc} alt="" />
             </Col>
             <Col span={16}>
               {getFieldDecorator(name, options)(<Input {...customProps} {...inputProps} />)}
@@ -161,19 +159,22 @@ class WrapFormItem extends Component {
       const inputProps = omit(otherProps, ['onGetCaptcha', 'countDown']);
       return (
         <FormItem>
-
-          {getFieldDecorator(name, options)(<Select
-            placeholder="请选择角色类型"
-          >
-            <Option value="1">学生</Option>
-            <Option value="2">学生（项目组长）</Option>
-            <Option value="3">指导教师</Option>
-            <Option value="4">实验室主任</Option>
-            <Option value="5">二级单位（学院领导）</Option>
-            <Option value="6">职能部门</Option>
-            <Option value="7">职能部门领导</Option>
-            <Option value="9">学院结题评审老师</Option>
-          </Select>)}
+          {getFieldDecorator(
+            name,
+            options,
+          )(
+            <Select placeholder="请选择角色类型">
+              <Option value="1">学生</Option>
+              {/* <Option value="2">学生（项目组长）</Option> */}
+              <Option value="3">指导教师</Option>
+              <Option value="4">实验室主任</Option>
+              <Option value="5">二级单位（学院领导）</Option>
+              <Option value="6">职能部门</Option>
+              <Option value="7">职能部门领导</Option>
+              <Option value="9">学院结题评审老师</Option>
+              <Option value="11">立项评审老师</Option>
+            </Select>,
+          )}
         </FormItem>
       );
     }

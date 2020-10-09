@@ -92,6 +92,7 @@ const proxyKeys = [
   '/collegeReview/getCollegeReview',
   '/collegeReview/collegeSetUpReview',
   '/collegeReview/deleteCollegeReview',
+  '/permission/getCollegeUserInfoByCollege',
 ];
 const proxyOptions = {
   target: proxyURL,
@@ -809,6 +810,54 @@ export default {
               authority: [6, 7],
             },
             {
+              path: '/approval',
+              name: '立项评审',
+              icon: 'solution',
+              routes: [
+                {
+                  name: '普通项目立项审批',
+                  path: '/approval/project',
+                  component: './approval/project',
+                  icon: 'solution',
+                },
+                {
+                  name: '普通项目待审批详情',
+                  path: '/approval/project/detail',
+                  component: './common/detail',
+                  hideInMenu: true,
+                  icon: 'file-add',
+                },
+                {
+                  name: '重点项目立项审批',
+                  path: '/approval/keyproject',
+                  component: './approval/key-project',
+                  icon: 'solution',
+                },
+                {
+                  name: '重点项目立项审批详情',
+                  path: '/approval/keyproject/detail',
+                  component: './common/key-detail',
+                  hideInMenu: true,
+                  icon: 'file-add',
+                },
+                // {
+                //   name: '普通项目详情',
+                //   path: '/overcheckfunction/project/detail',
+                //   component: './project-s/manage/overproject',
+                //   hideInMenu: true,
+                //   icon: 'team',
+                // },
+                // {
+                //   name: '重点项目详情',
+                //   path: '/overcheckfunction/keyproject/detail',
+                //   component: './project-s/manage/overproject',
+                //   hideInMenu: true,
+                //   icon: 'team',
+                // },
+              ],
+              authority: [11],
+            },
+            {
               path: '/selfInformation/edit',
               name: '完善个人信息',
               component: './user-information',
@@ -877,6 +926,13 @@ export default {
               icon: 'file-text',
               hideInMenu: true,
               authority: [4, 6, 7],
+            },
+            {
+              name: '立项评审设置',
+              path: '/settings/college-a',
+              component: './settings/college-a/index.jsx',
+              icon: 'file-text',
+              authority: [4],
             },
             //   ],
             // },

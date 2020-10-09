@@ -16,7 +16,7 @@ import {
   Timeline,
   Select,
   message,
-  Descriptions
+  Descriptions,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
@@ -25,12 +25,12 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES6
 const FormItem = Form.Item;
-const {TextArea} = Input
+const { TextArea } = Input;
 /* eslint react/no-multi-comp:0 */
-@connect(({ listTableList, loading,announcement }) => ({
+@connect(({ listTableList, loading, announcement }) => ({
   listTableList,
   loading: loading.models.listTableList,
-  detail:announcement.detail
+  detail: announcement.detail,
 }))
 class TableList extends Component {
   state = {
@@ -40,43 +40,59 @@ class TableList extends Component {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    detailModalVisible:false,
-    text: ''
+    detailModalVisible: false,
+    text: '',
   };
 
-  
-  handleChange = (value) => {
-    this.setState({ text: value })
+  componentWillMount() {
+    if (this.props.detail.id) {
+      return;
+    }
+    const { dispatch, history } = this.props;
+    // dispatch({
+    //   type:'announcement/getDetail',
+    //   payload: history.loca
+    // })
+    dispatch({
+      type: 'announcement/getDetail',
+      payload: {
+        announcementId: history.location.query.id,
+      },
+    });
   }
-  render() {
-    const { form,detail } = this.props;
-    const { getFieldDecorator } = form;
-    
-    const title = <div>
-      <span>{detail.title}</span>
-    </div>
-    const extra = <div>
-      <Button type='primary' onClick={()=>{this.props.history.goBack()}}>返回</Button>
-    </div>
-    const cardExtra = <span>
-      发布日期 : {moment(detail.publishTime).format('YYYY-MM-DD HH:mm')}
-    </span>
-    return (
-      <PageHeaderWrapper
-      extra={extra}
-      
-      >
-        <Card
-          title={title}
-          extra={cardExtra}
-        >
-          <div dangerouslySetInnerHTML={{__html:detail.content}}>
 
-          </div>
-          
-          
+  handleChange = value => {
+    this.setState({ text: value });
+  };
+  render() {
+    const { form, detail } = this.props;
+    const { getFieldDecorator } = form;
+
+    const title = (
+      <div>
+        <span>{detail.title}</span>
+      </div>
+    );
+    const extra = (
+      <div>
+        <Button
+          type="primary"
+          onClick={() => {
+            this.props.history.goBack();
+          }}
+        >
+          返回
+        </Button>
+      </div>
+    );
+    const cardExtra = (
+      <span>发布日期 : {moment(detail.publishTime).format('YYYY-MM-DD HH:mm')}</span>
+    );
+    return (
+      <PageHeaderWrapper extra={extra}>
+        <Card title={title} extra={cardExtra}>
+          <div dangerouslySetInnerHTML={{ __html: detail.content }}></div>
         </Card>
-        
       </PageHeaderWrapper>
     );
   }

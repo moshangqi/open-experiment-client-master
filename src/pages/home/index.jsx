@@ -4,8 +4,9 @@ import { GridContent } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import PageLoading from './components/PageLoading';
 import { getTimeDistance } from './utils/utils';
-import OpenProjects from '../common/OpenProjects'
+import OpenProjects from '../common/OpenProjects';
 import styles from './style.less';
+import { addLeadingSlash } from 'history/PathUtils';
 // import Projects from '@/pages/account/center/components/Projects';
 
 const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
@@ -15,31 +16,31 @@ const ProportionSales = React.lazy(() => import('./components/ProportionSales'))
 // const OfflineData = React.lazy(() => import('./components/OfflineData'));
 const salePieData = [
   {
-    x:'科研',
-    y:136
+    x: '科研',
+    y: 136,
   },
   {
-    x:'科技活动',
-    y:87
+    x: '科技活动',
+    y: 87,
   },
   {
-    x:'自选课题',
-    y:99
+    x: '自选课题',
+    y: 99,
   },
   {
-    x:'计算机应用',
-    y:198
+    x: '计算机应用',
+    y: 198,
   },
   {
-    x:'人文素质',
-    y:66
+    x: '人文素质',
+    y: 66,
   },
-]
-@connect(({ dashboardAnalysis, loading ,openProjects,announcement}) => ({
+];
+@connect(({ dashboardAnalysis, loading, openProjects, announcement }) => ({
   dashboardAnalysis,
   loading: loading.effects['dashboardAnalysis/fetch'],
-  projects:openProjects.projects,
-  announcements:announcement.data
+  projects: openProjects.projects,
+  announcements: announcement.data,
 }))
 class Analysis extends Component {
   state = {
@@ -63,11 +64,11 @@ class Analysis extends Component {
       type: 'openProjects/fetchProjects',
     });
     dispatch({
-      type:'announcement/fetch'
-    })
+      type: 'announcement/fetch',
+    });
     dispatch({
-      type:'openProjects/getMessageTips'
-    })
+      type: 'openProjects/getMessageTips',
+    });
   }
 
   componentWillUnmount() {
@@ -110,18 +111,17 @@ class Analysis extends Component {
       type: 'dashboardAnalysis/fetchSalesData',
     });
   };
-  handleView = (id)=>{
-    console.log(id)
-    const {dispatch} = this.props
+  handleView = id => {
+    console.log(id);
+    const { dispatch } = this.props;
     dispatch({
-      type:'announcement/getDetail',
-      payload:{
-        announcementId:id
-      }
-    })
-    this.props.history.push('/announcement/detail')
-
-  }
+      type: 'announcement/getDetail',
+      payload: {
+        announcementId: id,
+      },
+    });
+    this.props.history.push(`/announcement/detail?id=${id}`);
+  };
   isActive = type => {
     const { rangePickerValue } = this.state;
     const value = getTimeDistance(type);
@@ -142,10 +142,9 @@ class Analysis extends Component {
 
   render() {
     const { rangePickerValue, salesType, currentTabKey } = this.state;
-    const { dashboardAnalysis, loading ,projects,announcements} = this.props;
-    console.log(projects)
+    const { dashboardAnalysis, loading, projects, announcements } = this.props;
+    console.log(projects);
     // const {
-
 
     //   searchData,
     //   offlineData,
@@ -156,11 +155,13 @@ class Analysis extends Component {
 
     // } = dashboardAnalysis;
     // let salesPieData;
-    let announcementsData = announcements.filter(item=>{
-      return item.status === 1
-    }).sort((a,b)=>{
-      return b.publishTime - a.publishTime
-    })
+    let announcementsData = announcements
+      .filter(item => {
+        return item.status === 1;
+      })
+      .sort((a, b) => {
+        return b.publishTime - a.publishTime;
+      });
     // if (salesType === 'all') {
     //   salesPieData = salesTypeData;
     // } else {
@@ -184,7 +185,6 @@ class Analysis extends Component {
     return (
       <GridContent>
         <React.Fragment>
-
           {/* <Suspense fallback={<PageLoading />}>
             <IntroduceRow loading={loading}  />
           </Suspense> */}
@@ -209,17 +209,17 @@ class Analysis extends Component {
                 <Announcement
                   loading={loading}
                   data={announcementsData}
-                  title='所有公告'
+                  title="所有公告"
                   handleView={this.handleView}
                 />
               </Suspense>
             </Col>
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
-              <Announcement
+                <Announcement
                   loading={loading}
                   data={announcementsData}
-                  title='院内公告'
+                  title="院内公告"
                   handleView={this.handleView}
                 />
                 {/* <ProportionSales
@@ -237,7 +237,7 @@ class Analysis extends Component {
 
               loading={loading}
             /> */}
-            <OpenProjects/>
+            <OpenProjects />
           </Suspense>
         </React.Fragment>
       </GridContent>

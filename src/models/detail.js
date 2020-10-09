@@ -46,6 +46,7 @@ const roleURL = [
   '/overall/college/detail',
   '/overall/function/detail',
   '/overfunctionall/normal/detail',
+  '/approval/project/detail', //测试
 ];
 /**
  * 将传入role映射为对应身份unit(查看普通项目)
@@ -92,6 +93,7 @@ const keyRoleURL = [
   '/overall/keycollege/detail',
   '/overall/keyfunction/detail',
   '/overfunctionall/key/detail',
+  '/approval/keyproject/detail', // 测试
 ];
 /**
  * 将传入role映射为对应身份unit(查看重点项目)
@@ -351,7 +353,7 @@ const Model = {
           type: 'savePicFileList',
           payload: arr,
         });
-        console.log(router, arr);
+        console.log(router, arr, payload.role, '>>>>>');
         if (window.location.pathname === roleURL[payload.role]) {
           router.replace((projectType === 2 ? keyRoleURL : roleURL)[payload.role]);
         } else {
@@ -684,7 +686,7 @@ const Model = {
           payload: response.data.url,
         });
       } else {
-        message.error(`${res.msg}`);
+        message.error(`${response.msg}`);
       }
       // const res = yield call(reqProjectDetail, { id:payload.id});
       // console.log(res);

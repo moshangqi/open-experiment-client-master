@@ -1,10 +1,10 @@
-import { Avatar, Icon, Menu, Spin ,Badge} from 'antd';
+import { Avatar, Icon, Menu, Spin, Badge } from 'antd';
 import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import userImg from '@/assets/user.png'
+import userImg from '@/assets/user.png';
 
 class AvatarDropdown extends React.Component {
   onMenuClick = event => {
@@ -40,6 +40,7 @@ class AvatarDropdown extends React.Component {
         realName: '',
       },
       menu,
+      message,
     } = this.props;
 
     const menuHeaderDropdown = (
@@ -66,21 +67,28 @@ class AvatarDropdown extends React.Component {
         {menu && <Menu.Divider />}
 
         <Menu.Item key="message">
-          <Badge dot>
-          <Icon type="message" />
-          通知信息
-          </Badge>
+          {message ? (
+            <Badge dot>
+              <Icon type="message" />
+              通知信息
+            </Badge>
+          ) : (
+            <div>
+              <Icon type="message" />
+              通知信息
+            </div>
+          )}
         </Menu.Item>
       </Menu>
     );
     return (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar}  src={userImg} alt="avatar" />
+          <Avatar size="small" className={styles.avatar} src={userImg} alt="avatar" />
           <span className={styles.name}>{currentUser.realName}</span>
         </span>
       </HeaderDropdown>
-    )
+    );
     // return currentUser && currentUser.realName ? (
     //   <HeaderDropdown overlay={menuHeaderDropdown}>
     //     <span className={`${styles.action} ${styles.account}`}>
@@ -100,7 +108,8 @@ class AvatarDropdown extends React.Component {
   }
 }
 
-export default connect(({ user }) => ({
-  currentUser:user.currentUser,
-  userInfo: user.userInfo
+export default connect(({ user, openProjects }) => ({
+  currentUser: user.currentUser,
+  userInfo: user.userInfo,
+  message: openProjects.messageLength,
 }))(AvatarDropdown);

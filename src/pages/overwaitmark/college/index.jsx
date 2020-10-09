@@ -18,50 +18,47 @@ import {
   message,
   Statistic,
   Descriptions,
-
 } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { PageHeaderWrapper,RouteContext } from '@ant-design/pro-layout';
+import { PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import StandardTable from '@/pages/project-s/manage/projects/components/StandardTable';
-import {experimentType,major,college,grade,suggestGroupType, majorCollege} from '@/utils/constant'
+import {
+  experimentType,
+  major,
+  college,
+  grade,
+  suggestGroupType,
+  majorCollege,
+} from '@/utils/constant';
 import styles from './style.less';
 import { DownOutlined } from '@ant-design/icons';
-import TextArea from "antd/es/input/TextArea";
-import Search from "antd/es/input/Search";
+import TextArea from 'antd/es/input/TextArea';
+import Search from 'antd/es/input/Search';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const {Countdown} = Statistic
+const { Countdown } = Statistic;
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
-
-
-@connect(({ listTableList, loading,overwaitmark }) => ({
+@connect(({ listTableList, loading, overwaitmark }) => ({
   listTableList,
   loading: loading.models.overwaitmark,
-  projects:overwaitmark.projects,
-
+  projects: overwaitmark.projects,
 }))
-
-
-
 class WaitOverMarkFunction extends Component {
-
   state = {
     expandForm: false,
     formValues: {},
     selectedRows: [],
-    mVisible:false,
-    mVisible2:false,
+    mVisible: false,
+    mVisible2: false,
   };
-
-
 
   columns = [
     {
@@ -75,69 +72,62 @@ class WaitOverMarkFunction extends Component {
     {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
-      render:(t)=>{
-        return t===0?'职能部门':majorCollege[t-1].cName;
-      }
+      render: t => {
+        return t === 0 ? '职能部门' : majorCollege[t - 1].cName;
+      },
     },
     {
       title: '项目级别',
       dataIndex: 'projectType',
-      render:(type)=>type===1?'普通':'重点'
+      render: type => (type === 1 ? '普通' : '重点'),
     },
     {
       title: '操作',
-      dataIndex:'id',
-      render: (id) => (
+      dataIndex: 'id',
+      render: id => (
         <Fragment>
           {/* <a onClick={() => this.editWarning()}>编辑</a>
 
           <Divider type="vertical" /> */}
-          <a onClick={()=>this.handleDetailClick(id)}>查看详情</a>
+          <a onClick={() => this.handleDetailClick(id)}>查看详情</a>
         </Fragment>
       ),
     },
   ];
 
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'overwaitmark/collegeGetsTheProjects',
-      payload:{
-        data:{}
-      }
+      payload: {
+        data: {},
+      },
     });
   }
 
-
-
-  getProjectId = (e) =>{
+  getProjectId = e => {
     console.log(e);
   };
 
-
-
-  handleDetailClick = (id)=>{
-    const {dispatch} = this.props
+  handleDetailClick = id => {
+    const { dispatch } = this.props;
     dispatch({
-      type:'detail/fetchDetail',
-      payload:{
-        projectGroupId:id,
+      type: 'detail/fetchDetail',
+      payload: {
+        projectGroupId: id,
         //projectType:2,
-        role:13,
-      }
-    })
+        role: 13,
+      },
+    });
     dispatch({
-      type:'detail/fetchProcess',
-      payload:{
-        projectId:id,
+      type: 'detail/fetchProcess',
+      payload: {
+        projectId: id,
         //projectType:2,
-        role:13,
-      }
-    })
-  }
-
-
+        role: 13,
+      },
+    });
+  };
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
@@ -157,59 +147,54 @@ class WaitOverMarkFunction extends Component {
     });
   };
 
-
-
-
-
-
-
+  getExcel = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'overwaitmark/export',
+    });
+  };
 
   render() {
-    const {
-      loading,
-      projects,
-    } = this.props;
-    const { selectedRows,mVisible,mVisible2,text,searchValue} = this.state;
-    const btnDisable = selectedRows.length===0;
+    const { loading, projects } = this.props;
+    const action = (
+      <div>
+        <Button icon="export" type="primary" style={{ marginRight: 15 }} onClick={this.getExcel}>
+          导出普通项目结题一览表
+        </Button>
+      </div>
+    );
+    const { selectedRows, mVisible, mVisible2, text, searchValue } = this.state;
+    const btnDisable = selectedRows.length === 0;
     const formItemLayout = {
       labelCol: {
-        span:5
+        span: 5,
       },
       wrapperCol: {
-        span:18
+        span: 18,
       },
     };
     const {
-      form: { getFieldDecorator, getFieldValue }
+      form: { getFieldDecorator, getFieldValue },
     } = this.props;
-    const Label = ({children})=><span>{children}</span>
+    const Label = ({ children }) => <span>{children}</span>;
     return (
-      <PageHeaderWrapper>
-
-        <Card bordered={false} title='学院结题项目总览'  style={{marginTop:15}}>
+      <PageHeaderWrapper extra={action}>
+        <Card bordered={false} title="学院结题项目总览" style={{ marginTop: 15 }}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-
-            </div>
-            <div className={styles.tableListOperator}>
-
-            </div>
+            <div className={styles.tableListForm}></div>
+            <div className={styles.tableListOperator}></div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               dataSource={projects}
-              rowKey='id'
+              rowKey="id"
               columns={this.columns}
-              pagination={{pageSize:12}}
+              pagination={{ pageSize: 12 }}
               onSelectRow={this.handleSelectRows}
             />
           </div>
-
-
-
         </Card>
       </PageHeaderWrapper>
-
     );
   }
 }

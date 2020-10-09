@@ -9,16 +9,21 @@ import {
   Radio,
   Select,
   Tooltip,
-  TreeSelect
-
+  TreeSelect,
 } from 'antd';
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import moment from 'moment'
-import {majorCollege,grade,suggestGroupType,experimentType, funds,major} from '@/utils/constant'
+import moment from 'moment';
+import {
+  majorCollege,
+  grade,
+  suggestGroupType,
+  experimentType,
+  funds,
+  major,
+} from '@/utils/constant';
 import styles from './style.less';
-
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -28,43 +33,54 @@ const { TreeNode } = TreeSelect;
 let id = 0;
 
 class InnerProject extends Component {
-  state={
+  state = {
     data: [],
     value: undefined,
-    timeout:null,
-    currentValue:undefined
-  }
+    timeout: null,
+    currentValue: undefined,
+  };
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let limitCollege = values.limitCollege?(values.limitCollege.indexOf(null)>=0?null:JSON.stringify(values.limitCollege)):null
-        let limitMajor = values.limitMajor?(values.limitMajor.indexOf(null)>=0?null:JSON.stringify(values.limitMajor)):null
-        console.log(values)
+        let limitCollege = values.limitCollege
+          ? values.limitCollege.indexOf(null) >= 0
+            ? null
+            : JSON.stringify(values.limitCollege)
+          : null;
+        let limitMajor = values.limitMajor
+          ? values.limitMajor.indexOf(null) >= 0
+            ? null
+            : JSON.stringify(values.limitMajor)
+          : null;
+        console.log(values);
         let payload = {
           ...values,
           limitCollege,
-          limitGrade:values.limitGrade&&values.limitGrade[0]?JSON.stringify(values.limitGrade):null,
+          limitGrade:
+            values.limitGrade && values.limitGrade[0] ? JSON.stringify(values.limitGrade) : null,
           limitMajor,
-          startTime:values.time[0].format('YYYY-MM-DD'),
-          endTime:values.time[1].format('YYYY-MM-DD'),
-          stuCodes:values.names?values.names.filter(item=>item):[],
-
+          // startTime:values.time[0].format('YYYY-MM-DD'),
+          // endTime:values.time[1].format('YYYY-MM-DD'),
+          stuCodes: values.names ? values.names.filter(item => item) : [],
+        };
+        if (payload.anotherTeacherCodes == '') {
+          delete payload.anotherTeacherCodes;
         }
-        delete payload.names
-        delete payload.keys
-        delete payload.time
-        if(form.getFieldValue('isOpenTopic') === '1')
-          delete payload.stuCodes
+        delete payload.names;
+        delete payload.keys;
+        delete payload.time;
+        console.log(payload);
+        if (form.getFieldValue('isOpenTopic') === '1') delete payload.stuCodes;
 
         dispatch({
           type: 'innerApply/FunctionCreateCommonApply',
           payload,
-          form
+          form,
         });
         //form.resetFields()
-        console.log(payload)
+        console.log(payload);
       }
     });
   };
@@ -98,66 +114,64 @@ class InnerProject extends Component {
       keys: nextKeys,
     });
   };
-  renderTreeNode = (majorCollege)=>{
-    let nodes = majorCollege.map(item=>{
-      return <TreeNode value={item.cId+'c'} title={item.cName} key={item.cId+'c'} selectable={false}>
-        {
-          item.majors.map(element=>{
-            return <TreeNode value={element.mId} key={element.mId} title={element.mName}>
-            </TreeNode>
-          })
-        }
-      </TreeNode>
-
-    })
-    let notLimitNode = <TreeNode value={null} title='不限专业' key='all'>
-    </TreeNode>
-    nodes.unshift(notLimitNode)
-    return nodes
-  }
+  renderTreeNode = majorCollege => {
+    let nodes = majorCollege.map(item => {
+      return (
+        <TreeNode value={item.cId + 'c'} title={item.cName} key={item.cId + 'c'} selectable={false}>
+          {item.majors.map(element => {
+            return (
+              <TreeNode value={element.mId} key={element.mId} title={element.mName}></TreeNode>
+            );
+          })}
+        </TreeNode>
+      );
+    });
+    let notLimitNode = <TreeNode value={null} title="不限专业" key="all"></TreeNode>;
+    nodes.unshift(notLimitNode);
+    return nodes;
+  };
   handleSearch = value => {
-    const {dispatch} = this.props
+    const { dispatch } = this.props;
     if (value) {
       this.fetchStudents(value);
     } else {
       dispatch({
-        type:'applyForm/saveStudents',
-        payload:[]
-      })
+        type: 'applyForm/saveStudents',
+        payload: [],
+      });
     }
   };
 
-  fetchStudents = (value)=> {
+  fetchStudents = value => {
     if (this.timeout) {
       clearTimeout(this.timeout);
       this.timeout = null;
     }
     this.currentValue = value;
-    const {dispatch} = this.props
-    this.timeout = setTimeout(()=>{
+    const { dispatch } = this.props;
+    this.timeout = setTimeout(() => {
       dispatch({
-        type:'applyForm/fetchStudents',
-        payload:{
-          keyWord:value,
-          isTeacher:false
-        }
-      })
+        type: 'applyForm/fetchStudents',
+        payload: {
+          keyWord: value,
+          isTeacher: false,
+        },
+      });
     }, 300);
-  }
-  handleSelect = (value)=>{
-    const {form} = this.props
-    console.log(value)
+  };
+  handleSelect = value => {
+    const { form } = this.props;
+    console.log(value);
     // form.setFieldValue('')
-
-  }
+  };
 
   render() {
     const { submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
-      students
+      students,
     } = this.props;
-    const topFiftyStudents = students.slice(0,50)
+    const topFiftyStudents = students.slice(0, 50);
     const formItemLayout = {
       labelCol: {
         xs: {
@@ -209,25 +223,22 @@ class InnerProject extends Component {
     };
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
-    const options = topFiftyStudents.map((s,index) => <Option key={index} value={s.code}>
-      <span>{s.realName}</span>
-      <span style={{margin:'0 30px'}}>{s.code}</span>
-      <span>{(major.find(item=>item.mId===s.major)||{}).mName}</span>
-    </Option>);
+    const options = topFiftyStudents.map((s, index) => (
+      <Option key={index} value={s.code}>
+        <span>{s.realName}</span>
+        <span style={{ margin: '0 30px' }}>{s.code}</span>
+        <span>{(major.find(item => item.mId === s.major) || {}).mName}</span>
+      </Option>
+    ));
     const formItems = keys.map((k, index) => (
-      <Form.Item
-
-        label={index === 0 ? '学生关键字' : ''}
-        required={false}
-        key={index}
-      >
+      <Form.Item label={index === 0 ? '学生关键字' : ''} required={false} key={index}>
         {getFieldDecorator(`names[${k}]`, {
           validateTrigger: ['onChange', 'onBlur'],
           rules: [
             {
               required: true,
               whitespace: true,
-              message: "请选择成员或者删除该项",
+              message: '请选择成员或者删除该项',
             },
           ],
         })(
@@ -238,14 +249,14 @@ class InnerProject extends Component {
             filterOption={false}
             onSearch={this.handleSearch}
             notFoundContent={null}
-            onSelect ={this.handleSelect}
+            onSelect={this.handleSelect}
             style={{
-              width:'80%'
+              width: '80%',
             }}
-            placeholder='姓名或学号'
+            placeholder="姓名或学号"
           >
             {options}
-          </Select>
+          </Select>,
         )}
         {keys.length > 1 ? (
           <Icon
@@ -256,9 +267,14 @@ class InnerProject extends Component {
         ) : null}
       </Form.Item>
     ));
-    const Label = ({children})=><span><span style={{color:'red'}}>*</span>{children}</span>
+    const Label = ({ children }) => (
+      <span>
+        <span style={{ color: 'red' }}>*</span>
+        {children}
+      </span>
+    );
     return (
-      <PageHeaderWrapper >
+      <PageHeaderWrapper>
         <Card bordered={false}>
           <Form
             onSubmit={this.handleSubmit}
@@ -267,7 +283,6 @@ class InnerProject extends Component {
               marginTop: 8,
             }}
           >
-
             <FormItem {...formItemLayout} label={<Label>项目编号</Label>}>
               {getFieldDecorator('itemNumber', {
                 rules: [
@@ -288,7 +303,9 @@ class InnerProject extends Component {
                 ],
               })(<Input placeholder="项目名称" />)}
             </FormItem>
-             <FormItem {...formItemLayout} label="起止日期">
+
+            {/* 起止日期 */}
+            {/* <FormItem {...formItemLayout} label="起止日期">
               {getFieldDecorator('time', {
                 rules: [
                   {
@@ -304,7 +321,7 @@ class InnerProject extends Component {
                   placeholder={['开始日期', '结束日期']}
                 />,
               )}
-            </FormItem>
+            </FormItem> */}
             {/*<FormItem {...formItemLayout} label="项目所属学院">*/}
             {/*  {getFieldDecorator('subordinateCollege', {*/}
 
@@ -356,32 +373,38 @@ class InnerProject extends Component {
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>实验类型</Label>}>
               <div>
-                {getFieldDecorator('experimentType', {
-
-                })(
+                {getFieldDecorator(
+                  'experimentType',
+                  {},
+                )(
                   <Radio.Group>
-                    {Object.keys(experimentType).map(item=>{
-                      return <Radio key={item} value={item}>{experimentType[item]}</Radio>
+                    {Object.keys(experimentType).map(item => {
+                      return (
+                        <Radio key={item} value={item}>
+                          {experimentType[item]}
+                        </Radio>
+                      );
                     })}
                   </Radio.Group>,
                 )}
-
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>建议审分组</Label>}>
               <div>
-                {getFieldDecorator('suggestGroupType', {
-
-                })(
+                {getFieldDecorator(
+                  'suggestGroupType',
+                  {},
+                )(
                   <Radio.Group>
-                    {['1','2','3','6','4','5'].map(item=>{
-                      return <Radio value={item} key={item}>
-                        {suggestGroupType[item]}
-                      </Radio>
+                    {['1', '2', '3', '6', '4', '5'].map(item => {
+                      return (
+                        <Radio value={item} key={item}>
+                          {suggestGroupType[item]}
+                        </Radio>
+                      );
                     })}
                   </Radio.Group>,
                 )}
-
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>项目级别</Label>}>
@@ -394,7 +417,6 @@ class InnerProject extends Component {
                     <Radio value="2">重点</Radio>
                   </Radio.Group>,
                 )}
-
               </div>
             </FormItem>
             {/*<FormItem {...formItemLayout} label="限选专业">*/}
@@ -441,9 +463,9 @@ class InnerProject extends Component {
                     message: '请输入适宜学生数',
                   },
                   {
-                    pattern:/[3-6]/,
-                    message:'限选人数3~6人'
-                  }
+                    pattern: /[3-6]/,
+                    message: '限选人数3~6人',
+                  },
                 ],
               })(<Input placeholder="请输入适宜学生数" />)}
             </FormItem>
@@ -456,13 +478,17 @@ class InnerProject extends Component {
                     message: '请选择预申请金额',
                   },
                 ],
-              })(<Select
-                placeholder="请选择预申请金额"
-              >
-                {funds.map(item=>{
-                  return <Option key={item} value={item}>{item}元</Option>
-                })}
-              </Select>)}
+              })(
+                <Select placeholder="请选择预申请金额">
+                  {funds.map(item => {
+                    return (
+                      <Option key={item} value={item}>
+                        {item}元
+                      </Option>
+                    );
+                  })}
+                </Select>,
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>计划实验时间/h</Label>}>
               {getFieldDecorator('totalHours', {
@@ -470,12 +496,11 @@ class InnerProject extends Component {
                   {
                     required: true,
                     message: '请输入计划实验时间',
-                  }
-                  ,
+                  },
                   {
-                    pattern:/\d+/,
-                    message:'请输入数字'
-                  }
+                    pattern: /\d+/,
+                    message: '请输入数字',
+                  },
                 ],
               })(<Input placeholder="请输入计划实验时间" />)}
             </FormItem>
@@ -519,9 +544,9 @@ class InnerProject extends Component {
               {getFieldDecorator('teacherCodes', {
                 rules: [
                   {
-                    require:true,
-                    message:'请输入12位工号'
-                  }
+                    require: true,
+                    message: '请输入12位工号',
+                  },
                 ],
               })(<Input placeholder="输入教师工号 (必填)" />)}
             </FormItem>
@@ -529,9 +554,9 @@ class InnerProject extends Component {
               {getFieldDecorator('anotherTeacherCodes', {
                 rules: [
                   {
-                    pattern:/^\d\d\d\d\d\d\d\d\d\d\d\d$/,
-                    message:'请输入12位工号'
-                  }
+                    pattern: /^\d\d\d\d\d\d\d\d\d\d\d\d$/,
+                    message: '请输入12位工号',
+                  },
                 ],
               })(<Input placeholder="输入教师工号 (选填)" />)}
             </FormItem>
@@ -545,11 +570,10 @@ class InnerProject extends Component {
                   </Radio.Group>,
                 )}
 
-
                 <FormItem
                   style={{
                     margin: '8px 0',
-                    display:  'block' ,
+                    display: 'block',
                   }}
                 >
                   {formItems}
@@ -585,8 +609,8 @@ class InnerProject extends Component {
 }
 
 export default Form.create()(
-  connect(({ loading ,applyForm}) => ({
+  connect(({ loading, applyForm }) => ({
     submitting: loading.effects['innerApply/FunctionCreateCommonApply'],
-    students:applyForm.students
+    students: applyForm.students,
   }))(InnerProject),
 );

@@ -1,0 +1,4 @@
+diff a/config/config.js b/config/config.js	(rejected hunks)
+@@ -94 +94 @@ const proxyKeys = [
+-  '/collegeReview/deleteCollegeReview'
++  '/collegeReview/deleteCollegeReview',
