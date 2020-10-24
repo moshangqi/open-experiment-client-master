@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { reqApprovalRole, reqAddRole } from './service';
+import { reqApprovalRole, reqAddRole, reqDeleteRole } from './service';
 
 const Model = {
   namespace: 'approvalRole',
@@ -34,7 +34,7 @@ const Model = {
       }
     },
     *delete({ payload }, { call, put }) {
-      const res = yield call(reqRemoveRole, payload);
+      const res = yield call(reqDeleteRole, payload);
       if (res.code === 0) {
         yield put({
           type: 'fetch',

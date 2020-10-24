@@ -60,9 +60,11 @@ class Analysis extends Component {
         type: 'dashboardAnalysis/fetch',
       });
     });
-    dispatch({
-      type: 'openProjects/fetchProjects',
-    });
+    localStorage.getItem('token') &&
+      dispatch({
+        // 第一次进入页面不请求，无token不请求
+        type: 'openProjects/fetchProjects',
+      });
     dispatch({
       type: 'announcement/fetch',
     });

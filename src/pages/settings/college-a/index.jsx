@@ -88,6 +88,19 @@ class CollegeApproval extends Component {
     });
   };
 
+  handleDelete = user => {
+    console.log(user);
+    const userRoleForm = {
+      roleId: user.role,
+      userId: user.code,
+    };
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'approvalRole/delete',
+      payload: userRoleForm,
+    });
+  };
+
   render() {
     const formLayout = {
       wrapperCol: {

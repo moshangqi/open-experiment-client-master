@@ -10,3 +10,10 @@ export async function reqAddRole(params) {
     data: params,
   });
 }
+
+export async function reqDeleteRole(params) {
+  return request('/permission/deleteUserRole', {
+    method: 'POST',
+    data: params,
+  });
+}

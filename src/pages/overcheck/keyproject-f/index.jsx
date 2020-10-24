@@ -18,50 +18,47 @@ import {
   message,
   Statistic,
   Descriptions,
-
 } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { PageHeaderWrapper,RouteContext } from '@ant-design/pro-layout';
+import { PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import StandardTable from '@/pages/project-s/manage/projects/components/StandardTable';
-import {experimentType,major,college,grade,suggestGroupType, majorCollege} from '@/utils/constant'
+import {
+  experimentType,
+  major,
+  college,
+  grade,
+  suggestGroupType,
+  majorCollege,
+} from '@/utils/constant';
 import styles from './style.less';
 import { DownOutlined } from '@ant-design/icons';
-import TextArea from "antd/es/input/TextArea";
-import Search from "antd/es/input/Search";
+import TextArea from 'antd/es/input/TextArea';
+import Search from 'antd/es/input/Search';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const {Countdown} = Statistic
+const { Countdown } = Statistic;
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
-
-
-@connect(({ listTableList, loading,overkeyfunction }) => ({
+@connect(({ listTableList, loading, overkeyfunction }) => ({
   listTableList,
   loading: loading.models.overkeyfunction,
-  projects:overkeyfunction.projects,
-
+  projects: overkeyfunction.projects,
 }))
-
-
-
 class OverKeyCheckFuction extends Component {
-
   state = {
     expandForm: false,
     formValues: {},
     selectedRows: [],
-    mVisible:false,
-    mVisible2:false,
+    mVisible: false,
+    mVisible2: false,
   };
-
-
 
   columns = [
     {
@@ -75,98 +72,89 @@ class OverKeyCheckFuction extends Component {
     {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
-      render:(t)=>{
-        return t===0?'职能部门':majorCollege[t-1].cName;
-      }
+      render: t => {
+        return t === 0 ? '职能部门' : majorCollege[t - 1].cName;
+      },
     },
     {
       title: '项目级别',
       dataIndex: 'projectType',
-      render:(type)=>type===1?'普通':'重点'
+      render: type => (type === 1 ? '普通' : '重点'),
     },
     {
       title: '操作',
-      dataIndex:'id',
-      render: (id) => (
+      dataIndex: 'id',
+      render: id => (
         <Fragment>
           {/* <a onClick={() => this.editWarning()}>编辑</a>
 
           <Divider type="vertical" /> */}
-          <a onClick={()=>this.handleDetailClick(id)}>查看详情</a>
+          <a onClick={() => this.handleDetailClick(id)}>查看详情</a>
           <Divider type="vertical" />
-          <a onClick={()=>this.stopProject(id)}>中止项目</a>
+          <a onClick={() => this.stopProject(id)}>中止项目</a>
         </Fragment>
       ),
     },
   ];
 
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'overkeyfunction/getToBeConcludingKeyProject',
-      payload:{
-        data:{}
-      }
+      payload: {
+        data: {},
+      },
     });
   }
 
-  resetList=()=>{
+  resetList = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'mid/getIntermediateInspectionProject',
-      payload:{
-        data:{}
-      }
+      payload: {
+        data: {},
+      },
     });
     this.setState({
-      searchValue:''
-    })
+      searchValue: '',
+    });
   };
 
-  getProjectId = (e) =>{
+  getProjectId = e => {
     console.log(e);
   };
 
-  stopProject = (id) =>{
-    const {dispatch} = this.props;
-    let data=
-
-      [
-        {projectId:id,
-          reason:'职能部门结题审核不通过'}
-      ]
-    ;
+  stopProject = id => {
+    const { dispatch } = this.props;
+    let data = [{ projectId: id, reason: '职能部门结题审核不通过' }];
     console.log(data);
     dispatch({
-      type:'overkeyfunction/rejectToBeConcludingKeyProject',
-      payload:{
+      type: 'overkeyfunction/rejectToBeConcludingKeyProject',
+      payload: {
         data,
-      }
-    })
+      },
+    });
   };
 
-  handleDetailClick = (id)=>{
-    const {dispatch} = this.props
+  handleDetailClick = id => {
+    const { dispatch } = this.props;
     dispatch({
-      type:'detail/fetchDetail',
-      payload:{
-        projectGroupId:id,
-        projectType:2,
-        role:12,
-      }
-    })
+      type: 'detail/fetchDetail',
+      payload: {
+        projectGroupId: id,
+        projectType: 2,
+        role: 12,
+      },
+    });
     dispatch({
-      type:'detail/fetchProcess',
-      payload:{
-        projectId:id,
-        projectType:2,
-        role:12,
-      }
-    })
-  }
-
-
+      type: 'detail/fetchProcess',
+      payload: {
+        projectId: id,
+        projectType: 2,
+        role: 12,
+      },
+    });
+  };
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
@@ -186,155 +174,142 @@ class OverKeyCheckFuction extends Component {
     });
   };
 
+  hideModal = () => {
+    this.setState({
+      mVisible: false,
+    });
+  };
 
-
-
-  hideModal = ()=>{
+  hideModal2 = () => {
     this.setState({
-      mVisible:false
-    })
-  }
-
-  hideModal2 = ()=>{
+      mVisible2: false,
+    });
+  };
+  showModal = () => {
     this.setState({
-      mVisible2:false
-    })
-  }
-  showModal = ()=>{
+      mVisible: true,
+    });
+  };
+  showModal2 = () => {
     this.setState({
-      mVisible:true
-    })
-  }
-  showModal2 = ()=>{
+      mVisible2: true,
+    });
+  };
+  handleModalCancel = () => {
     this.setState({
-      mVisible2:true
-    })
-  }
-  handleModalCancel = ()=>{
+      mVisible: false,
+    });
+  };
+  handleModalCancel2 = () => {
     this.setState({
-      mVisible:false
-    })
-  }
-  handleModalCancel2 = ()=>{
-    this.setState({
-      mVisible2:false
-    })
-  }
-  handleModalOk = ()=>{
-    const {selectedRows,text} = this.state
-    const {dispatch,tabActiveKey} = this.props
-    const data = selectedRows.map(item=>{
+      mVisible2: false,
+    });
+  };
+  handleModalOk = () => {
+    const { selectedRows, text } = this.state;
+    const { dispatch, tabActiveKey } = this.props;
+    const data = selectedRows.map(item => {
       return {
-        reason:text,
-        projectId:item.id
-      }
-    })
-    let payload={
+        reason: text,
+        projectId: item.id,
+      };
+    });
+    let payload = {
       data,
     };
-    console.log(payload)
-    console.log(data)
-    dispatch({
-      type:'overkeyfunction/functionKeyProjectHitBack',
-      payload:{
-        data,
-      }
-    })
-    this.setState({mVisible:false,
-      text:''
-    })
-  }
-
-  handleModalOk2 = ()=>{
-    const {selectedRows,text} = this.state;
-    const {dispatch,tabActiveKey,form} = this.props;
-    form.validateFields((err,values)=>{
-      if(err)
-        return;
-      const data = selectedRows.map(item=>{
-        return {
-          value:parseInt(values.value),
-          projectId:item.id
-        }
-      });
-      let payload={
-        data,
-      };
-      console.log(payload)
-      console.log(data)
-      dispatch({
-        type:'overkeyfunction/functionGivesKeyProjectRating',
-        payload:{
-          data,
-        }
-      })
-
-    })
-    this.setState({
-      mVisible2:false,
-    })
-  }
-
-  showApprovalModal = (type)=>{
-    this.setState({
-      mVisible:true
-    })
-  }
-
-  showApprovalModal2 = (type)=>{
-    this.setState({
-      mVisible2:true
-    })
-  }
-  handleInputChange = (e)=>{
-    this.setState({
-      text:e.target.value
-    })
-  }
-
-  handleSearchChange= (e)=>{
-    this.setState({
-      searchValue:e.target.value
-    })
-  }
-
-  handleSearch = (value) =>{
-    const {dispatch} = this.props;
-    let data = {
-      keyword:value
-    }
+    console.log(payload);
     console.log(data);
     dispatch({
-      type:'mid/selectByKeyword',
-      payload:{
+      type: 'overkeyfunction/functionKeyProjectHitBack',
+      payload: {
         data,
-      }
-    })
-  }
+      },
+    });
+    this.setState({ mVisible: false, text: '' });
+  };
 
+  handleModalOk2 = () => {
+    const { selectedRows, text } = this.state;
+    const { dispatch, tabActiveKey, form } = this.props;
+    form.validateFields((err, values) => {
+      if (err) return;
+      const data = selectedRows.map(item => {
+        return {
+          reason: values.value,
+          // value:parseInt(values.value),
+          projectId: item.id,
+        };
+      });
+      let payload = {
+        data,
+      };
+      console.log(payload);
+      console.log(data);
+      dispatch({
+        type: 'overkeyfunction/functionGivesKeyProjectRating',
+        payload: {
+          data,
+        },
+      });
+    });
+    this.setState({
+      mVisible2: false,
+    });
+  };
 
+  showApprovalModal = type => {
+    this.setState({
+      mVisible: true,
+    });
+  };
 
+  showApprovalModal2 = type => {
+    this.setState({
+      mVisible2: true,
+    });
+  };
+  handleInputChange = e => {
+    this.setState({
+      text: e.target.value,
+    });
+  };
 
+  handleSearchChange = e => {
+    this.setState({
+      searchValue: e.target.value,
+    });
+  };
+
+  handleSearch = value => {
+    const { dispatch } = this.props;
+    let data = {
+      keyword: value,
+    };
+    console.log(data);
+    dispatch({
+      type: 'mid/selectByKeyword',
+      payload: {
+        data,
+      },
+    });
+  };
 
   render() {
-    const {
-      loading,
-      projects,
-    } = this.props;
-    const { selectedRows,mVisible,mVisible2,text,searchValue} = this.state;
-    const btnDisable = selectedRows.length===0;
+    const { loading, projects } = this.props;
+    const { selectedRows, mVisible, mVisible2, text, searchValue } = this.state;
+    const btnDisable = selectedRows.length === 0;
     const formItemLayout = {
       labelCol: {
-        span:5
+        span: 5,
       },
       wrapperCol: {
-        span:18
+        span: 18,
       },
     };
     const {
-      form: { getFieldDecorator, getFieldValue }
+      form: { getFieldDecorator, getFieldValue },
     } = this.props;
-    const Label = ({children})=><span>{children}</span>
+    const Label = ({ children }) => <span>{children}</span>;
     return (
       <PageHeaderWrapper>
         <Modal
@@ -343,20 +318,22 @@ class OverKeyCheckFuction extends Component {
           onCancel={this.handleModalCancel}
           title={'退回理由'}
         >
-
-          <TextArea onChange={this.handleInputChange} style={{height:150}} value={text} placeholder={'退回理由'}/>
-
+          <TextArea
+            onChange={this.handleInputChange}
+            style={{ height: 150 }}
+            value={text}
+            placeholder={'退回理由'}
+          />
         </Modal>
 
         <Modal
           visible={mVisible2}
           onOk={this.handleModalOk2}
           onCancel={this.handleModalCancel2}
-          title={'等级评价'}
+          title={'通过意见'}
         >
-
           <Form>
-            <FormItem {...formItemLayout} label={<Label>评级</Label>}>
+            <FormItem {...formItemLayout} label={<Label>意见</Label>}>
               {getFieldDecorator('value', {
                 rules: [
                   {
@@ -364,20 +341,21 @@ class OverKeyCheckFuction extends Component {
                     message: '请选择等级',
                   },
                 ],
-              })(<Select
-                placeholder="请选择等级"
-              >
-                <Option key='1' value='1'>优秀</Option>
-                <Option key='0' value='0'>通过</Option>
-              </Select>)}
+              })(
+                <TextArea autoSize={{ minRows: 1, maxRows: 20 }} />,
+                // <Select
+                //   placeholder="请选择等级"
+                // >
+
+                //   <Option key='1' value='1'>优秀</Option>
+                //   <Option key='0' value='0'>通过</Option>
+                // </Select>
+              )}
             </FormItem>
           </Form>
-
         </Modal>
 
-
-
-        <Card bordered={false} title='结题项目审理'  style={{marginTop:15}}>
+        <Card bordered={false} title="结题项目审理" style={{ marginTop: 15 }}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               {/*<Search*/}
@@ -392,28 +370,27 @@ class OverKeyCheckFuction extends Component {
               {/*/>*/}
             </div>
             <div className={styles.tableListOperator}>
-              <Button disabled={btnDisable}  onClick={()=>this.showApprovalModal()}>退回修改</Button>
-              <Button disabled={btnDisable}  onClick={()=>this.showApprovalModal2()}>职能部门评级</Button>
+              <Button disabled={btnDisable} onClick={() => this.showApprovalModal()}>
+                退回修改
+              </Button>
+              {/* 功能待定，展示保存 */}
+              <Button disabled={btnDisable} onClick={() => this.showApprovalModal2()}>
+                通过
+              </Button>
               {/*<Button type={"primary"}  onClick={()=>this.resetList()}>重置</Button>*/}
             </div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               dataSource={projects}
-              rowKey='id'
+              rowKey="id"
               columns={this.columns}
-              pagination={{pageSize:12}}
+              pagination={{ pageSize: 12 }}
               onSelectRow={this.handleSelectRows}
             />
-
-
           </div>
-
-
-
         </Card>
       </PageHeaderWrapper>
-
     );
   }
 }
