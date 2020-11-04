@@ -3,6 +3,10 @@ import {
   reqExportConclusionExcel,
   reqRejectedKeyProjects,
   reqFilter,
+  reqKeytoNormalProject,
+  reqReturnKeyProject,
+  reqHitBackKeyProject,
+  reqReviewPassed,
 } from './service';
 import { message } from 'antd';
 import { saveAs } from 'file-saver';
@@ -18,6 +22,8 @@ const Model = {
       const response =
         payload.status === '0'
           ? yield call(reqEquipmentKeyProjects, payload.data)
+          : payload.status === '3'
+          ? yield call(reqReturnKeyProject)
           : yield call(reqRejectedKeyProjects, payload.data);
       if (response.code === 0) {
         yield put({
@@ -43,6 +49,49 @@ const Model = {
       const res = yield call(reqExportConclusionExcel);
       console.log(res);
       saveAs(res, '结题一览表.xlsx');
+    },
+    *keyToProject({ payload }, { call, put }) {
+      const res = yield call(reqKeytoNormalProject, payload);
+      if (res.code == 0) {
+        yield put({
+          type: 'fetchProjects',
+          payload: {
+            status: '0',
+          },
+        });
+        message.success('转为普通项目成功');
+      } else {
+        message.error(res.msg);
+      }
+    },
+    *hitBack({ payload }, { call, put }) {
+      const res = yield call(reqHitBackKeyProject, payload);
+      if (res.code == 0) {
+        yield put({
+          type: 'fetchProjects',
+          payload: {
+            status: '0',
+          },
+        });
+        message.success('退回修改成功');
+      } else {
+        message.error(res.msg);
+      }
+    },
+    *reviewPassed({ payload }, { call, put }) {
+      const res = yield call(reqReviewPassed, payload);
+      if (res.code == 0) {
+        yield put({
+          type: 'fetchProjects',
+          payload: {
+            status: '3',
+          },
+        });
+        message.success('复核成功');
+      } else {
+        message.error(res.msg);
+      }
+      // reqReviewPassed
     },
   },
   reducers: {

@@ -30,10 +30,10 @@ import { json } from 'body-parser';
 import BaseInfo from '../detail-components/BaseInfo';
 import Advice from '../detail-components/Advice';
 import Member from '../detail-components/Member';
-import Process from '../detail-components/Process'
+import Process from '../detail-components/Process';
 import { statusType, operationType, operationUnit, suggestGroupType } from '@/utils/constant';
 import Preview from '../detail-components/Preview';
-import History from '../detail-components/History'
+import History from '../detail-components/History';
 import { isEmpty } from '@/utils/utils';
 
 const { TabPane } = Tabs;
@@ -48,19 +48,18 @@ function getHeaderStatus(num) {
     return '立项审核中';
   } else if (num === 6) {
     return '中期检查';
-  }
-  else {
+  } else {
     return '项目结题';
   }
 }
 
-@connect(({ detail,loading }) => ({
-  loading:loading.models.detail,
+@connect(({ detail, loading }) => ({
+  loading: loading.models.detail,
   detail: detail.baseInfo,
   role: detail.role,
   process: detail.process,
   text: '',
-  unit:detail.unit
+  unit: detail.unit,
 }))
 class Advanced extends Component {
   state = {
@@ -72,19 +71,22 @@ class Advanced extends Component {
     isPreview: false,
   };
 
-  componentWillMount(){
-    if(!isEmpty(this.props.detail)){
-      return
+  componentWillMount() {
+    const { dispatch, process } = this.props;
+    console.log(this.props);
+    if (isEmpty(this.props.detail)) {
+      dispatch({
+        type: 'detail/fetchNewDetail',
+        payload: JSON.parse(localStorage.getItem('payload-d')),
+      });
     }
-    const {dispatch} = this.props
-    dispatch({
-      type:'detail/fetchNewDetail',
-      payload: JSON.parse(localStorage.getItem('payload-d'))
-    })
-    dispatch({
-      type:'detail/fetchNewProcess',
-      payload: JSON.parse(localStorage.getItem('payload-p'))
-    })
+    console.log(this.props.process);
+    if (process.length == 0) {
+      dispatch({
+        type: 'detail/fetchNewProcess',
+        payload: JSON.parse(localStorage.getItem('payload-p')),
+      });
+    }
   }
 
   componentDidMount() {
@@ -95,7 +97,7 @@ class Advanced extends Component {
       dispatch,
       role,
       detail: { id },
-      unit
+      unit,
     } = this.props;
     const { approvalType } = this.state;
     console.log(role, approvalType);
@@ -124,7 +126,7 @@ class Advanced extends Component {
     });
   };
   handleReportClick = () => {
-    const { dispatch, role, detail,unit } = this.props;
+    const { dispatch, role, detail, unit } = this.props;
     const { approvalType, projectId } = this.state;
     console.log(role, approvalType);
     dispatch({
@@ -170,7 +172,6 @@ class Advanced extends Component {
     });
   };
 
-
   render() {
     const {
       operationKey,
@@ -181,51 +182,93 @@ class Advanced extends Component {
       text,
       isPreview,
     } = this.state;
-    const {  loading, detail, process,unit } = this.props;
-    const {status} = detail
-    const agreeBtnDisable = !(unit==='0'&&status===0||unit==='1'&&status===2||unit==='2'&&status===4||unit==='3'&&status===-4)
-    const rejectBtnDisable = !(unit==='0'&&status===0||unit==='1'&&status===2||unit==='2'&&status===4||unit==='3'&&status===-4)
-    const reportBtnDisable = !(unit==='0'&&status===1||unit==='1'&&status===3 )
-    const keyApplyBtnDisable = detail.status!==1&&detail.status!==-2
+    const { loading, detail, process, unit } = this.props;
+    const { status } = detail;
+    const agreeBtnDisable = !(
+      (unit === '0' && status === 0) ||
+      (unit === '1' && status === 2) ||
+      (unit === '2' && status === 4) ||
+      (unit === '3' && status === -4)
+    );
+    const rejectBtnDisable = !(
+      (unit === '0' && status === 0) ||
+      (unit === '1' && status === 2) ||
+      (unit === '2' && status === 4) ||
+      (unit === '3' && status === -4)
+    );
+    const reportBtnDisable = !((unit === '0' && status === 1) || (unit === '1' && status === 3));
+    const keyApplyBtnDisable = detail.status !== 1 && detail.status !== -2;
 
     console.log(detail);
     const extra = (
       <div className={styles.moreInfo}>
-        <Statistic style={{ textAlign: 'left', marginRight: 30 }} title="重点申请书状态" valueStyle={{fontSize:19}} value={detail.whetherCommitKeyApply?'已提交':'未提交'} />
-        <Statistic style={{ textAlign: 'left' }} title="项目状态" valueStyle={{fontSize:19}} value={statusType[detail.status]} />
+        <Statistic
+          style={{ textAlign: 'left', marginRight: 30 }}
+          title="重点申请书状态"
+          valueStyle={{ fontSize: 19 }}
+          value={detail.whetherCommitKeyApply ? '已提交' : '未提交'}
+        />
+        <Statistic
+          style={{ textAlign: 'left' }}
+          title="项目状态"
+          valueStyle={{ fontSize: 19 }}
+          value={statusType[detail.status]}
+        />
         {/* <Statistic title="参与人数" value={detail.stuMembers ? detail.stuMembers.length : 0} /> */}
       </div>
     );
     const action = (
       <div>
-        {unit==='4'?<Button
-          type="primary"
-          style={{ marginRight: 15 }}
-          onClick={() => this.handleKeyProjectApply()}
-          disabled={keyApplyBtnDisable}
-        >
-          提交重点申请
-        </Button>:''}
-        {['0','1','2','3'].indexOf(unit)>=0?<Button
-          type="primary"
-          style={{ marginRight: 15 }}
-          onClick={() => this.handleApprovalClick(1)}
-          disabled={agreeBtnDisable}
-        >
-          审批通过
-        </Button>:''}
-        {['1'].indexOf(unit)>=0?<Button style={{ marginRight: 15 }} disabled={reportBtnDisable} onClick={() => this.handleReportClick()}>
-          上报
-        </Button>:''}
-        {['0','1','2','3'].indexOf(unit)>=0?<Button style={{ marginRight: 15 }} disabled={rejectBtnDisable} onClick={() => this.handleApprovalClick(0)}>
-          驳回
-        </Button>:''}
+        {unit === '4' ? (
+          <Button
+            type="primary"
+            style={{ marginRight: 15 }}
+            onClick={() => this.handleKeyProjectApply()}
+            disabled={keyApplyBtnDisable}
+          >
+            提交重点申请
+          </Button>
+        ) : (
+          ''
+        )}
+        {['0', '1', '2', '3'].indexOf(unit) >= 0 ? (
+          <Button
+            type="primary"
+            style={{ marginRight: 15 }}
+            onClick={() => this.handleApprovalClick(1)}
+            disabled={agreeBtnDisable}
+          >
+            审批通过
+          </Button>
+        ) : (
+          ''
+        )}
+        {['1'].indexOf(unit) >= 0 ? (
+          <Button
+            style={{ marginRight: 15 }}
+            disabled={reportBtnDisable}
+            onClick={() => this.handleReportClick()}
+          >
+            上报
+          </Button>
+        ) : (
+          ''
+        )}
+        {['0', '1', '2', '3'].indexOf(unit) >= 0 ? (
+          <Button
+            style={{ marginRight: 15 }}
+            disabled={rejectBtnDisable}
+            onClick={() => this.handleApprovalClick(0)}
+          >
+            驳回
+          </Button>
+        ) : (
+          ''
+        )}
         <Button onClick={() => this.props.history.goBack()}>返回</Button>
       </div>
     );
     console.log(process);
-
-
 
     return (
       <PageHeaderWrapper
@@ -270,10 +313,10 @@ class Advanced extends Component {
             <div className={styles.main}>
               <GridContent>
                 {/* <Process/> */}
-                {isEmpty(detail)?<></>:<Preview fileUrl={detail.fileUrl}/>}
+                {isEmpty(detail) ? <></> : <Preview fileUrl={detail.fileUrl} />}
                 <Member memberList={detail.list} />
                 <Advice process={process} />
-                <History process={process}/>
+                <History process={process} />
               </GridContent>
             </div>
           </>

@@ -1,64 +1,53 @@
 import React, { Component } from 'react';
-import { Card, Button, Upload, Icon ,Modal,Form,Input,message,Spin} from 'antd';
-import {connect} from 'dva';
+import { Card, Button, Upload, Icon, Modal, Form, Input, message, Spin } from 'antd';
+import { connect } from 'dva';
 
-
-
-@connect(({
-            detail,
-            loading
-          })=>({
-  detail:detail.baseInfo,
-  PicsList:detail.PicsList,
-  loading:loading.models.detail,
-  budget:detail.budget,
-  membersInfo:detail.membersInfo
+@connect(({ detail, loading }) => ({
+  detail: detail.baseInfo,
+  PicsList: detail.PicsList,
+  loading: loading.models.detail,
+  budget: detail.budget,
+  membersInfo: detail.membersInfo,
 }))
-
-
-
-class Picview extends Component{
+class Picview extends Component {
   constructor(props) {
     super(props);
     this.state = {
       PicList: [],
       uploading: false,
       visible: false,
-      url:''
+      url: '',
     };
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   handleUpload = () => {
-    const {detail,dispatch} = this.props;
+    const { detail, dispatch } = this.props;
     console.log(detail.id);
     const { PicList } = this.state;
     const list = PicList;
     const formData = new FormData();
-    formData.append("projectId",detail.id);
+    formData.append('projectId', detail.id);
     list.forEach(file => {
       formData.append('file', file);
     });
     dispatch({
-      type:'detail/uploadAttachmentFile',
-      payload:{
-        data:formData,
-        id:detail.id
-      }
-    })
+      type: 'detail/uploadAttachmentFile',
+      payload: {
+        data: formData,
+        id: detail.id,
+      },
+    });
     this.setState({
-      PicList:[]
-    })
-
+      PicList: [],
+    });
   };
 
-  showModal = (URL) => {
+  showModal = URL => {
     this.setState({
       visible: true,
-      url:URL
+      url: URL,
     });
   };
 
@@ -66,7 +55,7 @@ class Picview extends Component{
     console.log(e);
     this.setState({
       visible: false,
-      url:''
+      url: '',
     });
   };
 
@@ -74,31 +63,30 @@ class Picview extends Component{
     console.log(e);
     this.setState({
       visible: false,
-      url:''
+      url: '',
     });
   };
 
-  deletePic = (uid) =>{
-    const {detail,dispatch} = this.props;
+  deletePic = uid => {
+    const { detail, dispatch } = this.props;
     let data = {
-      id:uid
-    }
+      id: uid,
+    };
     dispatch({
-      type:'detail/deleteFile',
-      payload:{
+      type: 'detail/deleteFile',
+      payload: {
         data,
-        theId:detail.id
-      }
-    })
-  }
-
+        theId: detail.id,
+      },
+    });
+  };
 
   render() {
-    const { uploading ,PicList} = this.state;
-    const {detail,loading,budget={},membersInfo={},PicsList} = this.props;
+    const { uploading, PicList } = this.state;
+    const { detail, loading, budget = {}, membersInfo = {}, PicsList } = this.props;
     const props = {
-      multiple:true,
-      onPreview:file=>{
+      multiple: true,
+      onPreview: file => {
         this.showModal(file.url);
       },
       onRemove: file => {
@@ -112,21 +100,16 @@ class Picview extends Component{
       },
     };
 
-
     return (
       <Spin tip="请耐心等候..." spinning={loading}>
         <Card
-          title="附件上传（图片或视频）"
+          title="附件上传（图片或视频，最大80M）"
           style={{
             marginBottom: 24,
           }}
         >
           <div>
-            <Upload {...props}
-                    fileList={PicsList}
-                    showUploadList={true}
-
-            >
+            <Upload {...props} fileList={PicsList} showUploadList={true}>
               <Button>
                 <Icon type="upload" /> 选择文件，支持多文件上传
               </Button>
@@ -138,7 +121,7 @@ class Picview extends Component{
               loading={uploading}
               style={{ marginTop: 16 }}
             >
-              { '上传'+PicList.length+'个文件'}
+              {'上传' + PicList.length + '个文件'}
             </Button>
           </div>
 
@@ -148,18 +131,12 @@ class Picview extends Component{
             onOk={this.handleOk}
             onCancel={this.handleCancel}
           >
-            <embed src={this.state.url} style={{ width: '100%' }}/>
+            <embed src={this.state.url} style={{ width: '100%' }} />
           </Modal>
-
         </Card>
       </Spin>
     );
-
-
   }
-
-
-
 }
 
 export default Picview;

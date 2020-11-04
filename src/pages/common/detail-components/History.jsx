@@ -1,13 +1,12 @@
-import React, { Component } from 'react'
-import {Card,Table} from 'antd'
-import {operationUnit,operationType} from '@/utils/constant'
-import moment from 'moment'
+import React, { Component } from 'react';
+import { Card, Table } from 'antd';
+import { operationUnit, operationType } from '@/utils/constant';
+import moment from 'moment';
 const columns = [
   {
     title: '操作类型',
-    render: ({operationType:type, operationUnit:unit}) => {
-      
-      return type==='3'&&unit==='4'?'同意':operationType[type];
+    render: ({ operationType: type, operationUnit: unit }) => {
+      return type === '3' && unit === '4' ? '同意' : operationType[type];
     },
   },
   {
@@ -30,21 +29,19 @@ const columns = [
   },
 ];
 class History extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {  }
-  }
-  render() { 
-    const {process} = this.props
-    return ( <Card  bordered={false} title="操作历史">
-    <Table
-      pagination={false}
-      rowKey={(history,index) =>index }
-      dataSource={process}
-      columns={columns}
-    />
-  </Card> );
+  render() {
+    const { process } = this.props;
+    return (
+      <Card bordered={false} title="操作历史">
+        <Table
+          pagination={false}
+          rowKey={(history, index) => index}
+          dataSource={process}
+          columns={columns}
+        />
+      </Card>
+    );
   }
 }
- 
+
 export default History;

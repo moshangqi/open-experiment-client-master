@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Descriptions, Card, Divider,Table } from 'antd';
-import { memberRole,majorCollege, major } from '@/utils/constant';
+import { Descriptions, Card, Divider, Table } from 'antd';
+import { memberRole, majorCollege, major } from '@/utils/constant';
 class Member extends Component {
   constructor(props) {
     super(props);
@@ -8,55 +8,53 @@ class Member extends Component {
   }
   columns = [
     {
-      title:'姓名',
-      dataIndex:'realName'
+      title: '姓名',
+      dataIndex: 'realName',
     },
     {
-      title:'性别',
-      dataIndex:'sex'
+      title: '性别',
+      dataIndex: 'sex',
     },
     {
-      title:'学号/工号',
-      dataIndex:'code'
+      title: '学号/工号',
+      dataIndex: 'code',
     },
     {
-      title:'学院',
-      dataIndex:'institute',
+      title: '学院',
+      dataIndex: 'institute',
       render(c) {
-        return (
-           majorCollege[c-1].cName
-        );
-      }
+        return majorCollege[c - 1].cName;
+      },
     },
     {
-      title:'联系电话',
-      dataIndex:'mobilePhone'
+      title: '联系电话',
+      dataIndex: 'mobilePhone',
     },
     {
-      title:'QQ号',
-      dataIndex:'qqNum'
+      title: 'QQ号',
+      dataIndex: 'qqNum',
     },
     {
-      title:'专业',
-      dataIndex:'major',
-      render:(m)=>{
-        return m===null||+m!==+m?'\\':major[m-1].mName;
-      }
+      title: '专业',
+      dataIndex: 'major',
+      render: m => {
+        return m === null || +m !== +m ? '\\' : major[m - 1].mName;
+      },
     },
     {
-      title:'年级',
-      render:(m)=>{
-        return m.memberRole===1?'\\':m.grade+'级'
-      }
+      title: '年级',
+      render: m => {
+        return m.memberRole === 1 ? '\\' : m.grade + '级';
+      },
     },
     {
-      title:'项目角色',
-      dataIndex:'memberRole',
-      render:(role)=>{
-        return memberRole[role]
-      }
-    }
-  ]
+      title: '项目角色',
+      dataIndex: 'memberRole',
+      render: role => {
+        return memberRole[role];
+      },
+    },
+  ];
   render() {
     const { memberList } = this.props;
     return (
@@ -68,13 +66,11 @@ class Member extends Component {
         bordered={false}
       >
         <Table
-        dataSource={memberList}
-        columns={this.columns}
-        pagination={false}
-        rowKey={(history,index) =>index }
-        >
-
-        </Table>
+          dataSource={memberList}
+          columns={this.columns}
+          pagination={false}
+          rowKey={(history, index) => index}
+        ></Table>
         {/* <Card style={{ marginBottom: 20 }} type="inner" title="指导老师" bordered={false}>
           {memberList
             .filter(item => item.memberRole === 1)
