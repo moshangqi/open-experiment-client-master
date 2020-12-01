@@ -34,7 +34,6 @@ const AuthComponent = ({
 }) => {
   const { currentUser } = user;
   const { routes = [] } = route;
-  console.log(routes)
   const isLogin = false//currentUser && currentUser.name;
   return (
     <Authorized

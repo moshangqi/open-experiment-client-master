@@ -257,11 +257,12 @@ class TableList extends Component {
     e.preventDefault();
     const { dispatch, form } = this.props;
     form.validateFields((err, values) => {
-      console.log(values);
       let payload = {
         ...values,
         startTime: values.date && values.date[0].format('x'),
         endTime: values.date && values.date[1].format('x'),
+        status: 4, // 加入查询状态限制
+        projectType: 2
       };
       delete payload.date;
       dispatch({
@@ -522,7 +523,6 @@ class TableList extends Component {
       type: approvalType,
       isDetail: true,
     };
-    console.log(payload);
     dispatch({
       type: 'approval/key',
       payload: {
@@ -577,7 +577,6 @@ class TableList extends Component {
   };
 
   keyToNomal = (reason, money) => {
-    console.log(this.state);
     const { selectedRows } = this.state;
     const data = selectedRows.reduce((res, item) => {
       return [...res, { projectId: item.id, reason: reason, applyFunds: money }];
@@ -653,7 +652,6 @@ class TableList extends Component {
       modalVisiblel2,
       modalVisiblel3,
     } = this.state;
-    console.log(projects);
     const btnDisable = selectedRows.length === 0;
     const content = (
       <RouteContext.Consumer>
@@ -700,7 +698,7 @@ class TableList extends Component {
         tabList={[
           {
             key: '0',
-            tab: '待审批',
+            tab: '立项审批中',
           },
           {
             key: '3',

@@ -149,11 +149,12 @@ class TableList extends Component {
     e.preventDefault();
     const { dispatch, form } = this.props;
     form.validateFields((err, values) => {
-      console.log(values);
       let payload = {
         ...values,
         startTime: values.date && values.date[0].format('x'),
         endTime: values.date && values.date[1].format('x'),
+        status: 4, // 加入查询状态限制
+        projectType: 1
       };
       delete payload.date;
       dispatch({
@@ -521,7 +522,6 @@ class TableList extends Component {
       (res, item) => [...res, { projectId: item.id, reason: reason }],
       [],
     );
-    console.log(data);
     const { dispatch } = this.props;
     dispatch({
       type: 'equipment/reviewPassed',
@@ -559,7 +559,7 @@ class TableList extends Component {
       (res, item) => [...res, { projectId: item.id, reason: reason }],
       [],
     );
-    console.log(data);
+
     const { dispatch } = this.props;
     dispatch({
       type: 'equipment/agree',
@@ -650,7 +650,7 @@ class TableList extends Component {
         tabList={[
           {
             key: '0',
-            tab: '待审批',
+            tab: '立项审批中',
           },
           {
             key: '1',

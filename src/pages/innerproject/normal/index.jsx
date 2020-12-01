@@ -54,7 +54,7 @@ class InnerProject extends Component {
             ? null
             : JSON.stringify(values.limitMajor)
           : null;
-        console.log(values);
+        //console.log(values);
         let payload = {
           ...values,
           limitCollege,
@@ -71,7 +71,7 @@ class InnerProject extends Component {
         delete payload.names;
         delete payload.keys;
         delete payload.time;
-        console.log(payload);
+       // console.log(payload);
         if (form.getFieldValue('isOpenTopic') === '1') delete payload.stuCodes;
 
         dispatch({
@@ -80,12 +80,11 @@ class InnerProject extends Component {
           form,
         });
         //form.resetFields()
-        console.log(payload);
+        //console.log(payload);
       }
     });
   };
   onChange = value => {
-    console.log(value);
     this.setState({ value });
   };
   remove = k => {
@@ -161,7 +160,6 @@ class InnerProject extends Component {
   };
   handleSelect = value => {
     const { form } = this.props;
-    console.log(value);
     // form.setFieldValue('')
   };
 

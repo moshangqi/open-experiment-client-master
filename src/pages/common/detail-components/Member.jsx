@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Descriptions, Card, Divider, Table } from 'antd';
-import { memberRole, majorCollege, major } from '@/utils/constant';
+import { memberRole, majorCollege, major, myMajor } from '@/utils/constant';
 class Member extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +23,7 @@ class Member extends Component {
       title: '学院',
       dataIndex: 'institute',
       render(c) {
-        return majorCollege[c - 1].cName;
+        return ( majorCollege.find(item => item.cId == c) || {}).cName; //修改完毕
       },
     },
     {
@@ -37,8 +37,8 @@ class Member extends Component {
     {
       title: '专业',
       dataIndex: 'major',
-      render: m => {
-        return m === null || +m !== +m ? '\\' : major[m - 1].mName;
+      render: (m,record) => {
+        return m === null ? '\\' : ( (myMajor[record.institute] || []).find(item => item.mId == m) || {}).mName; //修改完毕
       },
     },
     {

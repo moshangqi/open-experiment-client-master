@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin, getFakeCaptcha,reqToken ,reqCaptchaP,reqUserInfo} from './service';
+import { fakeAccountLogin, getFakeCaptcha,reqToken ,reqCaptchaP,reqUserInfo, reqLoginFirst, reqGetAllPermissions} from './service';
 import { getPageQuery, setAuthority,setToken } from './utils/utils';
 import router from 'umi/router';
 import {message} from 'antd'
@@ -9,15 +9,20 @@ const Model = {
   state: {
     status: undefined,
     imgSrc: '',
-    user:{}
+    user:{},
+    visible: false,
+    roleList: [],
+    loading: false
   },
   effects: {
     *login({ payload }, { call, put }) {
      // const response = yield call(fakeAccountLogin, payload);
-      // yield put({
-      //   type: 'changeLoginStatus',
-      //   payload: response,
-      // }); // Login successfully
+      yield put({
+        type: 'modalChange',
+        payload: {
+          loading: true
+        },
+      }); // Login successfully
       const res = yield call(reqToken,payload)
       if(res.code===0){
         setAuthority([res.data.roles.id]);
@@ -30,6 +35,13 @@ const Model = {
       }else{
         message.error(`登录失败:${res.msg}`)
       }
+      yield put({
+        type: 'modalChange',
+        payload: {
+          loading: false,
+          visible: false
+        },
+      }); 
       const res1 = yield call(reqUserInfo)
       if (res.code===0) {
         const urlParams = new URL(window.location.href);
@@ -38,10 +50,8 @@ const Model = {
 
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
-
           if (redirectUrlParams.origin === urlParams.origin) {
             redirect = redirect.substr(urlParams.origin.length);
-
             if (redirect.match(/^\/.*#/)) {
               redirect = redirect.substr(redirect.indexOf('#') + 1);
             }
@@ -50,10 +60,41 @@ const Model = {
             return;
           }
         }
-        window.location.href = urlParams.origin
-        //yield put(routerRedux.replace(redirect || '/'));
+        // window.location.hash = '#/home'
+        window.location.href = urlParams.origin + '/dist'
+        // yield put(routerRedux.replace(redirect || '/'));
 
       }
+    },
+
+    *loginFirst({ payload }, { call, put }) {
+      yield put({
+        type: 'modalChange',
+        payload: {
+          loading: true
+        }
+      })
+      const { code , data, msg} = yield call(reqLoginFirst, payload)
+      console.log(code, data, msg)
+      if( code == 0) {
+        const response = yield call(reqGetAllPermissions,{userCode: payload.userCode})
+        yield put({
+          type: 'modalChange',
+          payload: {
+            roleList: response.data,
+            visible: true,
+            loading: false
+          }
+        })
+      } else {
+        message.error(msg)
+      }
+      yield put({
+        type: 'modalChange',
+        payload: {
+          loading: false
+        }
+      })
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -79,6 +120,9 @@ const Model = {
     },
     save(state,{payload}){
       return {...state,user:payload}
+    },
+    modalChange(state, {payload}) {
+      return {...state,...payload}
     }
   },
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteContext } from '@ant-design/pro-layout';
 import { Descriptions } from 'antd';
-import { experimentType, suggestGroupType, majorCollege, major, openType } from '@/utils/constant';
+import { experimentType, suggestGroupType, majorCollege, major, openType, myMajor } from '@/utils/constant';
 import moment from 'moment';
 import { isEmpty } from '@/utils/utils';
 
@@ -43,7 +43,7 @@ export default ({ detail }) => {
           ? '不限学院'
           : JSON.parse(detail.limitCollege)
               .map(item => {
-                return majorCollege[item - 1].cName;
+                return (majorCollege.find(cItem=>cItem.cId ==item) || {} ).cName; //修改完成
               })
               .join('、')}
       </Descriptions.Item>

@@ -80,7 +80,6 @@ class Advanced extends Component {
         payload: JSON.parse(localStorage.getItem('payload-d')),
       });
     }
-    console.log(this.props.process);
     if (process.length == 0) {
       dispatch({
         type: 'detail/fetchNewProcess',
@@ -164,6 +163,7 @@ class Advanced extends Component {
   };
   handleKeyProjectApply = () => {
     const { dispatch, detail } = this.props;
+    // console.log(detail)
     dispatch({
       type: 'approval/apply',
       payload: {

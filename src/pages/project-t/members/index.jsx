@@ -81,7 +81,7 @@ class TableList extends Component {
     {
       title: '专业',
       dataIndex: 'major',
-      render: m => (major[m - 1] ? major[m - 1].mName : null),
+      render: m => { (major.find( item => item.mId == m) || {} ).mName }, // (major[m - 1] ? major[m - 1].mName : null),
     },
     {
       title: '年级',
@@ -636,7 +636,8 @@ class TableList extends Component {
               <Descriptions.Item label="QQ">{apply.qqNum}</Descriptions.Item>
               <Descriptions.Item label="联系电话">{apply.mobilePhone}</Descriptions.Item>
               <Descriptions.Item label="专业">
-                {major[apply.major - 1] && major[apply.major - 1].mName}
+              {  ( major.find(item => item.mId == apply.major) || {}).mName }
+                {/* { major[apply.major - 1] && major[apply.major - 1].mName} */}
               </Descriptions.Item>
               <Descriptions.Item label="年级">{apply.grade + '级'}</Descriptions.Item>
               {/* <Descriptions.Item span={2} label='学习绩点'>

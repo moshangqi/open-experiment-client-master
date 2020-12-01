@@ -4,10 +4,16 @@ const projectsUrl = [
   '/project/getToBeReportedProjectBySecondaryUnit',
   '/project/getHistoricalProjectInfoByUnitAndOperation',
   '/project/getHistoricalProjectInfoByUnitAndOperation',
+  '/project/getToReviewProject'
 ];
 
 export async function reqSecondProjects(payload) {
   console.log(projectsUrl[payload.status], payload.status, payload);
+  if(payload.status == 4) {
+    return request(projectsUrl[payload.status], {
+      method: 'get'
+    })
+  }
   return request(projectsUrl[payload.status], {
     method: +payload.status <= 1 ? 'get' : 'post',
     data: payload.data,

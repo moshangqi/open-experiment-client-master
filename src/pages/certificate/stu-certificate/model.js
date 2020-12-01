@@ -45,7 +45,6 @@ const Model = {
         message.error('删除出错'+res.msg)
       }
       const response = yield call(myApplication, payload);
-      console.log(response);
       yield put({
         type: 'save',
         payload: response.data,

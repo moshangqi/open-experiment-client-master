@@ -10,7 +10,7 @@ import { connect } from 'dva';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { isAntDesignPro } from '@/utils/utils'; // import logo from '../assets/logo.svg';
-
+import Footer from './Footer'
 import logo from '../assets/logo.png';
 /**
  * use Authorized check all menu item
@@ -24,12 +24,12 @@ const menuDataRender = menuList =>
 
 const footerRender = (_, defaultDom) => {
   if (!isAntDesignPro()) {
-    return defaultDom;
+    return <Footer /> ;
   }
 
   return (
     <>
-      {defaultDom}
+      {<Footer />}
       <div
         style={{
           padding: '0px 24px 24px',

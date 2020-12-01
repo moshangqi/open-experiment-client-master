@@ -22,7 +22,7 @@ const approvalUrl = [
  */
 const keyApprovalUrl = [
   ['/project/rejectKeyProjectByLabAdministrator','/project/agreeKeyProjectByLabAdministrator','/project/reportKeyProjectByLabAdministrator','/project/changeKeyProjectToGeneral'],
-  ['/project/rejectKeyProjectBySecondaryUnit','/project/agreeKeyProjectBySecondaryUnit','/project/reportKeyProjectBySecondaryUnit'],
+  ['/project/rejectKeyProjectBySecondaryUnit','/project/agreeKeyProjectBySecondaryUnit','/project/reportKeyProjectBySecondaryUnit', '/project/changeKeyProjectToGeneral'],
   ['/project/rejectKeyProjectByFunctionalDepartment','/project/agreeKeyProjectByFunctionalDepartment',],
   ['/project/rejectKeyProjectByGuideTeacher','/project/agreeKeyProjectByGuideTeacher']
 ]
@@ -53,7 +53,6 @@ const Model = {
      */
     *normal({payload},{call,put}){
       const {data,type,unit,isDetail,status=0} = payload
-      console.log('normal',payload)
       const res = yield call(reqApproval,approvalUrl[unit][type],data)
       if(res.code===0){
         message.success('操作成功！')
@@ -99,7 +98,6 @@ const Model = {
      */
     *key({payload},{call,put}){
       const {data,type,unit,isDetail,status=0,role=0} = payload
-      console.log('key',payload)
       const res = yield call(reqApproval,keyApprovalUrl[unit][type],data)
       if(res.code===0){
         message.success('操作成功！')
@@ -121,7 +119,7 @@ const Model = {
             }
           })
         }else{
-          console.log('ssssssss',approvalType[unit])
+          // console.log('ssssssss',approvalType[unit])
           yield put({
             type:keyApprovalType[unit],
             payload:{
@@ -137,7 +135,7 @@ const Model = {
     ,
 
     /**
-     * 学生提交重点项目申请接口,提交后重新请求详情刷新页面
+     * 学生项目申请接口,提交后重新请求详情刷新页面
      * payload:{
      *  projectId:string
      *  ...

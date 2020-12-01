@@ -47,7 +47,6 @@ const Model = {
     },
     *export({ payload }, { call, put }) {
       const res = yield call(reqExportConclusionExcel);
-      console.log(res);
       saveAs(res, '结题一览表.xlsx');
     },
     *keyToProject({ payload }, { call, put }) {

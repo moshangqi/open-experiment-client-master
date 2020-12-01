@@ -14,7 +14,7 @@ const Model = {
         payload: true,
       });
       const res = yield call(reqReviewKeyProject, payload);
-      console.log(res);
+      // console.log(res);
       if (res.code === 0) {
         yield put({
           type: 'save',

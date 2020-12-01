@@ -41,7 +41,7 @@ export default ({ detail }) => {
           ? '不限学院'
           : JSON.parse(detail.limitCollege)
               .map(item => {
-                return majorCollege[item - 1].cName;
+                return (majorCollege.find(citem => citem.cId == item) || {} ).cName; // majorCollege[item - 1].cName;
               })
               .join('、')}
       </Descriptions.Item>

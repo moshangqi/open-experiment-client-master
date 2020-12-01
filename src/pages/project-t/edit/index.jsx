@@ -489,6 +489,6 @@ class BasicForm extends Component {
 export default Form.create()(
   connect(({ loading,detail }) => ({
     submitting: loading.effects['formBasicForm/submitRegularForm'],
-    detail:detail.baseInfo
+    detail: detail.baseInfo
   }))(BasicForm),
 );

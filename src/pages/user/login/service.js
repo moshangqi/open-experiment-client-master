@@ -31,3 +31,18 @@ export async function reqCaptchaP(){
 export async function getFakeCaptcha(mobile) {
   return request(`/api/login/captcha?mobile=${mobile}`);
 }
+
+export async function reqLoginFirst(params) {
+  return request('/anon/loginFirst',{
+    method: 'POST',
+    data: params
+  })
+}
+
+
+export async function reqGetAllPermissions(params) {
+  return request('/anon/getAllPermissions',{
+    method: 'POST',
+    data: params
+  })
+}

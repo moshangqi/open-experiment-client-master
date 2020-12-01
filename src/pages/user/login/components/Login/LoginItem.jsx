@@ -4,10 +4,14 @@ import omit from 'omit.js';
 import ItemMap from './map';
 import LoginContext from './LoginContext';
 import styles from './index.less';
+import {connect} from 'dva';
 const { Option } = Select;
 
 const FormItem = Form.Item;
 
+@connect(({ userLogin, loading }) => ({
+  roleList: userLogin.roleList
+}))
 class WrapFormItem extends Component {
   static defaultProps = {
     getCaptchaButtonText: 'captcha',
@@ -86,6 +90,7 @@ class WrapFormItem extends Component {
 
   render() {
     const { count } = this.state; // 这么写是为了防止restProps中 带入 onChange, defaultValue, rules props tabUtil
+
 
     const {
       onChange,

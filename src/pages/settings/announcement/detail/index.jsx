@@ -53,12 +53,12 @@ class TableList extends Component {
     //   type:'announcement/getDetail',
     //   payload: history.loca
     // })
-    dispatch({
-      type: 'announcement/getDetail',
-      payload: {
-        announcementId: history.location.query.id,
-      },
-    });
+    // dispatch({
+    //   type: 'announcement/getDetail',
+    //   payload: {
+    //     announcementId: history.location.query.id,
+    //   },
+    // });
   }
 
   handleChange = value => {
@@ -67,7 +67,6 @@ class TableList extends Component {
   render() {
     const { form, detail } = this.props;
     const { getFieldDecorator } = form;
-
     const title = (
       <div>
         <span>{detail.title}</span>
@@ -91,7 +90,7 @@ class TableList extends Component {
     return (
       <PageHeaderWrapper extra={extra}>
         <Card title={title} extra={cardExtra}>
-          <div dangerouslySetInnerHTML={{ __html: detail.content }}></div>
+          <div className='ql-editor' data-gramm="false" contenteditable='true' dangerouslySetInnerHTML={{ __html: detail.content }}></div>
         </Card>
       </PageHeaderWrapper>
     );

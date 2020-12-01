@@ -10,7 +10,8 @@ import {
   majorCollege,
   memberRole,
   experimentType,
-  statusType
+  statusType,
+  myMajor
 } from '@/utils/constant'
 import baidu from 'baidu-template-pro'
 import moment from "moment";
@@ -141,7 +142,7 @@ class OutCome extends Component {
     const {detail,ZipList,loading,budget={},membersInfo={},OutComeList} = this.props
     const students = detail.list.filter(item=>item.memberRole!==1)
     const teachers = detail.list.filter(item=>item.memberRole===1)
-    const major = [...new Set(students.map(item=>MAJOR[item.major-1].mName))].join('、')
+    const major = [...new Set(students.map(item=>(myMajor[item.institute].find( mitem => mitem.mId ==item.major) || {}).mName))].join('、')
     const grade = [...new Set(students.map(item=>item.grade+'级'))].join('、')
     const data = {
       projectName:detail.projectName,
@@ -153,7 +154,8 @@ class OutCome extends Component {
       GRADE,
       students,
       teachers,
-      belongCollege:detail.subordinateCollege?majorCollege[detail.subordinateCollege-1].cName:'职能部门',
+      belongCollege:detail.subordinateCollege? (majorCollege.find(item => item.cId ==  detail.subordinateCollege) || {} ).cName //majorCollege[detail.subordinateCollege-1].cName
+      :'职能部门',
       membersInfo:membersInfo||{},
       budget:budget||{}
     };

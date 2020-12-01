@@ -1,0 +1,53 @@
+.table{
+  width: 100%;
+}
+
+.tableHeaderGroup{
+    background: rgb(250,250,250);
+    height: 54px;
+    line-height: 38px;
+}
+
+.tableRow{
+  display: flex;
+  width: 100%;
+}
+
+.tableCell {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tableId {
+  width: 12%;
+}
+
+.tableCompany {
+  width: 30%;
+}
+
+.tableName {
+  width: 40%;
+}
+
+.tableType {
+  width: 18%;
+}
+
+.tableRowGroup{
+  .tableRow{
+    display: flex;
+    width: 100%;
+    transition: all .2s;
+    &:hover{
+      background: #f2f4f5;
+    }
+  }
+}
+
+
+.pagination{
+  display: flex;
+  flex-direction: row-reverse;
+  padding-top: 16px;
+}

@@ -1,0 +1,105 @@
+@import '~antd/es/style/themes/default.less';
+
+.portal{
+  background: url(../../assets/bg.png) 0 0 repeat-x #fff;
+  min-height: 100%;
+  header{
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.maxContainer {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.logBar{
+  width: 100%;
+  height: 128px;
+  display: flex;
+  background: url(../../assets/top_bg.png) 70% 0 no-repeat transparent;
+}
+// .media {
+//   background: url(../../assets/top_bg.png) 0 0 repeat-x transparent;
+// }
+// span{ 
+//   background-color:yellow;
+// }
+
+.logo {
+  height: 70px;
+  width: 100%;
+  margin: auto;
+  img{
+    height: 100%;
+  }
+}
+
+
+.nav {
+  border-radius: 4px;
+  width: 100%;
+  background-color: rgb(66,68,157);
+
+}
+
+.menu {
+  display: flex;
+  height: 44px;
+  font-size: 16px;
+  li {
+    height: 100%;
+    padding: 0 24px;
+    margin-right: 2px;
+    list-style: none;
+    line-height: 44px;
+    color: white;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(50, 51, 110);
+    }
+  }
+}
+
+
+.main {
+  padding-top: 20px;
+}
+
+.myPadding {
+  padding-right: 20px;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cards{
+  padding-right: 20px;
+}
+
+
+.footer {
+  margin-top: 40px;
+  width: 100%;
+  text-align: center;
+  color: #bbb;
+  background: url(../../assets/foot_bg.png) center 0 no-repeat #2f536e;
+  border-top: 3px solid #062339;
+  padding: 40px 0;
+}
+
+
+.topBottom {
+  margin: 20px 0; 
+}
+
+@media  screen and (max-width: 768px) {
+  .myPadding {
+    padding: 20px;
+  }
+  .cards{
+    padding-right: 0px ;
+    margin-bottom: 20px;
+  }
+}

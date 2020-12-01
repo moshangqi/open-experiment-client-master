@@ -215,6 +215,7 @@ class OverProject extends Component {
   };
   handleKeyProjectApply = () => {
     const { dispatch, detail } = this.props;
+
     dispatch({
       type: 'approval/apply',
       payload: {

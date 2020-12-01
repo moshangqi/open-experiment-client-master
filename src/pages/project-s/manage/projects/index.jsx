@@ -120,12 +120,12 @@ class TableList extends Component {
     {
       title: '操作',
       dataIndex:'id',
-      render: (id) => (
+      render: (id,record) => (
         <Fragment>
           {/* <a onClick={() => this.editWarning()}>编辑</a>
 
           <Divider type="vertical" /> */}
-          <a onClick={()=>this.handleDetailClick(id)}>查看详情</a>
+          <a onClick={()=>this.handleDetailClick(id,record.projectType)}>查看详情</a>
         </Fragment>
       ),
     },
@@ -262,13 +262,14 @@ class TableList extends Component {
       modalVisible:true
     })
   }
-  handleDetailClick = (id)=>{
+  handleDetailClick = (id,type)=>{
     const {history,dispatch} = this.props
     dispatch({
       type:'detail/fetchDetail',
       payload:{
         projectGroupId:id,
-        role:7
+        role:7,
+        projectType: type
       }
     })
     dispatch({

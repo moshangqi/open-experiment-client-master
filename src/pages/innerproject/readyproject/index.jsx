@@ -209,7 +209,6 @@ class InnerList extends Component {
 
   render() {
     const { loading, projects, process } = this.props;
-    console.log('projects', projects);
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -217,7 +216,6 @@ class InnerList extends Component {
         <Menu.Item key="approval">批量审批</Menu.Item>
       </Menu>
     );
-    console.log(process);
     const timeLines = process.map(item => {
       switch (item.operationType) {
         case '1':

@@ -141,7 +141,6 @@ const Model = {
      * }
      */
     *fetchProcess({ payload }, { call, put }) {
-      console.log('fetchProcess', payload);
       const { projectType } = payload;
       const res = yield call(reqProjectProcess, { projectId: payload.projectId });
       localStorage.setItem('payload-p', JSON.stringify(payload));
@@ -171,7 +170,6 @@ const Model = {
 
     //从写匹配，解决刷新bug
     *fetchNewProcess({ payload }, { call, put }) {
-      console.log('fetchProcess', payload);
       const { projectType } = payload;
       const res = yield call(reqProjectProcess, { projectId: payload.projectId });
       if (res.code === 0) {
@@ -199,7 +197,6 @@ const Model = {
     },
 
     *fetchKeyProcess({ payload }, { call, put }) {
-      console.log('fetchProcess', payload);
       const { projectType } = payload;
       const res = yield call(reqKeyProjectProcess, { projectId: payload.projectId });
       if (res.code === 0) {
@@ -353,7 +350,7 @@ const Model = {
           type: 'savePicFileList',
           payload: arr,
         });
-        console.log(router, arr, payload.role, '>>>>>');
+        // console.log(router, arr, payload.role, '>>>>>');
         if (window.location.pathname === roleURL[payload.role]) {
           router.replace((projectType === 2 ? keyRoleURL : roleURL)[payload.role]);
         } else {
@@ -372,7 +369,7 @@ const Model = {
     *fetchNewDetail({ payload }, { call, put }) {
       const { projectType, role, reportToAgree } = payload;
       const res = yield call(reqProjectDetail, { id: payload.projectGroupId });
-      console.log(res);
+      // console.log(res);
       if (res.code === 0) {
         yield put({
           type: 'saveDetail',
@@ -487,7 +484,7 @@ const Model = {
           type: 'savePicFileList',
           payload: arr,
         });
-        console.log(router, arr);
+        // console.log(router, arr);
       } else {
         yield put({
           type: 'saveDetail',
@@ -499,7 +496,7 @@ const Model = {
 
     *uploadApplyFile({ payload }, { call, put }) {
       const res = yield call(reqUploadApplyFile, payload.data);
-      console.log(payload);
+      // console.log(payload);
       if (res.code === 0) {
         message.success('上传成功');
 
@@ -526,8 +523,8 @@ const Model = {
 
     *uploadConcludingReport({ payload }, { call, put }) {
       const response = yield call(reqUploadOverFile, payload.data);
-      console.log(response);
-      console.log(payload);
+      // console.log(response);
+      // console.log(payload);
       if (response.code === 0) {
         message.success('上传成功');
 
@@ -575,7 +572,7 @@ const Model = {
 
     *uploadAchievementAnnex({ payload }, { call, put }) {
       const response = yield call(reqUploadZipFile, payload.data);
-      console.log(response);
+      // console.log(response);
       if (response.code === 0) {
         message.success('上传成功');
 
@@ -623,7 +620,7 @@ const Model = {
 
     *uploadAttachmentFile({ payload }, { call, put }) {
       const response = yield call(reqUploadAttFile, payload.data);
-      console.log(response, payload.id);
+      // console.log(response, payload.id);
       let arr = [];
       for (let i = 0; i < response.data.length; i++) {
         arr[i] = {
@@ -644,7 +641,7 @@ const Model = {
         message.error(`${response.msg}`);
       }
       const res = yield call(reqProjectDetail, { id: payload.id });
-      console.log(res);
+      // console.log(res);
       if (res.code === 0) {
         let arr = [];
         for (let i = 0; i < res.data.annexes.length; i++) {
@@ -666,7 +663,7 @@ const Model = {
 
     *uploadExperimentReport({ payload }, { call, put }) {
       const response = yield call(reqUploadEquipmentFile, payload.data);
-      console.log(response);
+      // console.log(response);
       if (response.code === 0) {
         message.success('上传成功');
         yield put({
@@ -761,14 +758,13 @@ const Model = {
     *deleteFile({ payload }, { call, put }) {
       const { data } = payload;
       const response = yield call(deleteFile, data);
-      console.log(response, data);
+      // console.log(response, data);
       if (response.code === 0) {
         message.success('删除成功');
       } else {
         message.error(`${response.msg}`);
       }
       const res = yield call(reqProjectDetail, { id: payload.theId });
-      console.log(res);
       if (res.code === 0) {
         let arr = [];
         for (let i = 0; i < res.data.annexes.length; i++) {
@@ -801,14 +797,12 @@ const Model = {
     *deleteIconicResult({ payload }, { call, put }) {
       const { data } = payload;
       const response = yield call(deleteOutCome, data);
-      console.log(response, data);
       if (response.code === 0) {
         message.success('删除成功');
       } else {
         message.error(`${response.msg}`);
       }
       const res = yield call(reqProjectDetail, { id: payload.theId });
-      console.log(res);
       if (res.code === 0) {
         yield put({
           type: 'saveDetail',

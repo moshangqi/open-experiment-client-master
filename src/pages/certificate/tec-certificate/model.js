@@ -33,7 +33,6 @@ const Model = {
 
     *emptyTheTable({ payload}, { call}) {
       const response = yield call(emptyWays, payload);
-      console.log(response);
       if(response.code===0) {
         message.success('清空所有申领数据成功');
       }

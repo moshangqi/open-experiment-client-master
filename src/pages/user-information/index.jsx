@@ -36,7 +36,6 @@ class BasicForm extends Component {
         const payload = {
           ...values
         }
-        console.log(payload)
          dispatch({
           type: 'user/updateUserInfo',
           payload,
@@ -45,7 +44,6 @@ class BasicForm extends Component {
     });
   };
   onChange = value => {
-    console.log(value);
     this.setState({ value });
   };
 

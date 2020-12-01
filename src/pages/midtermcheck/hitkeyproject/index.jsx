@@ -71,7 +71,7 @@ class MidHitKeyProject extends Component {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
       render:(t)=>{
-        return t===0?'职能部门':majorCollege[t-1].cName;
+        return t===0?'职能部门': (majorCollege.find(item => item.cId == t) || {} ).cName; // majorCollege[t-1].cName;
       }
     },
     {
@@ -140,7 +140,6 @@ class MidHitKeyProject extends Component {
     e.preventDefault()
     const {dispatch,form} = this.props
     form.validateFields((err,values)=>{
-      console.log(values)
       let payload = {...values,
         startTime:values.date&&values.date[0].format('x'),
         endTime:values.date&&values.date[1].format('x')

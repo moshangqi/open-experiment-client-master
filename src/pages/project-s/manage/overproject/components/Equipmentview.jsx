@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Button, Upload, Icon, Modal, Form, Input, message, Spin } from 'antd';
 import { connect } from 'dva';
 import { saveAs } from 'file-saver';
-import { applyModel, major as MAJOR, grade as GRADE, majorCollege } from '@/utils/constant';
+import { applyModel, major as MAJOR, grade as GRADE, majorCollege , myMajor} from '@/utils/constant';
 import baidu from 'baidu-template-pro';
 
 const { TextArea } = Input;
@@ -30,7 +30,7 @@ class Equipmentview extends Component {
   downloadApplyModel = () => {
     const { detail } = this.props;
     saveAs(
-      'http://192.168.43.29:8083/document/开放实验重点项目申请书正文参考模板.doc',
+      'http://192.168.109.88:8083/document/开放实验重点项目申请书正文参考模板.doc',
       '开放实验重点项目申请书正文参考模板.doc',
     );
   };
@@ -73,7 +73,8 @@ class Equipmentview extends Component {
     const { detail, EquipmentList, loading, budget = {}, membersInfo = {} } = this.props;
     const students = detail.list.filter(item => item.memberRole !== 1);
     const teachers = detail.list.filter(item => item.memberRole === 1);
-    const major = [...new Set(students.map(item => MAJOR[item.major - 1].mName))].join('、');
+    console.log(myMajor)
+    const major = [...new Set(students.map(item => (myMajor[item.institute].find( mitem => mitem.mId ==item.major) || {}).mName))].join('、');
     const grade = [...new Set(students.map(item => item.grade + '级'))].join('、');
     const data = {
       projectName: detail.projectName,
@@ -86,7 +87,7 @@ class Equipmentview extends Component {
       students,
       teachers,
       belongCollege: detail.subordinateCollege
-        ? majorCollege[detail.subordinateCollege - 1].cName
+        ? (majorCollege.find(item => item.cId ==  detail.subordinateCollege) || {} ).cName // majorCollege[ detail.subordinateCollege - 1].cName
         : '职能部门',
       membersInfo: membersInfo || {},
       budget: budget || {},

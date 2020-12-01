@@ -119,7 +119,7 @@ class TableList extends Component {
         <Fragment>
           <a onClick={() => this.handleEdit(record.id)}>编辑</a>
           <Divider type="vertical" />
-          <a onClick={()=>this.handleDetailClick(record.id)}>查看详情</a>
+          <a onClick={()=>this.handleDetailClick(record.id,record)}>查看详情</a>
           <Divider style={{display:((record.projectType === 1 && (record.status >= -2 && record.status <= 2))||(record.projectType === 2 && ((record.status >= -2 && record.status <= 2)||(record.status === -4))))? 'inline' : 'none'}} type="vertical" />
           <a  style={{display:((record.projectType === 1 && (record.status >= -2 && record.status <= 2))||(record.projectType === 2 && ((record.status >= -2 && record.status <= 2)||(record.status === -4))))? 'inline' : 'none'}} onClick={()=>this.handleDeleteClick(record.id,record.projectType)}>删除</a>
         </Fragment>
@@ -174,13 +174,14 @@ class TableList extends Component {
 
 
 
-  handleDetailClick = (id)=>{
+  handleDetailClick = (id,record)=>{
     const {history,dispatch} = this.props
     dispatch({
       type:'detail/fetchDetail',
       payload:{
         projectGroupId:id,
-        role:5
+        role:5,
+        projectType: record.projectType
       }
     })
     dispatch({

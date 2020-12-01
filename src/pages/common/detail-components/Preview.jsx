@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Card, Button, Upload, Icon, Modal, Form, Input, message, Spin } from 'antd';
 import { connect } from 'dva';
 import { saveAs } from 'file-saver';
-import { applyModel, major as MAJOR, grade as GRADE, majorCollege } from '@/utils/constant';
+import { applyModel, major as MAJOR, grade as GRADE, majorCollege, myMajor } from '@/utils/constant';
 import baidu from 'baidu-template-pro';
+import { head } from 'lodash';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -30,7 +31,7 @@ class Preview extends Component {
   downloadApplyModel = () => {
     const { detail } = this.props;
     saveAs(
-      'http://192.168.43.29:8083/document/开放实验重点项目申请书正文参考模板.doc',
+      'http://192.168.109.88:8083/document/开放实验重点项目申请书正文参考模板.doc',
       '开放实验重点项目申请书正文参考模板.doc',
     );
   };
@@ -90,8 +91,13 @@ class Preview extends Component {
     const { detail, fileList, loading, budget = {}, membersInfo = {} } = this.props;
     const students = detail.list.filter(item => item.memberRole !== 1);
     const teachers = detail.list.filter(item => item.memberRole === 1);
-    const major = [...new Set(students.map(item => MAJOR[item.major - 1].mName))].join('、');
+    
+    // const major = [...new Set(students.map(item => (MAJOR[ item.major - 1] || {}) .mName))].join('、');
+    const  major = [...new Set(students.map(item => ( (myMajor[item.institute] || []).find( mItem => mItem.mId === item.major) || {}).mName ))].join('、')
     const grade = [...new Set(students.map(item => item.grade + '级'))].join('、');
+
+
+    console.log(major,students)
     const data = {
       projectName: detail.projectName,
       projectType: detail.projectType === 1 ? '普通' : '重点',
@@ -100,14 +106,17 @@ class Preview extends Component {
       grade,
       MAJOR,
       GRADE,
-      students,
+      students: students.map(item =>  ({...item ,
+        majorName: ( (myMajor[item.institute] || []).find( mItem => mItem.mId === item.major) || {}).mName 
+      })),
       teachers,
       belongCollege: detail.subordinateCollege
-        ? majorCollege[detail.subordinateCollege - 1].cName
+        ? (majorCollege.find(item => item.cId == detail.subordinateCollege) || {}).cName
         : '职能部门',
       membersInfo: membersInfo || {},
       budget: budget || {},
     };
+    console.log(data)
     let html = baidu.template(applyModel, data);
     var blob = new Blob([html], { type: 'application/msword' });
     //saveAs(blob,'重点项目申请书.doc')
@@ -131,6 +140,7 @@ class Preview extends Component {
           message.warning('请先填写成员简介');
           return false;
         }
+        console.log(headFile,file)
         dispatch({
           type: 'detail/uploadApplyFile',
           payload: {

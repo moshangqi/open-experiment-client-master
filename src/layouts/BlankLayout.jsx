@@ -6,7 +6,7 @@ const Layout = ({ children }) => (
   <>
     <>
       <>
-        <div>{children}</div>
+        <div>{children} </div>
         {/* <CopyBlock id={Date.now()} /> */}
       </>
     </>

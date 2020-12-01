@@ -25,7 +25,6 @@ const Model = {
     *selectByKeyword({ payload }, { call, put }) {
       const {data} = payload;
       const response = yield call(keyWordSearch, data);
-      console.log(response);
       if(response.code===0){
         yield put({
           type: 'save',

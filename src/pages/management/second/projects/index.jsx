@@ -566,7 +566,7 @@ class TableList extends Component {
           style={{ marginRight: 15 }}
           onClick={() => this.handleExportExcel()}
         >
-          导出立项一览表
+          导出学院上报项目
         </Button>
         <Button
           icon="export"
@@ -574,7 +574,7 @@ class TableList extends Component {
           style={{ marginRight: 15 }}
           onClick={() => this.handleExportExcel(1)}
         >
-          导出项目信息表
+          导出学院所有项目信息
         </Button>
       </div>
     );
@@ -602,7 +602,7 @@ class TableList extends Component {
           <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
             <Descriptions.Item
               label={`${
-                majorCollege[user.institute - 1] ? majorCollege[user.institute - 1].cName : ''
+                majorCollege[user.institute - 1] ? (majorCollege.find(item => item.cId == user.institute) || {}).cName : '' // majorCollege[user.institute - 1].cName 
               }可申报普通项目数`}
             >
               {amountLimit.length > 0 ? amountLimit[0].list[0].maxAmount : ''}
@@ -652,6 +652,10 @@ class TableList extends Component {
             key: '3',
             tab: '已上报',
           },
+          {
+            key: '4',
+            tab: '正在评审'
+          }
         ]}
       >
         <Modal
@@ -683,7 +687,7 @@ class TableList extends Component {
         <Card bordered={false}>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
-            {tabActiveKey !== '2' && tabActiveKey !== '3' && (
+            {tabActiveKey !== '2' && tabActiveKey !== '3' && tabActiveKey !== '4' && (
               <div className={styles.tableListOperator}>
                 {tabActiveKey === '0' && (
                   <Button

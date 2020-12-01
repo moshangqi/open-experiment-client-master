@@ -65,7 +65,7 @@ class MidKeyProjectCheck extends Component {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
       render:(t)=>{
-        return t===0?'职能部门':majorCollege[t-1].cName;
+        return t===0?'职能部门': (majorCollege.find(item => item.cId == t) || {} ).cName; //majorCollege[t-1].cName;
       }
     },
     {

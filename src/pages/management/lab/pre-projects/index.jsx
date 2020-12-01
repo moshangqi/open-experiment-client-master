@@ -340,7 +340,8 @@ class TableList extends Component {
       }
     })
     this.setState({mVisible:false,
-    text:''
+    text:'',
+    selectedRows: []
     })
   }
   handleReportClick = ()=>{
@@ -399,8 +400,8 @@ class TableList extends Component {
    const hasSelected = selectedRows.length > 0;
    const extra  = (
     <div>
-      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel()}>导出立项一览表</Button>
-      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel(1)}>导出项目信息表</Button>
+      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel()}>导出学院上报项目</Button>
+      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel(1)}>导出学院所有项目信息</Button>
     </div>
     
   );

@@ -23,7 +23,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import StandardTable from '../../project-t/members/components/StandardTable';
-import { projectType, memberRole, experimentType, major } from '@/utils/constant';
+import { projectType, memberRole, experimentType, major, myMajor } from '@/utils/constant';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -79,7 +79,11 @@ class MemberList extends Component {
     {
       title: '专业',
       dataIndex: 'major',
-      render: m => (major[m - 1] ? major[m - 1].mName : null),
+      render: (m,record) => {
+        // console.log(m,record)
+        return ( major.find(item => item.mId == m) || {}).mName ||  null
+        // return (major[m] ? major[m].mName : null)
+      }
     },
     {
       title: '年级',
@@ -157,7 +161,7 @@ class MemberList extends Component {
     const { dispatch, form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log(fieldsValue);
+      //console.log(fieldsValue);
       const values = {
         ...fieldsValue,
       };
@@ -185,7 +189,7 @@ class MemberList extends Component {
     const { dispatch, form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log(fieldsValue);
+      //(fieldsValue);
       const values = {
         ...fieldsValue,
       };
@@ -466,7 +470,7 @@ class MemberList extends Component {
   };
   handleSelect = value => {
     const { form } = this.props;
-    console.log(value);
+    //console.log(value);
     // form.setFieldValue('')
   };
   onSelectRoleChange = e => {
@@ -631,7 +635,8 @@ class MemberList extends Component {
               <Descriptions.Item label="QQ">{apply.qqNum}</Descriptions.Item>
               <Descriptions.Item label="联系电话">{apply.mobilePhone}</Descriptions.Item>
               <Descriptions.Item label="专业">
-                {major[apply.major - 1] && major[apply.major - 1].mName}
+                {/*   major[apply.major - 1] && major[apply.major - 1].mName */}
+                {  ( major.find(item => item.mId == apply.major) || {}).mName }
               </Descriptions.Item>
               <Descriptions.Item label="年级">{apply.grade + '级'}</Descriptions.Item>
               {/* <Descriptions.Item span={2} label='学习绩点'>

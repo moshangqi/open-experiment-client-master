@@ -59,7 +59,8 @@ class TableList extends Component {
     approvalType:1,
     mVisible:false,
     experimentType:undefined,
-    projectType:undefined
+    projectType:undefined,
+    money: ''
   };
 
   columns = [
@@ -186,7 +187,6 @@ class TableList extends Component {
   };
 
   handleSelectRows = rows => {
-    console.log(rows)
     this.setState({
       selectedRows: rows,
     });
@@ -194,7 +194,6 @@ class TableList extends Component {
 
   handleSearchClick = ()=>{
     const {form} = this.props
-    console.log(form.getFieldsValue())
     this.setState({
       formValues:form.getFieldsValue()
     })
@@ -306,9 +305,16 @@ class TableList extends Component {
     })
   }
   handleModalOk = ()=>{
-    const {selectedRows,text,approvalType} = this.state
+    const {selectedRows,text,approvalType,money} = this.state
     const {dispatch} = this.props
     const data = selectedRows.map(item=>{
+      if(approvalType == 3) {
+        return {
+          reason:text,
+          projectId:item.id,
+          applyFunds: money
+        }
+      }
       return {
         reason:text,
         projectId:item.id
@@ -319,8 +325,9 @@ class TableList extends Component {
       data,
       type:approvalType,
       isDetail:true
+      
     }
-    console.log(payload)
+
     dispatch({
       type:'approval/key',
       payload:{
@@ -331,7 +338,8 @@ class TableList extends Component {
       }
     })
     this.setState({mVisible:false,
-    text:''
+    text:'',
+    selectedRows: []
     })
   }
   handleReportClick = ()=>{
@@ -398,8 +406,8 @@ class TableList extends Component {
     const hasSelected = selectedRows.length > 0;    
     const extra  = (
       <div>
-        <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel()}>导出立项一览表</Button>
-        <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel(1)}>导出项目信息表</Button>
+        <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel()}>导出学院上报项目</Button>
+        <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel(1)}>导出学院所有项目信息</Button>
       </div>
       
     );
@@ -430,6 +438,10 @@ class TableList extends Component {
         {
           key: '2',
           tab: '已驳回',
+        },
+        {
+          key: '4',
+          tab: '正在审批',
         }
         
       ]}
@@ -440,13 +452,25 @@ class TableList extends Component {
         onCancel={this.handleModalCancel}
         title={modalText[approvalType]}
         >
+          { approvalType == 3 &&
+            <div style={{marginBottom: '20px'}}>
+              <span style={{paddingRight:'20px'}}>输入金额:</span>
+              <Select placeholder='修改金额' onChange = {(e)=>{
+                this.setState({money: e})
+              }} style={{width:'340px'}}>
+                <Select.Option value='200'>200元</Select.Option>
+                <Select.Option value='300'>300元</Select.Option>
+                <Select.Option value='500'>500元</Select.Option>
+              </Select>
+            </div>
+          }
           <TextArea onChange={this.handleInputChange} style={{height:150}} value={text} placeholder={approvalType===0?'驳回理由':'审核意见'}/>
 
         </Modal>
         <Card bordered={false}>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
-            {tabActiveKey!=='2'&&tabActiveKey!=='3'&&<div className={styles.tableListOperator}>
+            {tabActiveKey!=='2'&&tabActiveKey!=='3'&&tabActiveKey!=='4'&&<div className={styles.tableListOperator}>
              
               {tabActiveKey==='0'&&<Button type="primary" disabled={btnDisable} onClick={()=>{this.showApprovalModal(1)}}>
                 批准

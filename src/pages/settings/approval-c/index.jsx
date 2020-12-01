@@ -69,7 +69,7 @@ class Approval extends Component {
     {
       title: '学院',
       dataIndex: 'college',
-      render: text => <a>{majorCollege[text - 1].cName}</a>,
+      render: text => <a>{ (majorCollege.find(item => item.cId == text) || {}).cName}</a>, //修改完成
     },
     {
       title: '项目类型',

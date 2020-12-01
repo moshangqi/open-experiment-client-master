@@ -58,7 +58,7 @@ class TableList extends Component {
     {
       title: '开放学院',
       dataIndex: 'subordinateCollege',
-      render:(college)=>majorCollege[college-1].cName
+      render:((college)=> majorCollege.find(item => item.cId == college)|| {}).cName  //majorCollege[college-1].cName
     },
     {
       title: '实验类型',
@@ -460,7 +460,7 @@ class TableList extends Component {
     const { expandForm } = this.state;
     return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
-  renderTreeNode = (majorCollege)=>{
+  renderTreeNode = (majorCollege)=>{ //表单树形结构不用修改
     return majorCollege.map(item=>{
       return <TreeNode value={item.cId+'c'} title={item.cName} key={item.cId+'c'} selectable={false}>
         {

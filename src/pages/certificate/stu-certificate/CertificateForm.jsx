@@ -35,7 +35,6 @@ class   CertificateForm extends Component {
         const payload = {
           ...values
         }
-        console.log(payload)
         dispatch({
           type: 'resCertific/applyCertificate',
           payload,
@@ -47,7 +46,6 @@ class   CertificateForm extends Component {
     });
   };
   onChange = value => {
-    console.log(value);
     this.setState({ value });
   };
 

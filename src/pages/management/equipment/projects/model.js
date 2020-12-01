@@ -37,7 +37,6 @@ const Model = {
     },
     *filter({ payload }, { call, put }) {
       const res = yield call(reqfilterProjects, payload);
-      console.log('aaa');
       if (res.code === 0) {
         yield put({
           type: 'save',
@@ -60,7 +59,6 @@ const Model = {
     },
     *export({ payload }, { call, put }) {
       const res = yield call(reqExportConclusionExcel);
-      console.log(res);
       saveAs(res, '结题一览表.xlsx');
     },
     *agree({ payload }, { call, put }) {

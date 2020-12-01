@@ -29,3 +29,25 @@ export const isEmpty = (obj) =>{
   }
   return false
 }
+
+// 防抖函数
+export const debounce = (fn, wait) => {
+  let timeout;
+  const later = () => setTimeout( () => {
+   timeout = null;
+   fn() 
+  }, wait);
+  let debounced = function() {
+    if(!timeout) {
+      timeout = later();
+    } else {
+      clearTimeout(timeout);
+      timeout = later();
+    }
+  }
+  debounced.cancel = function() {
+    clearTimeout(timeout);
+    timeout = null;
+  }
+  return debounced;
+}

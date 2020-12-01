@@ -10,7 +10,7 @@ const UserModel = {
     *fetch(_, { call, put }) {
       const response = yield call(reqUserInfo);
       if(response.code===0){
-        console.log('cur',response)
+        // console.log('cur',response)
         yield put({
           type: 'saveCurrentUser',
           payload: response.data,
@@ -18,7 +18,6 @@ const UserModel = {
       }else if(response.code===1401||response.code===1403){
         yield put({
           type:'login/logout',
-
         })
         message.warning(`您的登录已过期，请重新登录`)
 

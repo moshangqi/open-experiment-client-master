@@ -15,7 +15,6 @@ class ApprovalProject extends Component {
   };
 
   onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
 
@@ -32,7 +31,7 @@ class ApprovalProject extends Component {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
       render: t => {
-        return t === 0 ? '职能部门' : majorCollege[t - 1].cName;
+        return t === 0 ? '职能部门' : (majorCollege.find( item => item.cId == t)|| {}).cName; // majorCollege[t - 1].cName 占时修改
       },
     },
     {
@@ -57,7 +56,6 @@ class ApprovalProject extends Component {
   ];
 
   handleDetailClick = id => {
-    console.log(id);
     const { dispatch } = this.props;
     dispatch({
       type: 'detail/fetchDetail',

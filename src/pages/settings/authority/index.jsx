@@ -128,7 +128,7 @@ class Authority extends Component {
                   <Option value='4'>实验室主任</Option>
                   <Option value='5'>二级单位领导</Option>
                   <Option value='7'>职能部门领导</Option>
-                  <Option value='9'>学院结题审核人</Option>
+                  <Option value='6'>职能部门</Option>
 
                 </Select>
               )}

@@ -309,7 +309,6 @@ class TableList extends Component {
   }
   handleModalOk = ()=>{
     const {selectedRows,text,approvalType} = this.state
-    debugger
     const {dispatch,tabActiveKey} = this.props
     const data = selectedRows.map(item=>{
       return {
@@ -335,7 +334,8 @@ class TableList extends Component {
       }
     })
     this.setState({mVisible:false,
-    text:''
+      text:'',
+      selectedRows: []
     })
   }
   // handleReportClick = ()=>{
@@ -389,8 +389,8 @@ class TableList extends Component {
    let projects = labProjects.map((item,index)=>({key:index,...item}))
    const extra  = (
     <div>
-      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel()}>导出立项一览表</Button>
-      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel(1)}>导出项目信息表</Button>
+      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel()}>导出学院上报项目</Button>
+      <Button icon='export' type='primary' style={{marginRight:15}} onClick={()=>this.handleExportExcel(1)}>导出学院所有项目信息</Button>
     </div>
     
   );
@@ -418,6 +418,10 @@ class TableList extends Component {
         {
           key: '2',
           tab: '已驳回',
+        },
+        {
+          key: '4',
+          tab: '正在审批',
         }
         
       ]}
@@ -434,7 +438,7 @@ class TableList extends Component {
         <Card bordered={false}>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
-            {tabActiveKey!=='2'&&tabActiveKey!=='3'&&<div className={styles.tableListOperator}>
+            {tabActiveKey!=='2'&&tabActiveKey!=='3'&&tabActiveKey!=='4'&&<div className={styles.tableListOperator}>
              
               {tabActiveKey==='1'&&<Button type="primary" disabled={btnDisable} onClick={()=>{this.showApprovalModal(2)}}>
                 批准

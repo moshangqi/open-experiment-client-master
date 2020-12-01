@@ -1,4 +1,4 @@
-import {Alert, Checkbox, Form, Icon, Select} from 'antd';
+import {Alert, Checkbox, Form, Icon, Select, Modal, Button} from 'antd';
 import React, { Component } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -12,13 +12,14 @@ const FormItem = Form.Item;
   userLogin,
   imgSrc:userLogin.imgSrc,
   submitting: loading.effects['userLogin/login'],
+  visible: userLogin.visible
 }))
 class Login extends Component {
   loginForm = undefined;
 
   state = {
     type: 'account',
-    autoLogin: true,
+    autoLogin: true
   };
   componentDidMount(){
     this.handleCaptchaPClick()
@@ -39,7 +40,6 @@ class Login extends Component {
         type: 'userLogin/login',
         payload: { ...values, type },
       });
-      console.log(...values);
     }
   };
 
@@ -87,11 +87,23 @@ class Login extends Component {
   );
 
   sendUser= () =>{
-    console.log(this);
+    // console.log(this);
   }
 ;
+
+  checkLogin = (e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userLogin/loginFirst',
+      payload: {
+        userCode: e.userName,
+        password: e.password,
+        verifyCode: e.captchaP
+      }
+    })
+  }
   render() {
-    const { userLogin, submitting,imgSrc } = this.props;
+    const { userLogin, submitting,imgSrc, visible } = this.props;
     const { status, type: loginType } = userLogin;
     const { type, autoLogin } = this.state;
     return (
@@ -100,6 +112,7 @@ class Login extends Component {
           defaultActiveKey={type}
           onTabChange={this.onTabChange}
           onSubmit={this.handleSubmit}
+          checkLogin = {this.checkLogin}
           ref={form => {
             this.loginForm = form;
           }}
@@ -148,7 +161,7 @@ class Login extends Component {
               imgSrc={imgSrc}
             ></CaptchaP>
 
-            <Role
+            {/* <Role
               name="role"
               placeholder={`${'用户类型'}`}
               rules={[
@@ -157,15 +170,7 @@ class Login extends Component {
                   message: '请选择用户类型!',
                 },
               ]}
-            />
-
-            {/*<Select*/}
-            {/*  placeholder="请选择登录角色"*/}
-            {/*>*/}
-            {/*  <Option value="male">male</Option>*/}
-            {/*  <Option value="female">female</Option>*/}
-            {/*  <Option value="other">other</Option>*/}
-            {/*</Select>*/}
+            /> */}
 
 
           </Tab>
@@ -183,7 +188,28 @@ class Login extends Component {
               忘记密码
             </a>
           </div>
-          <Submit loading={submitting}>登录</Submit>
+
+          {/* <Modal 
+            className = 'login-modal'
+            visible={true}
+            title={'选择身份'}
+            footer={[
+              <Submit loading={submitting}>登录</Submit>,
+            ]}
+          >
+            <Role
+              name="role"
+              a = {[]}
+              placeholder={`${'用户类型'}`}
+              rules={[
+                {
+                  required: true,
+                  message: '请选择用户类型!',
+                },
+              ]}
+            />
+          </Modal> */}
+          {/* <Submit loading={submitting}>登录</Submit> */}
           {/* <div className={styles.other}>
             其他登录方式
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />

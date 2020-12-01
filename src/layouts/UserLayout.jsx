@@ -4,6 +4,7 @@ import Link from 'umi/link';
 import React from 'react';
 import { connect } from 'dva';
 import SelectLang from '@/components/SelectLang';
+import Footer from './Footer';
 import logo from '../assets/logo.png';
 import styles from './UserLayout.less';
 
@@ -45,7 +46,8 @@ const UserLayout = props => {
           </div>
           {children}
         </div>
-        <DefaultFooter />
+        <Footer />
+        {/* <DefaultFooter /> */}
       </div>
     </DocumentTitle>
   );
