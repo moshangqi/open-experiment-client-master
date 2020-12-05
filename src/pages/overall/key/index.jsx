@@ -17,39 +17,44 @@ import {
   Select,
   message,
   Statistic,
-  Descriptions
+  Descriptions,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { PageHeaderWrapper,RouteContext } from '@ant-design/pro-layout';
+import { PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import StandardTable from '@/pages/project-s/manage/projects/components/StandardTable';
-import {experimentType,major,college,grade,suggestGroupType, majorCollege} from '@/utils/constant'
-import styles from './style.less'
-import TextArea from "antd/es/input/TextArea";
-import Search from "antd/es/input/Search";
+import {
+  experimentType,
+  major,
+  college,
+  grade,
+  suggestGroupType,
+  majorCollege,
+} from '@/utils/constant';
+import styles from './style.less';
+import TextArea from 'antd/es/input/TextArea';
+import Search from 'antd/es/input/Search';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const {Countdown} = Statistic
+const { Countdown } = Statistic;
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
-@connect(({  loading,overfunctionallkey }) => ({
-
+@connect(({ loading, overfunctionallkey }) => ({
   loading: loading.models.overfunctionallkey,
-  projects:overfunctionallkey.projects,
+  projects: overfunctionallkey.projects,
 }))
 class OverAllKeyProjectCheck extends Component {
   state = {
     expandForm: false,
     formValues: {},
     selectedRows: [],
-    mVisible:false,
-
+    mVisible: false,
   };
 
   columns = [
@@ -64,14 +69,14 @@ class OverAllKeyProjectCheck extends Component {
     {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
-      render:(t)=>{
-        return t===0?'职能部门': (majorCollege.find(item => item.cId == t) || {} ).cName; //majorCollege[t-1].cName;
-      }
+      render: t => {
+        return t === 39 ? '职能部门' : (majorCollege.find(item => item.cId == t) || {}).cName; //majorCollege[t-1].cName;
+      },
     },
     {
       title: '项目级别',
       dataIndex: 'projectType',
-      render:(type)=>type===1?'普通':'重点'
+      render: type => (type === 1 ? '普通' : '重点'),
     },
     // {
     //   title: '已选学生数',
@@ -102,14 +107,13 @@ class OverAllKeyProjectCheck extends Component {
     // },
     {
       title: '操作',
-      dataIndex:'id',
-      render: (id) => (
+      dataIndex: 'id',
+      render: id => (
         <Fragment>
           {/* <a onClick={() => this.editWarning()}>编辑</a>
 
           <Divider type="vertical" /> */}
-          <a onClick={()=>this.handleDetailClick(id)}>查看详情</a>
-
+          <a onClick={() => this.handleDetailClick(id)}>查看详情</a>
         </Fragment>
       ),
     },
@@ -122,43 +126,38 @@ class OverAllKeyProjectCheck extends Component {
     });
   }
 
-  resetList=()=>{
+  resetList = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'overfunctionallkey/getCompleteKeyProject',
-      payload:{
-        data:{}
-      }
+      payload: {
+        data: {},
+      },
     });
     this.setState({
-      searchValue:''
-    })
+      searchValue: '',
+    });
   };
 
-
-
-  handleDetailClick = (id)=>{
-    const {dispatch} = this.props
+  handleDetailClick = id => {
+    const { dispatch } = this.props;
     dispatch({
-      type:'detail/fetchDetail',
-      payload:{
-        projectGroupId:id,
-        role:15,
-        projectType:2
-      }
-    })
+      type: 'detail/fetchDetail',
+      payload: {
+        projectGroupId: id,
+        role: 15,
+        projectType: 2,
+      },
+    });
     dispatch({
-      type:'detail/fetchProcess',
-      payload:{
-        projectId:id,
-        role:15,
-        projectType:2
-      }
-    })
-  }
-
-
-
+      type: 'detail/fetchProcess',
+      payload: {
+        projectId: id,
+        role: 15,
+        projectType: 2,
+      },
+    });
+  };
 
   handleSelectRows = rows => {
     this.setState({
@@ -166,46 +165,38 @@ class OverAllKeyProjectCheck extends Component {
     });
   };
 
-
-  handleInputChange = (e)=>{
+  handleInputChange = e => {
     this.setState({
-      text:e.target.value
-    })
-  }
-  handleSearchChange= (e)=>{
+      text: e.target.value,
+    });
+  };
+  handleSearchChange = e => {
     this.setState({
-      searchValue:e.target.value
-    })
-  }
+      searchValue: e.target.value,
+    });
+  };
 
-  handleSearch = (value) =>{
-    const {dispatch} = this.props;
+  handleSearch = value => {
+    const { dispatch } = this.props;
     let data = {
-      keyword:value
-    }
+      keyword: value,
+    };
     console.log(data);
     dispatch({
-      type:'overfunctionallkey/selectConclusionKeyProjectByKeyword',
-      payload:{
+      type: 'overfunctionallkey/selectConclusionKeyProjectByKeyword',
+      payload: {
         data,
-      }
-    })
-  }
-
-
-
+      },
+    });
+  };
 
   render() {
-    const {
-      loading,
-      projects,
-    } = this.props;
-    const { selectedRows,mVisible,text,searchValue} = this.state;
-    const btnDisable = selectedRows.length===0
+    const { loading, projects } = this.props;
+    const { selectedRows, mVisible, text, searchValue } = this.state;
+    const btnDisable = selectedRows.length === 0;
     return (
       <PageHeaderWrapper>
-
-        <Card bordered={false} title='结题项目总览'  style={{marginTop:15}}>
+        <Card bordered={false} title="结题项目总览" style={{ marginTop: 15 }}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <Search
@@ -213,32 +204,29 @@ class OverAllKeyProjectCheck extends Component {
                 id={'searchBox'}
                 enterButton="Search"
                 size="large"
-                style={{marginBottom:15}}
+                style={{ marginBottom: 15 }}
                 value={searchValue}
                 onChange={this.handleSearchChange}
                 onSearch={value => this.handleSearch(value)}
               />
             </div>
             <div className={styles.tableListOperator}>
-              <Button type={"primary"}  onClick={()=>this.resetList()}>重置</Button>
+              <Button type={'primary'} onClick={() => this.resetList()}>
+                重置
+              </Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
               dataSource={projects}
-              rowKey='id'
+              rowKey="id"
               columns={this.columns}
-              pagination={{pageSize:12}}
+              pagination={{ pageSize: 12 }}
               onSelectRow={this.handleSelectRows}
             />
-
           </div>
-
-
-
         </Card>
       </PageHeaderWrapper>
-
     );
   }
 }

@@ -81,6 +81,7 @@ class TableList extends Component {
     modalVisible1: false, // 驳回弹出层
     modalVisible2: false, //复核通过弹出层
     modalVisible3: false, //审核通过弹出层
+    modalVisible4: false,
   };
 
   columns = [
@@ -154,7 +155,7 @@ class TableList extends Component {
         startTime: values.date && values.date[0].format('x'),
         endTime: values.date && values.date[1].format('x'),
         status: 4, // 加入查询状态限制
-        projectType: 1
+        projectType: 1,
       };
       delete payload.date;
       dispatch({
@@ -374,7 +375,7 @@ class TableList extends Component {
         >
           <Col md={8} sm={24}>
             <FormItem label="开放学院">
-              {getFieldDecorator('college')(
+              {getFieldDecorator('subordinateCollege')(
                 <Select
                   placeholder="请选择"
                   style={{
@@ -553,6 +554,37 @@ class TableList extends Component {
     });
   };
 
+  hideModal4 = () => {
+    this.setState({
+      modalVisible4: false,
+    });
+  };
+
+  showModal4 = () => {
+    this.setState({
+      modalVisible4: true,
+    });
+  };
+
+  handReject = reason => {
+    const { selectedRows } = this.state;
+    const data = selectedRows.reduce(
+      (res, item) => [...res, { projectId: item.id, reason: reason }],
+      [],
+    );
+
+    const { dispatch } = this.props;
+    console.log(data);
+    dispatch({
+      type: 'equipment/reject',
+      payload: data,
+    });
+    this.hideModal4();
+    this.setState({
+      selectedRows: [],
+      formValues: {},
+    });
+  };
   handelPassed = reason => {
     const { selectedRows } = this.state;
     const data = selectedRows.reduce(
@@ -595,6 +627,7 @@ class TableList extends Component {
       modalVisible1,
       modalVisible2,
       modalVisible3,
+      modalVisible4,
     } = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -650,7 +683,7 @@ class TableList extends Component {
         tabList={[
           {
             key: '0',
-            tab: '立项审批中',
+            tab: '待评审',
           },
           {
             key: '1',
@@ -687,9 +720,14 @@ class TableList extends Component {
                   </span>
                 )}
                 {tabActiveKey == 0 && (
-                  <Button onClick={this.showModal1} disabled={btnDisable}>
-                    退回修改
-                  </Button>
+                  <React.Fragment>
+                    <Button onClick={this.showModal1} disabled={btnDisable}>
+                      退回修改
+                    </Button>
+                    <Button onClick={this.showModal4} disabled={btnDisable}>
+                      立项失败
+                    </Button>
+                  </React.Fragment>
                 )}
                 {tabActiveKey == 0 ? (
                   <Button onClick={this.showModal3} disabled={btnDisable}>
@@ -699,9 +737,14 @@ class TableList extends Component {
                   ''
                 )}
                 {tabActiveKey == 1 && (
-                  <Button onClick={this.showMyModal} disabled={btnDisable}>
-                    复核通过
-                  </Button>
+                  <React.Fragment>
+                    <Button onClick={this.showModal4} disabled={btnDisable}>
+                      立项失败
+                    </Button>
+                    <Button onClick={this.showMyModal} disabled={btnDisable}>
+                      复核通过
+                    </Button>
+                  </React.Fragment>
                 )}
               </div>
             )}
@@ -757,6 +800,14 @@ class TableList extends Component {
             reason={'通过理由'}
             onCancel={this.hideMyModal}
             onOk={this.handleReview}
+          />
+
+          <ReasonModle
+            visible={modalVisible4}
+            title={'立项失败'}
+            reason={'失败理由'}
+            onCancel={this.hideModal4}
+            onOk={this.handReject}
           />
 
           <ReasonModle

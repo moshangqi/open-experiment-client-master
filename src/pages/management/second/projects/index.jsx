@@ -602,7 +602,9 @@ class TableList extends Component {
           <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
             <Descriptions.Item
               label={`${
-                majorCollege[user.institute - 1] ? (majorCollege.find(item => item.cId == user.institute) || {}).cName : '' // majorCollege[user.institute - 1].cName 
+                majorCollege[user.institute - 1]
+                  ? (majorCollege.find(item => item.cId == user.institute) || {}).cName
+                  : '' // majorCollege[user.institute - 1].cName
               }可申报普通项目数`}
             >
               {amountLimit.length > 0 ? amountLimit[0].list[0].maxAmount : ''}
@@ -654,8 +656,8 @@ class TableList extends Component {
           },
           {
             key: '4',
-            tab: '正在评审'
-          }
+            tab: '立项评审中',
+          },
         ]}
       >
         <Modal

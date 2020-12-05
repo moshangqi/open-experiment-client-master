@@ -53,3 +53,10 @@ export async function reqAgree(params) {
     data: params,
   });
 }
+
+export async function reqReject(params) {
+  return request('/project/rejectProjectApplyByFunctionalDepartment', {
+    method: 'post',
+    data: params,
+  });
+}

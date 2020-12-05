@@ -14,11 +14,10 @@ import {
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import moment from 'moment'
-import {majorCollege } from '@/utils/constant'
+import moment from 'moment';
+import { majorCollege } from '@/utils/constant';
 import styles from './style.less';
 import { router } from 'umi';
-
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -28,15 +27,15 @@ const { TreeNode } = TreeSelect;
 let id = 0;
 
 class BasicForm extends Component {
-  state={}
+  state = {};
   handleSubmit = e => {
-    const { dispatch, form ,detail} = this.props;
+    const { dispatch, form, detail } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const payload = {
-          ...values
-        }
-         dispatch({
+          ...values,
+        };
+        dispatch({
           type: 'user/updateUserInfo',
           payload,
         });
@@ -47,10 +46,8 @@ class BasicForm extends Component {
     this.setState({ value });
   };
 
-
-
   render() {
-    const { submitting,currentUser } = this.props;
+    const { submitting, currentUser } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -94,8 +91,21 @@ class BasicForm extends Component {
         sm: { span: 20, offset: 4 },
       },
     };
-    const extra = <Button onClick={()=>{router.goBack()}}>返回</Button>
-    const Label = ({children})=><span><span style={{color:'red'}}>*</span>{children}</span>
+    const extra = (
+      <Button
+        onClick={() => {
+          router.goBack();
+        }}
+      >
+        返回
+      </Button>
+    );
+    const Label = ({ children }) => (
+      <span>
+        <span style={{ color: 'red' }}>*</span>
+        {children}
+      </span>
+    );
     return (
       <PageHeaderWrapper content="完善基本信息" extra={extra}>
         <Card bordered={false}>
@@ -113,10 +123,8 @@ class BasicForm extends Component {
                     required: true,
                     message: '请输入学号',
                   },
-
-                ]
-                ,initialValue:currentUser.code
-
+                ],
+                initialValue: currentUser.code,
               })(<Input placeholder="学号" disabled />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>姓名</Label>}>
@@ -127,7 +135,7 @@ class BasicForm extends Component {
                     message: '请输入姓名',
                   },
                 ],
-                initialValue:currentUser.realName
+                initialValue: currentUser.realName,
               })(<Input placeholder="姓名" disabled />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>性别</Label>}>
@@ -138,16 +146,13 @@ class BasicForm extends Component {
                     message: '选择性别',
                   },
                 ],
-                initialValue:currentUser.sex
-
-              })(<Radio.Group>
-                <Radio value='男'>
-                  男
-                </Radio>
-                <Radio value='女'>
-                  女
-                </Radio>
-              </Radio.Group>)}
+                initialValue: currentUser.sex,
+              })(
+                <Radio.Group>
+                  <Radio value="1">男</Radio>
+                  <Radio value="2">女</Radio>
+                </Radio.Group>,
+              )}
             </FormItem>
             {/* <FormItem {...formItemLayout} label="身份证号">
               {getFieldDecorator('idCard', {
@@ -171,12 +176,11 @@ class BasicForm extends Component {
               {getFieldDecorator('email', {
                 rules: [
                   {
-                    type:'email',
-                    message:'请输入正确格式的邮箱'
-                  }
+                    type: 'email',
+                    message: '请输入正确格式的邮箱',
+                  },
                 ],
-                initialValue:currentUser.email
-
+                initialValue: currentUser.email,
               })(<Input placeholder="email (选填)" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>手机号码</Label>}>
@@ -187,60 +191,48 @@ class BasicForm extends Component {
                     message: '手机号码不能为空',
                   },
                   {
-                    pattern:/^\d*$/,
-                    message:'请输入正确的手机号码'
-                  }
+                    pattern: /^\d*$/,
+                    message: '请输入正确的手机号码',
+                  },
                 ],
-                initialValue:currentUser.mobilePhone
-
-              })(
-                <Input placeholder='请输入手机号码'/>
-              )}
+                initialValue: currentUser.mobilePhone,
+              })(<Input placeholder="请输入手机号码" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="固定电话">
               {getFieldDecorator('fixPhone', {
                 rules: [
                   {
-                    pattern:/^\d*$/,
-                    message:'请输入正确的号码'
-                  }
+                    pattern: /^\d*$/,
+                    message: '请输入正确的号码',
+                  },
                 ],
-                initialValue:currentUser.fixPhone
-
-              })(
-                <Input placeholder='请输入固定电话 (选填)'/>
-              )}
+                initialValue: currentUser.fixPhone,
+              })(<Input placeholder="请输入固定电话 (选填)" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>qq号</Label>}>
               {getFieldDecorator('qqNum', {
                 rules: [
                   {
-                    pattern:/^\d*$/,
-                    message:'请输入正确的qq号码'
+                    pattern: /^\d*$/,
+                    message: '请输入正确的qq号码',
                   },
                   {
                     required: true,
                     message: '手机号码不能为空',
                   },
                 ],
-                initialValue:currentUser.qqNum
-
-              })(
-                <Input placeholder='请输入qq号码'/>
-              )}
+                initialValue: currentUser.qqNum,
+              })(<Input placeholder="请输入qq号码" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>新密码</Label>}>
               {getFieldDecorator('password', {
                 rules: [
                   {
-                    required:true,
-                    message:'请输入新密码'
-                  }
+                    required: true,
+                    message: '请输入新密码',
+                  },
                 ],
-
-              })(
-                <Input placeholder='请输入新密码'/>
-              )}
+              })(<Input placeholder="请输入新密码" />)}
             </FormItem>
 
             <FormItem
@@ -249,13 +241,7 @@ class BasicForm extends Component {
                 marginTop: 32,
               }}
             >
-
-              <Button
-                onClick={this.handleSubmit}
-
-                loading={submitting}
-                type='primary'
-              >
+              <Button onClick={this.handleSubmit} loading={submitting} type="primary">
                 提交
               </Button>
             </FormItem>
@@ -267,8 +253,8 @@ class BasicForm extends Component {
 }
 
 export default Form.create()(
-  connect(({ loading,user }) => ({
+  connect(({ loading, user }) => ({
     submitting: loading.effects['user/updateUserInfo'],
-    currentUser:user.currentUser
+    currentUser: user.currentUser,
   }))(BasicForm),
 );

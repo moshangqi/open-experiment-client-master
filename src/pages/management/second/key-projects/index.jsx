@@ -64,7 +64,7 @@ class TableList extends Component {
     text: '',
     rVisible: false,
     reason: '',
-    money: ''
+    money: '',
   };
 
   columns_needScore = [
@@ -407,7 +407,7 @@ class TableList extends Component {
     const { selectedRows, text, approvalType, money } = this.state;
     const { dispatch, tabActiveKey } = this.props;
     const data = selectedRows.map(item => {
-      if(approvalType == 3) {
+      if (approvalType == 3) {
         return {
           applyFunds: money,
           reason: text,
@@ -560,7 +560,9 @@ class TableList extends Component {
           <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
             <Descriptions.Item
               label={`${
-                user.institute ? (majorCollege.find(item => item.cId == user.institute) || {}).cName : '' //majorCollege[user.institute - 1].cName 
+                user.institute
+                  ? (majorCollege.find(item => item.cId == user.institute) || {}).cName
+                  : '' //majorCollege[user.institute - 1].cName
               }可申报重点项目数`}
             >
               {amountLimit.length > 0 ? amountLimit[0].list[0].maxAmount : ''}
@@ -612,7 +614,7 @@ class TableList extends Component {
           },
           {
             key: '4',
-            tab: '正在评审',
+            tab: '立项评审中',
           },
         ]}
       >
@@ -632,26 +634,35 @@ class TableList extends Component {
           visible={mVisible}
           onOk={this.handleModalOk}
           onCancel={this.handleModalCancel}
-          title={approvalType === 0 ? '驳回理由' : approvalType == 3  ? '转普通立项' : '审核意见'}
+          title={approvalType === 0 ? '驳回理由' : approvalType == 3 ? '转普通立项' : '审核意见'}
         >
-          {
-            approvalType == 3 &&
-            <div style={{marginBottom:"20px"}}>
-              <span style={{paddingRight:"16px"}}>修改金额</span>
-              <Select placeholder = '请选择修改金额' onChange = {(e)=>{
-                this.setState({money: e})
-              }} style={{width:"300px"}}> 
-                <Option value = '200'>200元</Option>
-                <Option value = '300'>300元</Option>
-                <Option  value = '500'>500元</Option>
+          {approvalType == 3 && (
+            <div style={{ marginBottom: '20px' }}>
+              <span style={{ paddingRight: '16px' }}>修改金额</span>
+              <Select
+                placeholder="请选择修改金额"
+                onChange={e => {
+                  this.setState({ money: e });
+                }}
+                style={{ width: '300px' }}
+              >
+                <Option value="200">200元</Option>
+                <Option value="300">300元</Option>
+                <Option value="500">500元</Option>
               </Select>
             </div>
-          }
+          )}
           <TextArea
             onChange={this.handleInputChange}
             style={{ height: 150 }}
             value={text}
-            placeholder={approvalType === 0 ? '批量驳回理由' : approvalType == 3  ? '转普通立项理由' : '批量审核意见'}
+            placeholder={
+              approvalType === 0
+                ? '批量驳回理由'
+                : approvalType == 3
+                ? '转普通立项理由'
+                : '批量审核意见'
+            }
           />
         </Modal>
         <Card bordered={false}>
@@ -670,9 +681,7 @@ class TableList extends Component {
                     >
                       批准
                     </Button>
-
                   </Fragment>
-                  
                 )}
                 {tabActiveKey === '1' && (
                   <span>
@@ -690,7 +699,7 @@ class TableList extends Component {
                     </Button>
                   </span>
                 )}
-                                    
+
                 <Button
                   type="primary"
                   disabled={btnDisable}

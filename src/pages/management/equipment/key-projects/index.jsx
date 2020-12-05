@@ -262,7 +262,7 @@ class TableList extends Component {
         startTime: values.date && values.date[0].format('x'),
         endTime: values.date && values.date[1].format('x'),
         status: 4, // 加入查询状态限制
-        projectType: 2
+        projectType: 2,
       };
       delete payload.date;
       dispatch({
@@ -417,7 +417,7 @@ class TableList extends Component {
         >
           <Col md={8} sm={24}>
             <FormItem label="学院">
-              {getFieldDecorator('college')(
+              {getFieldDecorator('subordinateCollege')(
                 <Select
                   placeholder="请选择"
                   style={{
@@ -698,7 +698,7 @@ class TableList extends Component {
         tabList={[
           {
             key: '0',
-            tab: '立项审批中',
+            tab: '待评审',
           },
           {
             key: '3',

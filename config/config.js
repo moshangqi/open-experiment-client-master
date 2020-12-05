@@ -9,7 +9,7 @@ const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
 const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 
 //开发模式代理
-const proxyURL = 'http://192.168.109.88:8083'; //'http://220.167.105.201:8083'//172.23.252.212 //'http://192.168.43.153:8083' //'http://10.20.0.77:8083'
+const proxyURL = 'http://192.168.1.139:8083'; //'http://220.167.105.201:8083'//172.23.252.212 //'http://192.168.43.153:8083' //'http://10.20.0.77:8083'
 const proxyKeys = [
   '/anon',
   '/user/getMyInfo',
@@ -94,10 +94,10 @@ const proxyKeys = [
   '/collegeReview/deleteCollegeReview',
   '/permission/getCollegeUserInfoByCollege',
   '/homePage/homePagePublishAnnouncement',
-  '/homePage/homePagePublishNews', 
+  '/homePage/homePagePublishNews',
   '/homePage/publishAchievementShow',
-  '/homePage/getAllAnnouncementList', 
-  '/homePage/getAllNewsList', 
+  '/homePage/getAllAnnouncementList',
+  '/homePage/getAllNewsList',
   '/homePage/getAllAchievementShowList',
   '/homePage/deleteAnnouncementById',
   '/homePage/deleteNewsById',
@@ -111,13 +111,14 @@ const proxyKeys = [
   '/homePage/updateToPublished',
   '/homePage/updateAchievementToSave',
   '/homePage/updateAchievementToPublished',
-  '/homePage/updateAnnouncementContent' ,
-  '/homePage/updateNewsContent', 
+  '/homePage/updateAnnouncementContent',
+  '/homePage/updateNewsContent',
   '/homePage/updateAchievementContent',
   '/homePage/getTopPublishedAchievementShowList',
   '/homePage/getHomePageNewsList',
   '/homePage/getHomePageAnnouncementList',
-  '/homePage/getPublishedAchievementShowList'
+  '/homePage/getPublishedAchievementShowList',
+  // '/announcement/getList'
 ];
 const proxyOptions = {
   target: proxyURL,
@@ -208,7 +209,7 @@ export default {
     {
       path: '/',
       component: '../layouts/BlankLayout',
-      
+
       routes: [
         // {
         //   path: '/portal',
@@ -244,7 +245,7 @@ export default {
         },
         {
           path: '/passage',
-          component: './web-passage'
+          component: './web-passage',
         },
         {
           path: '/',
@@ -253,13 +254,13 @@ export default {
           routes: [
             {
               path: '/',
-              redirect: '/dist' // 页面从定向
+              redirect: '/dist', // 页面从定向
             },
             {
               path: '/dist',
               name: '首页',
               icon: 'home',
-              component: './home'
+              component: './home',
             },
             {
               path: '/timeLimit/detail',

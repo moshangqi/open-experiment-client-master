@@ -41,6 +41,7 @@ const salePieData = [
   loading: loading.effects['dashboardAnalysis/fetch'],
   projects: openProjects.projects,
   announcements: announcement.data,
+  collegeData: announcement.collegeData,
 }))
 class Analysis extends Component {
   state = {
@@ -66,7 +67,10 @@ class Analysis extends Component {
         type: 'openProjects/fetchProjects',
       });
     dispatch({
-      type: 'announcement/fetch',
+      type: 'announcement/fetchPublish',
+    });
+    dispatch({
+      type: 'announcement/fetchCollege',
     });
     dispatch({
       type: 'openProjects/getMessageTips',
@@ -144,8 +148,8 @@ class Analysis extends Component {
 
   render() {
     const { rangePickerValue, salesType, currentTabKey } = this.state;
-    const { dashboardAnalysis, loading, projects, announcements } = this.props;
-    console.log(projects);
+    const { dashboardAnalysis, loading, projects, announcements, collegeData } = this.props;
+    console.log(collegeData);
     // const {
 
     //   searchData,
@@ -220,7 +224,7 @@ class Analysis extends Component {
               <Suspense fallback={null}>
                 <Announcement
                   loading={loading}
-                  data={announcementsData}
+                  data={collegeData}
                   title="院内公告"
                   handleView={this.handleView}
                 />

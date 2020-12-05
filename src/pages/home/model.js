@@ -41,6 +41,7 @@ const Model = {
   },
   reducers: {
     saveProjects(state, { payload }) {
+      console.log({ ...state, projects: payload });
       return { ...state, projects: payload };
     },
     saveMessageLength(state, { payload }) {

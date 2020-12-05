@@ -8,6 +8,7 @@ import {
   reqReviewPassed,
   reqResolveProject,
   reqAgree,
+  reqReject,
 } from './service';
 import { message } from 'antd';
 import { saveAs } from 'file-saver';
@@ -55,6 +56,20 @@ const Model = {
         });
       } else {
         message.error('请求出错');
+      }
+    },
+    *reject({ payload }, { call, put }) {
+      const res = yield call(reqReject, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchProjects',
+          payload: {
+            status: '0',
+          },
+        });
+        message.success('拒绝立项成功');
+      } else {
+        message.error(res.msg);
       }
     },
     *export({ payload }, { call, put }) {

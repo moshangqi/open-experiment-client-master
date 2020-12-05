@@ -31,7 +31,7 @@ class ApprovalProject extends Component {
       title: '所属学院',
       dataIndex: 'subordinateCollege',
       render: t => {
-        return t === 0 ? '职能部门' : (majorCollege.find( item => item.cId == t)|| {}).cName; // majorCollege[t - 1].cName 占时修改
+        return t === 39 ? '职能部门' : (majorCollege.find(item => item.cId == t) || {}).cName; // majorCollege[t - 1].cName 占时修改
       },
     },
     {

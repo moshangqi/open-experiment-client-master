@@ -14,6 +14,9 @@ class Member extends Component {
     {
       title: '性别',
       dataIndex: 'sex',
+      render(sex) {
+        return sex === '1' ? '男' : '女';
+      },
     },
     {
       title: '学号/工号',
@@ -23,7 +26,7 @@ class Member extends Component {
       title: '学院',
       dataIndex: 'institute',
       render(c) {
-        return ( majorCollege.find(item => item.cId == c) || {}).cName; //修改完毕
+        return (majorCollege.find(item => item.cId == c) || {}).cName; //修改完毕
       },
     },
     {
@@ -37,8 +40,10 @@ class Member extends Component {
     {
       title: '专业',
       dataIndex: 'major',
-      render: (m,record) => {
-        return m === null ? '\\' : ( (myMajor[record.institute] || []).find(item => item.mId == m) || {}).mName; //修改完毕
+      render: (m, record) => {
+        return m === null
+          ? '\\'
+          : ((myMajor[record.institute] || []).find(item => item.mId == m) || {}).mName; //修改完毕
       },
     },
     {

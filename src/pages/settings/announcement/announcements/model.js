@@ -7,7 +7,10 @@ import {
   reqSavedAnnouncementPublish,
   reqAnnouncementUpdate,
   reqAnnouncementCancelPublish,
-  reqAnnouncementByCondition
+  reqAnnouncementByCondition,
+  reqCollegeList,
+  reqCollegeAllList,
+  reqPublishAnnouncements,
 } from './service';
 import { message } from 'antd';
 
@@ -15,31 +18,64 @@ const Model = {
   namespace: 'announcement',
   state: {
     data: [],
+    collegeData: [],
     isModify: false,
-    detail: {title:'',content:''},
+    detail: { title: '', content: '' },
   },
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(reqAnnouncements);
-      if(response.code===0){
+      if (response.code === 0) {
         yield put({
           type: 'save',
           payload: response.data,
         });
-      }else{
-        message.error('请求出错')
+      } else {
+        message.error('请求出错');
       }
     },
-    *filter({payload},{call,put}){
-      const res = yield call(reqAnnouncementByCondition,payload)
-      if(res.code===0){
+    *fetchPublish({ payload }, { call, put }) {
+      const response = yield call(reqPublishAnnouncements);
+      if (response.code === 0) {
         yield put({
-          type:'save',
-          payload: response.data
-        })
+          type: 'save',
+          payload: response.data,
+        });
+      } else {
+        message.error('请求出错');
       }
-    }
-    ,
+    },
+    *fetchAllList({ payload }, { call, put }) {
+      const response = yield call(reqCollegeAllList);
+      if (response.code === 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+      } else {
+        message.error('请求出错');
+      }
+    },
+    *fetchCollege({ payload }, { call, put }) {
+      const response = yield call(reqCollegeList);
+      if (response.code === 0) {
+        yield put({
+          type: 'saveCollege',
+          payload: response.data,
+        });
+      } else {
+        message.error('请求出错');
+      }
+    },
+    *filter({ payload }, { call, put }) {
+      const res = yield call(reqAnnouncementByCondition, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+      }
+    },
     *getDetail({ payload }, { call, put }) {
       const res = yield call(reqAnnouncementDetail, payload);
       if (res.code === 0) {
@@ -56,60 +92,116 @@ const Model = {
       if (res.code === 0) {
         message.success('保存成功');
         yield put({
-          type:'fetch'
-        })
+          type: 'fetch',
+        });
       } else {
         message.error('保存失败');
       }
     },
     *publish({ payload }, { call, put }) {
+      const role = payload.role;
       let res = yield call(reqAnnouncementPublish, payload);
+      if (role == 4) {
+        if (res.code === 0) {
+          message.success('发布成功');
+          yield put({
+            type: 'fetchAllList',
+          });
+          let sleep = function(time) {
+            let startTime = new Date().getTime() + parseInt(time, 10);
+            while (new Date().getTime() < startTime) {}
+          };
+          sleep(10);
+          window.history.back();
+        } else {
+          message.error('发布失败');
+        }
+        return;
+      }
       if (res.code === 0) {
         message.success('发布成功');
         yield put({
-          type:'fetch'
-        })
+          type: 'fetch',
+        });
         let sleep = function(time) {
           let startTime = new Date().getTime() + parseInt(time, 10);
-          while(new Date().getTime() < startTime) {}
+          while (new Date().getTime() < startTime) {}
         };
-        sleep(2000);
+        sleep(10);
         window.history.back();
       } else {
         message.error('发布失败');
       }
     },
     *publishSaved({ payload }, { call, put }) {
+      const role = payload.role;
       let res = yield call(reqSavedAnnouncementPublish, payload);
+      if (role == 4) {
+        if (res.code === 0) {
+          message.success('发布成功');
+          yield put({
+            type: 'fetchAllList',
+          });
+          yield put({
+            type: 'getDetail',
+            payload: {
+              announcementId: payload.announcementId,
+            },
+          });
+          let sleep = function(time) {
+            let startTime = new Date().getTime() + parseInt(time, 10);
+            while (new Date().getTime() < startTime) {}
+          };
+
+          sleep(10);
+          window.history.back();
+        } else {
+          message.error('发布失败');
+        }
+        return;
+      }
       if (res.code === 0) {
         message.success('发布成功');
         yield put({
-          type:'fetch'
-        })
+          type: 'fetch',
+        });
         yield put({
-          type:'getDetail',
-          payload:{
-            announcementId:payload.announcementId
-          }
-        })
+          type: 'getDetail',
+          payload: {
+            announcementId: payload.announcementId,
+          },
+        });
         let sleep = function(time) {
           let startTime = new Date().getTime() + parseInt(time, 10);
-          while(new Date().getTime() < startTime) {}
+          while (new Date().getTime() < startTime) {}
         };
 
-        sleep(2000);
+        sleep(10);
         window.history.back();
       } else {
         message.error('发布失败');
       }
     },
     *delete({ payload }, { call, put }) {
+      const role = payload.role;
+      delete payload.role;
       let res = yield call(reqAnnouncementDelete, payload);
+      if (role == 4) {
+        if (res.code === 0) {
+          message.success('删除成功');
+          yield put({
+            type: 'fetchAllList',
+          });
+        } else {
+          message.error('删除失败');
+        }
+        return;
+      }
       if (res.code === 0) {
         message.success('删除成功');
         yield put({
-          type:'fetch'
-        })
+          type: 'fetch',
+        });
       } else {
         message.error('删除失败');
       }
@@ -119,14 +211,11 @@ const Model = {
       if (res.code === 0) {
         message.success('操作成功');
         yield put({
-          type:'fetch'
-        })
-        yield put({
-          type:'getDetail',
-          payload:{
-            announcementId:payload.announcementId
-          }
-        })
+          type: 'getDetail',
+          payload: {
+            announcementId: payload.announcementId,
+          },
+        });
       } else {
         message.error('操作失败');
       }
@@ -136,8 +225,8 @@ const Model = {
       if (res.code === 0) {
         message.success('操作成功');
         yield put({
-          type:'fetch'
-        })
+          type: 'fetch',
+        });
       } else {
         message.error('操作失败');
       }
@@ -153,9 +242,12 @@ const Model = {
     saveDetail(state, { payload }) {
       return { ...state, detail: payload };
     },
-    changeDetail(state,{payload}){
-      return {...state,detail:{...state.detail,...payload}}
-    }
+    changeDetail(state, { payload }) {
+      return { ...state, detail: { ...state.detail, ...payload } };
+    },
+    saveCollege(state, { payload }) {
+      return { ...state, collegeData: payload };
+    },
   },
 };
 export default Model;

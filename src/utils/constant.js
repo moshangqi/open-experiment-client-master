@@ -72,10 +72,10 @@ export const operationUnit = {
   '5': '二级单位',
   '6': '职能部门',
 };
-export const grade = [ 2017, 2018, 2019, 2020];
+export const grade = [2017, 2018, 2019, 2020];
 
 export const statusType = {
-  '-9': '职能部门结题审核退回修改',
+  '-9': '职能部门立项审核退回修改',
   '-8': '实验室审核通过，立项评审中',
   '-7': '职能部门结题审核退回修改',
   '-6': '学院结题审核退回修改',
@@ -138,7 +138,7 @@ export const majorCollege = [
       {
         mId: '020401OS',
         mName: '国际经济与贸易(国际学生)',
-      },      
+      },
       {
         mId: '1202',
         mName: '工商管理类',
@@ -146,11 +146,11 @@ export const majorCollege = [
       {
         mId: '110201s',
         mName: '工商管理(双学位)',
-      },      
+      },
       {
         mId: '120202CA',
         mName: '市场营销(中澳)',
-      }
+      },
     ],
   },
   {
@@ -284,7 +284,7 @@ export const majorCollege = [
       {
         mId: '080201CA',
         mName: '机械工程(中澳)',
-      }
+      },
     ],
   },
   {
@@ -410,7 +410,7 @@ export const majorCollege = [
       {
         mId: '050201s',
         mName: '英语(双学位)',
-      }
+      },
     ],
   },
   {
@@ -451,7 +451,7 @@ export const majorCollege = [
       {
         mId: '030101s',
         mName: '法学(双学位)',
-      }
+      },
     ],
   },
   {
@@ -682,7 +682,7 @@ export const majorCollege = [
         mId: '130301',
         mName: '表演',
       },
-    ],   
+    ],
   },
   {
     cId: '78',
@@ -704,7 +704,7 @@ export const majorCollege = [
         mId: '120401',
         mName: '公共事业管理',
       },
-    ], 
+    ],
   },
   {
     cId: '暂无',
@@ -718,14 +718,13 @@ export const majorCollege = [
   },
 ];
 export const major = majorCollege.reduce((cur, pre) => {
-  
   return cur.concat(pre.majors);
 }, []);
 
 // 新加入的学院专业 key-v 键值对 key代表学院id, v代表学院
 export const myMajor = majorCollege.reduce((cur, pre) => {
-  return {...cur, [pre.cId]: pre.majors}
-}, {}) 
+  return { ...cur, [pre.cId]: pre.majors };
+}, {});
 export const collegeTimeLimit = {
   '0': '申报时间限制',
   '1': '学生申请加入项目时间限制',
