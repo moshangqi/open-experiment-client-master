@@ -634,7 +634,7 @@ class TableList extends Component {
           style={{ marginRight: 15 }}
           onClick={this.handleExport}
         >
-          导出结题验收一览表
+          导出立项验收一览表
         </Button>
         {/* <Button >关闭/开启学院审核</Button> */}
       </div>

@@ -4,7 +4,8 @@ export async function reqEquipmentProjects(payload) {
   return request('/project/getPendingApprovalProjectByFunctionalDepartment');
 }
 export async function reqExportConclusionExcel() {
-  return request('/file/generateConclusionExcel', {
+  return request('/file/generateAllEstablishExcel', {
+    // /generateConclusionExcel 修改下载接口
     method: 'POST',
     responseType: 'blob',
   });

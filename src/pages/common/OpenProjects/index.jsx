@@ -66,7 +66,7 @@ class TableList extends Component {
     {
       title: '开放学院',
       dataIndex: 'subordinateCollege',
-      render: (college => majorCollege.find(item => item.cId == college) || {}).cName, //majorCollege[college-1].cName
+      render: college => (majorCollege.find(item => item.cId == college) || {}).cName, //majorCollege[college-1].cName
     },
     {
       title: '实验类型',
