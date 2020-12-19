@@ -200,7 +200,7 @@ class BasicForm extends Component {
             <Descriptions.Item label="项目级别">
               {detail.projectType === 1 ? '重点' : '普通'}
             </Descriptions.Item>
-            <Descriptions.Item label="建议审分组">
+            <Descriptions.Item label="建议评审分组">
               {suggestGroupType[detail.suggestGroupType]}
             </Descriptions.Item>
             {/* <Descriptions.Item label="适应专业">{JSON.parse(detail.limitMajor).map(item=>major[item-1].mName).join('、')}</Descriptions.Item> */}
@@ -376,7 +376,7 @@ class BasicForm extends Component {
                 />,
               )}
             </FormItem> */}
-            {/* <FormItem {...formItemLayout} label="建议审分组">
+            {/* <FormItem {...formItemLayout} label="建议评审分组">
               <div>
                 {getFieldDecorator('suggestGroupType', {
                   initialValue: '1',

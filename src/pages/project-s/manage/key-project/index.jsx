@@ -13,13 +13,13 @@ import {
   Table,
   Tooltip,
   Empty,
-  Tabs
+  Tabs,
 } from 'antd';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { connect } from 'dva';
-import Achievement from './components/achievement'
+import Achievement from './components/achievement';
 import styles from './style.less';
 
 const { Step } = Steps;
@@ -75,11 +75,11 @@ const mobileMenu = (
 //   </RouteContext.Consumer>
 // );
 const extra = (
-      <span>
-        <span>状态 : </span>
-        <Badge status='processing'></Badge>
-        <span >未提交</span>
-      </span>
+  <span>
+    <span>状态 : </span>
+    <Badge status="processing"></Badge>
+    <span>未提交</span>
+  </span>
 );
 const description = (
   <RouteContext.Consumer>
@@ -88,18 +88,15 @@ const description = (
         <Descriptions.Item label="创建人">XX老师</Descriptions.Item>
         <Descriptions.Item label="开放实验室">明理楼XX实验室</Descriptions.Item>
         <Descriptions.Item label="地点">石油大学XX教师</Descriptions.Item>
-        <Descriptions.Item label="实验类型">
-          科技活动
-        </Descriptions.Item>
+        <Descriptions.Item label="实验类型">科技活动</Descriptions.Item>
         <Descriptions.Item label="实验时间">2017-07-07 ~ 2017-08-08</Descriptions.Item>
         <Descriptions.Item label="项目级别">重点</Descriptions.Item>
-        <Descriptions.Item label="建议审分组">E组-软件与数学</Descriptions.Item>
+        <Descriptions.Item label="建议评审分组">E组-软件与数学</Descriptions.Item>
         <Descriptions.Item label="适应专业">软件工程、网络工程</Descriptions.Item>
         <Descriptions.Item label="适宜学生数">10</Descriptions.Item>
         <Descriptions.Item label="成果及考核方式">项目审查</Descriptions.Item>
         <Descriptions.Item label="计划实验小时">153</Descriptions.Item>
         <Descriptions.Item label="开放实验条件">无条件</Descriptions.Item>
-       
       </Descriptions>
     )}
   </RouteContext.Consumer>
@@ -251,11 +248,13 @@ class Advanced extends Component {
     const { operationKey, tabActiveKey } = this.state;
     const { profileAdvanced, loading } = this.props;
     const { advancedOperation1, advancedOperation2, advancedOperation3 } = profileAdvanced;
-    const extraTitle = <div>
-      <Button style={{marginRight:15}}>提交重点项目申请</Button>
-      <Button onClick={()=>this.props.history.goBack()}>返回</Button>
-    </div>
-    
+    const extraTitle = (
+      <div>
+        <Button style={{ marginRight: 15 }}>提交重点项目申请</Button>
+        <Button onClick={() => this.props.history.goBack()}>返回</Button>
+      </div>
+    );
+
     return (
       <PageHeaderWrapper
         title="XXX实验重点项目申请书"
@@ -265,198 +264,182 @@ class Advanced extends Component {
         extraContent={extra}
         tabActiveKey={tabActiveKey}
         onTabChange={this.onTabChange}
-        
       >
-        {tabActiveKey==='achievement'?<Achievement/>:<>
-        <TabPane key='detail'>
-        detail
-        </TabPane>
-        <TabPane key='rule'>
-        rule
-        </TabPane>
-        
-        <div className={styles.main}>
-          <GridContent>
-            <Card
-              title="审核进度"
-              style={{
-                marginBottom: 24,
-              }}
-            >
-              <RouteContext.Consumer>
-                {({ isMobile }) => (
-                  <Steps
-                    direction={isMobile ? 'vertical' : 'horizontal'}
-                    progressDot={customDot}
-                    current={1}
-                  >
-                     <Step title="提交重点申请" description={desc1} />
-                    <Step title="指导老师审核" description={desc1} />
-                    <Step title="实验室审核" description={desc2} />
-                    <Step title="二级单位审核" />
-                    <Step title="职能部门审核" />
-                  </Steps>
-                )}
-              </RouteContext.Consumer>
-            </Card>
-            <Card
-              title="项目主要内容"
-              style={{
-                marginBottom: 24,
-              }}
-            >
-              很长一段的主要内容。。。。。。。。。。。。。。。。。。。。。。。。。。。
-              
-            </Card>
-            <Card
-            title='项目成员简介'
-            style={{
-              marginBottom: 24,
-            }}
-            extra={<Button type="primary">修改</Button>}
-            >
-              <Descriptions title='项目组长:XXX'>
-                <Descriptions.Item label='简介'>项目组长简介</Descriptions.Item>
-              </Descriptions>
-              <Descriptions title='其他成员简介'>
-                <Descriptions.Item label='简介'>其他成员简介</Descriptions.Item>
-              </Descriptions>
+        {tabActiveKey === 'achievement' ? (
+          <Achievement />
+        ) : (
+          <>
+            <TabPane key="detail">detail</TabPane>
+            <TabPane key="rule">rule</TabPane>
 
-            </Card>
-            <Card
-              title="人员信息"
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}
-            >
-              
-             
-              {/* <h4
+            <div className={styles.main}>
+              <GridContent>
+                <Card
+                  title="审核进度"
+                  style={{
+                    marginBottom: 24,
+                  }}
+                >
+                  <RouteContext.Consumer>
+                    {({ isMobile }) => (
+                      <Steps
+                        direction={isMobile ? 'vertical' : 'horizontal'}
+                        progressDot={customDot}
+                        current={1}
+                      >
+                        <Step title="提交重点申请" description={desc1} />
+                        <Step title="指导老师审核" description={desc1} />
+                        <Step title="实验室审核" description={desc2} />
+                        <Step title="二级单位审核" />
+                        <Step title="职能部门审核" />
+                      </Steps>
+                    )}
+                  </RouteContext.Consumer>
+                </Card>
+                <Card
+                  title="项目主要内容"
+                  style={{
+                    marginBottom: 24,
+                  }}
+                >
+                  很长一段的主要内容。。。。。。。。。。。。。。。。。。。。。。。。。。。
+                </Card>
+                <Card
+                  title="项目成员简介"
+                  style={{
+                    marginBottom: 24,
+                  }}
+                  extra={<Button type="primary">修改</Button>}
+                >
+                  <Descriptions title="项目组长:XXX">
+                    <Descriptions.Item label="简介">项目组长简介</Descriptions.Item>
+                  </Descriptions>
+                  <Descriptions title="其他成员简介">
+                    <Descriptions.Item label="简介">其他成员简介</Descriptions.Item>
+                  </Descriptions>
+                </Card>
+                <Card
+                  title="人员信息"
+                  style={{
+                    marginBottom: 24,
+                  }}
+                  bordered={false}
+                >
+                  {/* <h4
                 style={{
                   marginBottom: 16,
                 }}
               >
                 信息组
               </h4> */}
-              <Card style={{marginBottom:20}} type="inner" title="指导老师" bordered={false}>
-                <Descriptions
-                  style={{
-                    marginBottom: 16,
-                  }}
-                
-                >
-                  <Descriptions.Item label="姓名">林东东</Descriptions.Item>
-                  <Descriptions.Item label="电话">1234567</Descriptions.Item>
-                  <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
-                  <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
-                  <Descriptions.Item label="描述">
-                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
-                  </Descriptions.Item>
-                </Descriptions>
-                <Divider
-                  style={{
-                    margin: '16px 0',
-                  }}
-                />
-                <Descriptions
-                  style={{
-                    marginBottom: 16,
-                  }}
-                
-                >
-                  <Descriptions.Item label="姓名">林东东</Descriptions.Item>
-                  <Descriptions.Item label="电话">1234567</Descriptions.Item>
-                  <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
-                  <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
-                  <Descriptions.Item label="描述">
-                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
-                  </Descriptions.Item>
-                </Descriptions>
-              </Card>
-              <Card type="inner" title="学生/助教" bordered={false}>
-                <Descriptions
-                  style={{
-                    marginBottom: 16,
-                  }}
-                
-                >
-                  <Descriptions.Item label="姓名">林东东</Descriptions.Item>
-                  <Descriptions.Item label="电话">1234567</Descriptions.Item>
-                  <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
-                  <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
-                  <Descriptions.Item label="描述">
-                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
-                  </Descriptions.Item>
-                </Descriptions>
-                <Divider
-                  style={{
-                    margin: '16px 0',
-                  }}
-                />
-                <Descriptions
-                  style={{
-                    marginBottom: 16,
-                  }}
-                
-                >
-                  <Descriptions.Item label="姓名">林东东</Descriptions.Item>
-                  <Descriptions.Item label="电话">1234567</Descriptions.Item>
-                  <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
-                  <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
-                  <Descriptions.Item label="描述">
-                    这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
-                  </Descriptions.Item>
-                </Descriptions>
-              </Card>
-            </Card>
-           
-              <Card
+                  <Card style={{ marginBottom: 20 }} type="inner" title="指导老师" bordered={false}>
+                    <Descriptions
+                      style={{
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Descriptions.Item label="姓名">林东东</Descriptions.Item>
+                      <Descriptions.Item label="电话">1234567</Descriptions.Item>
+                      <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
+                      <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
+                      <Descriptions.Item label="描述">
+                        这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+                      </Descriptions.Item>
+                    </Descriptions>
+                    <Divider
+                      style={{
+                        margin: '16px 0',
+                      }}
+                    />
+                    <Descriptions
+                      style={{
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Descriptions.Item label="姓名">林东东</Descriptions.Item>
+                      <Descriptions.Item label="电话">1234567</Descriptions.Item>
+                      <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
+                      <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
+                      <Descriptions.Item label="描述">
+                        这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Card>
+                  <Card type="inner" title="学生/助教" bordered={false}>
+                    <Descriptions
+                      style={{
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Descriptions.Item label="姓名">林东东</Descriptions.Item>
+                      <Descriptions.Item label="电话">1234567</Descriptions.Item>
+                      <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
+                      <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
+                      <Descriptions.Item label="描述">
+                        这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+                      </Descriptions.Item>
+                    </Descriptions>
+                    <Divider
+                      style={{
+                        margin: '16px 0',
+                      }}
+                    />
+                    <Descriptions
+                      style={{
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Descriptions.Item label="姓名">林东东</Descriptions.Item>
+                      <Descriptions.Item label="电话">1234567</Descriptions.Item>
+                      <Descriptions.Item label="email">XX@Xx.com</Descriptions.Item>
+                      <Descriptions.Item label="所属学院">计算机科学学院</Descriptions.Item>
+                      <Descriptions.Item label="描述">
+                        这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Card>
+                </Card>
 
-              title="实验室审核意见"
-              
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}
-              >
-              1111111111
-              </Card>
-              <Card
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}
-              title="二级单位审核意见"
-              >
-              222222222222222
-              </Card>
-              <Card         
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}  
-              title="职能部门审核意见"
-              >
-              <Empty/>
-              </Card>
-   
-            <Card
-              className={styles.tabsCard}
-              bordered={false}
-              title='操作历史'
-            >
-              <Table
-                pagination={false}
-                loading={loading}
-                dataSource={advancedOperation1}
-                columns={columns}
-              />
-            </Card>
-          </GridContent>
-        </div>
-        </>
-        }
+                <Card
+                  title="实验室审核意见"
+                  style={{
+                    marginBottom: 24,
+                  }}
+                  bordered={false}
+                >
+                  1111111111
+                </Card>
+                <Card
+                  style={{
+                    marginBottom: 24,
+                  }}
+                  bordered={false}
+                  title="二级单位审核意见"
+                >
+                  222222222222222
+                </Card>
+                <Card
+                  style={{
+                    marginBottom: 24,
+                  }}
+                  bordered={false}
+                  title="职能部门审核意见"
+                >
+                  <Empty />
+                </Card>
+
+                <Card className={styles.tabsCard} bordered={false} title="操作历史">
+                  <Table
+                    pagination={false}
+                    loading={loading}
+                    dataSource={advancedOperation1}
+                    columns={columns}
+                  />
+                </Card>
+              </GridContent>
+            </div>
+          </>
+        )}
       </PageHeaderWrapper>
     );
   }

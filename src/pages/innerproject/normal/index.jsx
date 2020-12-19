@@ -71,7 +71,7 @@ class InnerProject extends Component {
         delete payload.names;
         delete payload.keys;
         delete payload.time;
-       // console.log(payload);
+        // console.log(payload);
         if (form.getFieldValue('isOpenTopic') === '1') delete payload.stuCodes;
 
         dispatch({
@@ -387,7 +387,7 @@ class InnerProject extends Component {
                 )}
               </div>
             </FormItem>
-            <FormItem {...formItemLayout} label={<Label>建议审分组</Label>}>
+            <FormItem {...formItemLayout} label={<Label>建议评审分组</Label>}>
               <div>
                 {getFieldDecorator(
                   'suggestGroupType',
@@ -461,11 +461,11 @@ class InnerProject extends Component {
                     message: '请输入适宜学生数',
                   },
                   {
-                    pattern: /[3-6]/,
-                    message: '限选人数3~6人',
+                    pattern: /^[3-6]*$/,
+                    message: '限选人数3~6人,输入必须为3-6区间的数字,不能为区间',
                   },
                 ],
-              })(<Input placeholder="请输入适宜学生数" />)}
+              })(<Input placeholder="请输入适宜学生数(输入为数字:如5,不能为区间)" />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label={<Label>预申请金额</Label>}>

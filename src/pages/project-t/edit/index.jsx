@@ -9,16 +9,21 @@ import {
   Radio,
   Select,
   Tooltip,
-  TreeSelect
-
+  TreeSelect,
 } from 'antd';
 import React, { Component } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import moment from 'moment'
-import {majorCollege,grade,suggestGroupType,experimentType, funds,major} from '@/utils/constant'
+import moment from 'moment';
+import {
+  majorCollege,
+  grade,
+  suggestGroupType,
+  experimentType,
+  funds,
+  major,
+} from '@/utils/constant';
 import styles from './style.less';
-
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -28,37 +33,45 @@ const { TreeNode } = TreeSelect;
 let id = 0;
 
 class BasicForm extends Component {
-  state={}
+  state = {};
   handleSubmit = e => {
-    const { dispatch, form ,detail} = this.props;
+    const { dispatch, form, detail } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let limitCollege = values.limitCollege?(values.limitCollege.indexOf(null)>=0?null:JSON.stringify(values.limitCollege)):null
-        let limitMajor = values.limitMajor?(values.limitMajor.indexOf(null)>=0?null:JSON.stringify(values.limitMajor)):null
-        console.log(values)
+        let limitCollege = values.limitCollege
+          ? values.limitCollege.indexOf(null) >= 0
+            ? null
+            : JSON.stringify(values.limitCollege)
+          : null;
+        let limitMajor = values.limitMajor
+          ? values.limitMajor.indexOf(null) >= 0
+            ? null
+            : JSON.stringify(values.limitMajor)
+          : null;
+        console.log(values);
         let payload = {
           ...values,
           limitCollege,
-          limitGrade:values.limitGrade&&values.limitGrade[0]?JSON.stringify(values.limitGrade):null,
+          limitGrade:
+            values.limitGrade && values.limitGrade[0] ? JSON.stringify(values.limitGrade) : null,
           limitMajor,
           //startTime:values.time[0].format('YYYY-MM-DD'),
-         // endTime:values.time[1].format('YYYY-MM-DD'),
+          // endTime:values.time[1].format('YYYY-MM-DD'),
           //teacherCodes:['31'],
-          projectGroupId:detail.id
-        }
-        delete payload.names
-        delete payload.keys
-        delete payload.time
-        if(form.getFieldValue('isOpenTopic') === '1')
-          delete payload.stuCodes
+          projectGroupId: detail.id,
+        };
+        delete payload.names;
+        delete payload.keys;
+        delete payload.time;
+        if (form.getFieldValue('isOpenTopic') === '1') delete payload.stuCodes;
 
-         dispatch({
+        dispatch({
           type: 'editApplyForm/submitUpdateForm',
           payload,
         });
-        form.resetFields()
-        console.log(payload)
+        form.resetFields();
+        console.log(payload);
       }
     });
   };
@@ -92,25 +105,24 @@ class BasicForm extends Component {
       keys: nextKeys,
     });
   };
-  renderTreeNode = (majorCollege)=>{
-    let nodes = majorCollege.map(item=>{
-      return <TreeNode value={item.cId+'c'} title={item.cName} key={item.cId+'c'} selectable={false}>
-        {
-          item.majors.map(element=>{
-            return <TreeNode value={element.mId} key={element.mId} title={element.mName}>
-            </TreeNode>
-          })
-        }
-      </TreeNode>
-   
-    })
-    let notLimitNode = <TreeNode value={null} title='不限专业' key='all'>
-    </TreeNode>
-    nodes.unshift(notLimitNode)
-    return nodes
-  }
+  renderTreeNode = majorCollege => {
+    let nodes = majorCollege.map(item => {
+      return (
+        <TreeNode value={item.cId + 'c'} title={item.cName} key={item.cId + 'c'} selectable={false}>
+          {item.majors.map(element => {
+            return (
+              <TreeNode value={element.mId} key={element.mId} title={element.mName}></TreeNode>
+            );
+          })}
+        </TreeNode>
+      );
+    });
+    let notLimitNode = <TreeNode value={null} title="不限专业" key="all"></TreeNode>;
+    nodes.unshift(notLimitNode);
+    return nodes;
+  };
   render() {
-    const { submitting,detail } = this.props;
+    const { submitting, detail } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -166,22 +178,17 @@ class BasicForm extends Component {
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
     const formItems = keys.map((k, index) => (
-      <Form.Item
-        
-        label={index === 0 ? '学生学号' : ''}
-        required={false}
-        key={k}
-      >
+      <Form.Item label={index === 0 ? '学生学号' : ''} required={false} key={k}>
         {getFieldDecorator(`names[${k}]`, {
           validateTrigger: ['onChange', 'onBlur'],
           rules: [
             {
               required: true,
               whitespace: true,
-              message: "请输入添加成员的学号或者删除该项",
+              message: '请输入添加成员的学号或者删除该项',
             },
           ],
-        })(<Input placeholder="请输入学生学号" style={{width:'80%',marginRight:8}} />)}
+        })(<Input placeholder="请输入学生学号" style={{ width: '80%', marginRight: 8 }} />)}
         {keys.length > 1 ? (
           <Icon
             className={styles.dynamicDeleteButton}
@@ -191,10 +198,16 @@ class BasicForm extends Component {
         ) : null}
       </Form.Item>
     ));
-    const Label = ({children})=><span><span style={{color:'red'}}>*</span>{children}</span>
+    const Label = ({ children }) => (
+      <span>
+        <span style={{ color: 'red' }}>*</span>
+        {children}
+      </span>
+    );
     return (
-      <PageHeaderWrapper content="此表单为立项申请表，由指导老师填写"
-        extra={<Button onClick={()=>this.props.history.goBack()}>返回</Button>}      
+      <PageHeaderWrapper
+        content="此表单为立项申请表，由指导老师填写"
+        extra={<Button onClick={() => this.props.history.goBack()}>返回</Button>}
       >
         <Card bordered={false}>
           <Form
@@ -203,9 +216,7 @@ class BasicForm extends Component {
             style={{
               marginTop: 8,
             }}
-            
           >
-            
             <FormItem {...formItemLayout} label={<Label>项目名称</Label>}>
               {getFieldDecorator('projectName', {
                 rules: [
@@ -214,7 +225,7 @@ class BasicForm extends Component {
                     message: '请输入项目名称',
                   },
                 ],
-                initialValue:detail.projectName
+                initialValue: detail.projectName,
               })(<Input placeholder="项目名称" />)}
             </FormItem>
             {/* <FormItem {...formItemLayout} label="起止日期">
@@ -243,7 +254,7 @@ class BasicForm extends Component {
                     message: '请输入实验室名称',
                   },
                 ],
-                initialValue:detail.labName
+                initialValue: detail.labName,
               })(<Input placeholder="请输入实验室名称" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>地点</Label>}>
@@ -254,7 +265,7 @@ class BasicForm extends Component {
                     message: '请输入项目地点',
                   },
                 ],
-                initialValue:detail.address
+                initialValue: detail.address,
               })(<Input placeholder="请输入项目地点" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>开放实验条件</Label>}>
@@ -265,7 +276,7 @@ class BasicForm extends Component {
                     message: '请输入开放实验条件',
                   },
                 ],
-                initialValue:detail.experimentCondition
+                initialValue: detail.experimentCondition,
               })(
                 <TextArea
                   style={{
@@ -279,83 +290,102 @@ class BasicForm extends Component {
             <FormItem {...formItemLayout} label={<Label>实验类型</Label>}>
               <div>
                 {getFieldDecorator('experimentType', {
-                  initialValue:detail.experimentType+''
+                  initialValue: detail.experimentType + '',
                 })(
                   <Radio.Group>
-                     {Object.keys(experimentType).map(item=>{
-                      return <Radio key={item} value={item}>{experimentType[item]}</Radio>
+                    {Object.keys(experimentType).map(item => {
+                      return (
+                        <Radio key={item} value={item}>
+                          {experimentType[item]}
+                        </Radio>
+                      );
                     })}
                   </Radio.Group>,
                 )}
-                
               </div>
             </FormItem>
-            <FormItem {...formItemLayout} label={<Label>建议审分组</Label>}>
+            <FormItem {...formItemLayout} label={<Label>建议评审分组</Label>}>
               <div>
                 {getFieldDecorator('suggestGroupType', {
-                  initialValue:detail.suggestGroupType+''
+                  initialValue: detail.suggestGroupType + '',
                 })(
                   <Radio.Group>
-                    {['1','2','3','6','4','5'].map(item=>{
-                      return <Radio value={item} key={item}>
-                        {suggestGroupType[item]}
-                      </Radio>
+                    {['1', '2', '3', '6', '4', '5'].map(item => {
+                      return (
+                        <Radio value={item} key={item}>
+                          {suggestGroupType[item]}
+                        </Radio>
+                      );
                     })}
                   </Radio.Group>,
                 )}
-                
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>项目级别</Label>}>
               <div>
                 {getFieldDecorator('projectType', {
-                  initialValue:detail.projectType+''
+                  initialValue: detail.projectType + '',
                 })(
                   <Radio.Group>
                     <Radio value="1">普通</Radio>
                     <Radio value="2">重点</Radio>
                   </Radio.Group>,
                 )}
-                
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label="限选专业">
               {getFieldDecorator('limitMajor', {
-                initialValue:detail.limitMajor?JSON.parse(detail.limitMajor):undefined
-              })(<TreeSelect                     
-                placeholder="请选择适应专业 (选填)"
-                allowClear
-                multiple={true}
-                onChange={this.onChange}
-              >             
-               {this.renderTreeNode(majorCollege)}
-              </TreeSelect>)}
+                initialValue: detail.limitMajor ? JSON.parse(detail.limitMajor) : undefined,
+              })(
+                <TreeSelect
+                  placeholder="请选择适应专业 (选填)"
+                  allowClear
+                  multiple={true}
+                  onChange={this.onChange}
+                >
+                  {this.renderTreeNode(majorCollege)}
+                </TreeSelect>,
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label="限选年级">
               {getFieldDecorator('limitGrade', {
-    
-                initialValue:detail.limitGrade?JSON.parse(detail.limitGrade):undefined
-              })(<Select
-                mode="multiple"
-                placeholder="请选择限选年级 (选填)"
-              >
-                 {[<Option key='all' value={null}>不限年级</Option>,...grade.map(item=>{
-                  return <Option key={item} value={item}>{item}级</Option>
-                })]}
-              </Select>)}
+                initialValue: detail.limitGrade ? JSON.parse(detail.limitGrade) : undefined,
+              })(
+                <Select mode="multiple" placeholder="请选择限选年级 (选填)">
+                  {[
+                    <Option key="all" value={null}>
+                      不限年级
+                    </Option>,
+                    ...grade.map(item => {
+                      return (
+                        <Option key={item} value={item}>
+                          {item}级
+                        </Option>
+                      );
+                    }),
+                  ]}
+                </Select>,
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label="限选学院">
               {getFieldDecorator('limitCollege', {
-            
-                initialValue:detail.limitCollege?JSON.parse(detail.limitCollege):undefined
-              })(<Select
-                mode="multiple"
-                placeholder="请选择适应学院 (选填)"
-              >
-                {[<Option key='all' value={null}>不限学院</Option>,...majorCollege.map(item=>{
-                  return <Option value={item.cId} key={item.cId}>{item.cName}</Option>
-                })]}
-              </Select>)}
+                initialValue: detail.limitCollege ? JSON.parse(detail.limitCollege) : undefined,
+              })(
+                <Select mode="multiple" placeholder="请选择适应学院 (选填)">
+                  {[
+                    <Option key="all" value={null}>
+                      不限学院
+                    </Option>,
+                    ...majorCollege.map(item => {
+                      return (
+                        <Option value={item.cId} key={item.cId}>
+                          {item.cName}
+                        </Option>
+                      );
+                    }),
+                  ]}
+                </Select>,
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>限选人数</Label>}>
               {getFieldDecorator('fitPeopleNum', {
@@ -364,9 +394,13 @@ class BasicForm extends Component {
                     required: true,
                     message: '请输入适宜学生数',
                   },
+                  {
+                    pattern: /^[3-6]*$/,
+                    message: '限选人数3~6人,输入必须为3-6区间的数字,不能为区间',
+                  },
                 ],
-                initialValue:detail.fitPeopleNum
-              })(<Input placeholder="请输入适宜学生数" />)}
+                initialValue: detail.fitPeopleNum,
+              })(<Input placeholder="请输入适宜学生数(输入为数字:如5,不能为区间)" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>预申请金额</Label>}>
               {getFieldDecorator('applyFunds', {
@@ -376,14 +410,18 @@ class BasicForm extends Component {
                     message: '请选择预申请金额',
                   },
                 ],
-                initialValue:detail.applyFunds
-              })(<Select
-                placeholder="请选择预申请金额"
-              >
-                {funds.map(item=>{
-                  return <Option key={item} value={item}>{item}元</Option>
-                })}
-              </Select>)}
+                initialValue: detail.applyFunds,
+              })(
+                <Select placeholder="请选择预申请金额">
+                  {funds.map(item => {
+                    return (
+                      <Option key={item} value={item}>
+                        {item}元
+                      </Option>
+                    );
+                  })}
+                </Select>,
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>计划实验时间/h</Label>}>
               {getFieldDecorator('totalHours', {
@@ -393,7 +431,7 @@ class BasicForm extends Component {
                     message: '请输入计划实验时间',
                   },
                 ],
-                initialValue:detail.totalHours
+                initialValue: detail.totalHours,
               })(<Input placeholder="请输入计划实验时间" />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<Label>成果及考核方式</Label>}>
@@ -404,7 +442,7 @@ class BasicForm extends Component {
                     message: '请输入成果形式及考核方式',
                   },
                 ],
-                initialValue:detail.achievementCheck
+                initialValue: detail.achievementCheck,
               })(
                 <TextArea
                   style={{
@@ -423,7 +461,7 @@ class BasicForm extends Component {
                     message: '请输入项目主要内容',
                   },
                 ],
-                initialValue:detail.mainContent
+                initialValue: detail.mainContent,
               })(
                 <TextArea
                   style={{
@@ -434,11 +472,11 @@ class BasicForm extends Component {
                 />,
               )}
             </FormItem>
-  
+
             <FormItem {...formItemLayout} label={<Label>是否开放选题</Label>}>
               <div>
                 {getFieldDecorator('isOpenTopic', {
-                  initialValue:detail.isOpenTopic+''
+                  initialValue: detail.isOpenTopic + '',
                 })(
                   <Radio.Group>
                     <Radio value="1">公开</Radio>
@@ -446,8 +484,7 @@ class BasicForm extends Component {
                     <Radio value="3">部分公开</Radio>
                   </Radio.Group>,
                 )}
-                
-                
+
                 {/* <FormItem 
                   style={{
                     margin: '8px 0',
@@ -487,8 +524,8 @@ class BasicForm extends Component {
 }
 
 export default Form.create()(
-  connect(({ loading,detail }) => ({
+  connect(({ loading, detail }) => ({
     submitting: loading.effects['formBasicForm/submitRegularForm'],
-    detail: detail.baseInfo
+    detail: detail.baseInfo,
   }))(BasicForm),
 );

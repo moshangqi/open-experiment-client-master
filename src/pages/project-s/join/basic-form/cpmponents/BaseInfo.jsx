@@ -24,7 +24,7 @@ export default ({ detail }) => {
       <Descriptions.Item label="项目级别">
         {detail.projectType === 1 ? '普通' : '重点'}
       </Descriptions.Item>
-      <Descriptions.Item label="建议审分组">
+      <Descriptions.Item label="建议评审分组">
         {suggestGroupType[detail.suggestGroupType]}
       </Descriptions.Item>
       <Descriptions.Item label="适应专业">
@@ -41,7 +41,7 @@ export default ({ detail }) => {
           ? '不限学院'
           : JSON.parse(detail.limitCollege)
               .map(item => {
-                return (majorCollege.find(citem => citem.cId == item) || {} ).cName; // majorCollege[item - 1].cName;
+                return (majorCollege.find(citem => citem.cId == item) || {}).cName; // majorCollege[item - 1].cName;
               })
               .join('、')}
       </Descriptions.Item>

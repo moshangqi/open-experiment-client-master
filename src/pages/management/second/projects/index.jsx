@@ -74,13 +74,15 @@ class TableList extends Component {
     {
       title: '指导老师',
       dataIndex: 'guidanceTeachers',
-      render: t =>
-        t
+      render: t => {
+        console.log(t);
+        return t
           ? t
               .filter(item => item.memberRole === 1)
               .map(item => item.userName)
               .join('、')
-          : '',
+          : '';
+      },
     },
     {
       title: '评审得分',
@@ -199,13 +201,14 @@ class TableList extends Component {
     {
       title: '指导老师',
       dataIndex: 'guidanceTeachers',
-      render: t =>
-        t
+      render: t => {
+        return t
           ? t
-              .filter(item => item.memberRole === 1)
+              // .filter(item => item.memberRole === 1)
               .map(item => item.userName)
               .join('、')
-          : '',
+          : '';
+      },
     },
     // {
     //   title: '学院',

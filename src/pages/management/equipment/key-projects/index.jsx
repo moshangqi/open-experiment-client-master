@@ -310,7 +310,7 @@ class TableList extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="建议审分组">
+            <FormItem label="建议评审分组">
               {getFieldDecorator('suggestGroupType')(
                 <Select
                   placeholder="请选择"
@@ -436,7 +436,7 @@ class TableList extends Component {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="建议审分组">
+            <FormItem label="建议评审分组">
               {getFieldDecorator('suggestGroupType')(
                 <Select
                   placeholder="请选择"

@@ -1,7 +1,14 @@
 import React from 'react';
 import { RouteContext } from '@ant-design/pro-layout';
 import { Descriptions } from 'antd';
-import { experimentType, suggestGroupType, majorCollege, major, openType, myMajor } from '@/utils/constant';
+import {
+  experimentType,
+  suggestGroupType,
+  majorCollege,
+  major,
+  openType,
+  myMajor,
+} from '@/utils/constant';
 import moment from 'moment';
 import { isEmpty } from '@/utils/utils';
 
@@ -26,7 +33,7 @@ export default ({ detail }) => {
       <Descriptions.Item label="项目级别">
         {detail.projectType === 1 ? '普通' : '重点'}
       </Descriptions.Item>
-      <Descriptions.Item label="建议审分组">
+      <Descriptions.Item label="建议评审分组">
         {suggestGroupType[detail.suggestGroupType]}
       </Descriptions.Item>
       <Descriptions.Item label="适应专业">
@@ -43,7 +50,7 @@ export default ({ detail }) => {
           ? '不限学院'
           : JSON.parse(detail.limitCollege)
               .map(item => {
-                return (majorCollege.find(cItem=>cItem.cId ==item) || {} ).cName; //修改完成
+                return (majorCollege.find(cItem => cItem.cId == item) || {}).cName; //修改完成
               })
               .join('、')}
       </Descriptions.Item>

@@ -712,12 +712,17 @@ export const majorCollege = [
   },
   {
     cId: '61',
-    cName: '网信中心',
+    cName: '网络与信息化中心',
     majors: [],
   },
   {
     cId: '62',
     cName: '工程训练中心',
+    majors: [],
+  },
+  {
+    cId: '71',
+    cName: '海洋天然气水合物研究院',
     majors: [],
   },
   {
@@ -1026,7 +1031,7 @@ export const applyModel = `
         </p>
       </td>
       <td>
-        <p><span><%=students[i].sex||''%></span>
+        <p><span><%=students[i].sex === '1' ? '男':'女'%></span>
         </p>
       </td>
       <td>
@@ -1111,7 +1116,7 @@ export const applyModel = `
         </p>
       </td>
       <td>
-        <p><span><%=teachers[i].sex||''%></span>
+        <p><span><%=teachers[i].sex === '1' ? '男':'女'%></span>
         </p>
       </td>
       <td>
