@@ -1,10 +1,9 @@
 import request from '@/utils/request';
 
-
 export async function reqOwnProjects(params) {
   return request('/project/getOwnProjects', {
     method: 'GET',
-    data: { ...params},
+    data: { ...params },
   });
 }
 export async function reqProjectProcess(params) {
@@ -22,66 +21,68 @@ export async function reqKeyProjectProcess(params) {
 export async function reqProjectDetail(params) {
   return request('/project/getConclusionInfo', {
     method: 'get',
-    params
+    params,
   });
 }
 export async function reqUploadApplyFile(params) {
   return request('/file/reloadApplyDoc', {
     method: 'post',
-    data:params
+    data: params,
   });
 }
 
 export async function reqUploadOverFile(params) {
   return request('/file/uploadConcludingReport', {
     method: 'post',
-    data:params
+    data: params,
   });
 }
 
 export async function reqUploadZipFile(params) {
   return request('/file/uploadAchievementAnnex', {
     method: 'post',
-    data:params
+    data: params,
   });
 }
 
 export async function reqUploadEquipmentFile(params) {
   return request('/file/uploadExperimentReport', {
     method: 'post',
-    data:params
+    data: params,
   });
 }
-
-
 
 export async function reqUploadAttFile(params) {
   return request('/file/uploadAttachmentFile', {
     method: 'post',
-    data:params
+    data: params,
   });
 }
 
 export async function deleteFile(data) {
   return request('/file/deleteFile', {
     method: 'post',
-    data:data
+    data: data,
   });
 }
 
 export async function deleteOutCome(data) {
   return request('/project/deleteIconicResult', {
     method: 'post',
-    data:data
+    data: data,
   });
 }
 
 export async function reqNewOut(params) {
   return request('/project/insertIconicResult', {
     method: 'post',
-    data:params
+    data: params,
   });
 }
 
-
-
+export async function reqTeacherThing(params) {
+  return request('/user/getInfoByUserId', {
+    method: 'get',
+    params: params,
+  });
+}

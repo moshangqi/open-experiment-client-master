@@ -328,7 +328,7 @@ export const majorCollege = [
         mName: '化学工程与工艺(卓越班)',
       },
       {
-        mId: '2082502FH2',
+        mId: '082502FH',
         mName: '环境工程(复合型)',
       },
       {
@@ -822,7 +822,7 @@ export const applyModel = `
 	<div class='WordSection1' style='layout-grid:15.6pt;margin-bottom:250px'>
     <p class='MsoNormal'><span lang='EN-US' style='font-size:14.0pt;mso-bidi-font-size:  12.0pt;'><span
             style='mso-spacerun:yes'>  </span></span><span
-            style='font-size:14.0pt;mso-bidi-font-size:12.0pt;  '>编号：<span lang='EN-US'><span
+            style='font-size:14.0pt;mso-bidi-font-size:12.0pt;  '>编号：<%=serialNumber%><span lang='EN-US'><span
             style='mso-spacerun:yes'>  </span></span></span>
     </p>
     <p class='MsoNormal'><span lang='EN-US'></span></p>
@@ -843,8 +843,8 @@ export const applyModel = `
             lang='EN-US' style='font-size:14.0pt;line-height:150%;'> <%=projectName%></span>
     </p>
     <p class='MsoNormal' style='text-indent:5em;margin-left:42.0pt;line-height:  150%'><span
-            style='font-size:14.0pt;line-height:150%;mso-ascii-font-family:  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>项目类型：</span><span
-            lang='EN-US' style='font-size:14.0pt;line-height:150%;'> <%=projectType%></span></p>
+            style='font-size:14.0pt;line-height:150%;mso-ascii-font-family:  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>项目类型： </span>
+            <span lang='EN-US' style='font-size:14.0pt;line-height:150%;'> <%= projectType %> </span></p>
     <p class='MsoNormal' style='text-indent:5em;margin-left:42.0pt;line-height:  150%'><span
             style='font-size:14.0pt;line-height:150%;mso-ascii-font-family:  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>项目成员：</span><span
             lang='EN-US' style='font-size:14.0pt;line-height:150%;'> <%=students.map(item=>item.realName).join('、')%> </span></p>
@@ -856,7 +856,7 @@ export const applyModel = `
             lang='EN-US' style='font-size:14.0pt;line-height:150%;'> <%=teachers.map(item=>item.realName).join('、')%></span></p>
     <p class='MsoNormal' style='text-indent:5em;margin-left:42.0pt;line-height:  150%'><span
             style='font-size:14.0pt;line-height:150%;mso-ascii-font-family:  "Times New Roman";mso-hansi-font-family:"Times New Roman"'>推荐单位：</span><span
-            lang='EN-US' style='font-size:14.0pt;line-height:150%;'><%=belongCollege%><td></td></span>
+            lang='EN-US' style='font-size:14.0pt;line-height:150%;'><%=belongCollege%></span>
     </p>
     <p class='MsoNormal'><span lang='EN-US' style='font-size:14.0pt;mso-bidi-font-size:  12.0pt'></span>
     </p>
@@ -1031,7 +1031,7 @@ export const applyModel = `
         </p>
       </td>
       <td>
-        <p><span><%=students[i].sex === '1' ? '男':'女'%></span>
+        <p><span><%=students[i].sex === '1' ? '女':'男'%></span>
         </p>
       </td>
       <td>
@@ -1116,11 +1116,11 @@ export const applyModel = `
         </p>
       </td>
       <td>
-        <p><span><%=teachers[i].sex === '1' ? '男':'女'%></span>
+        <p><span><%=teachers[i].sex === '1' ? '女':'男'%></span>
         </p>
       </td>
       <td>
-        <p><span><%=teachers[i].technicalRole||''%></span>
+        <p><span><%=teachers[i].professional||''%></span>
         </p>
       </td>
       <td>
@@ -1128,7 +1128,7 @@ export const applyModel = `
         </p>
       </td>
       <td>
-        <p><span></span>
+        <p><span><%=teachers[i].collegeName||''%></span>
         </p>
       </td>
       <td>
@@ -1146,7 +1146,7 @@ export const applyModel = `
         <p><span>申请经费<span>(</span>元<span>)</span></span></p>
       </td>
       <td colspan="6">
-        <p><span>2500</span>
+        <p><span><%=applyFunds%></span>
         </p>
       </td>
     </tr>

@@ -11,6 +11,7 @@ import {
   reqUploadOverFile,
   reqUploadAttFile,
   reqUploadEquipmentFile,
+  reqTeacherThing,
 } from '../services/detail';
 import { message } from 'antd';
 import router from 'umi/router';
@@ -131,6 +132,7 @@ const Model = {
     reportToAgree: false, //实验室查看详情，是否上报来审批通过
     budget: undefined, //重点项目经费预算
     membersInfo: undefined, //重点项目成员简介
+    teachersList: [],
   },
   effects: {
     /**
@@ -234,7 +236,7 @@ const Model = {
     *fetchDetail({ payload }, { call, put }) {
       const { projectType, role, reportToAgree } = payload;
       const res = yield call(reqProjectDetail, { id: payload.projectGroupId });
-      console.log(res);
+      console.log('a', res);
       localStorage.setItem('payload-d', JSON.stringify(payload));
       if (res.code === 0) {
         yield put({
@@ -363,13 +365,37 @@ const Model = {
         });
         message.error(`请求项目详情出错:${res.msg}`);
       }
+      if (res.code === 0) {
+        const list = res.data.list.filter(item => item.memberRole === 1);
+        const response = yield Promise.all(
+          list.map(item => {
+            return reqTeacherThing({ userId: item.code });
+          }),
+        ).then(res => {
+          const teacher = res.map((item, index) => {
+            return {
+              ...item.data,
+              code: list[index].code,
+            };
+          });
+          return teacher;
+        });
+        console.log(response, 'rm,');
+        yield put({
+          type: 'saveTeacher',
+          payload: {
+            response,
+          },
+        });
+      }
     },
 
     //从写获取详情，解决刷新bug
     *fetchNewDetail({ payload }, { call, put }) {
       const { projectType, role, reportToAgree } = payload;
       const res = yield call(reqProjectDetail, { id: payload.projectGroupId });
-      // console.log(res);
+      // alert('a')
+      console.log('aaaaaaaaaaaa', res);
       if (res.code === 0) {
         yield put({
           type: 'saveDetail',
@@ -491,6 +517,30 @@ const Model = {
           payload: {},
         });
         message.error(`请求项目详情出错:${res.msg}`);
+      }
+
+      if (res.code === 0) {
+        const list = res.data.list.filter(item => item.memberRole === 1);
+        const response = yield Promise.all(
+          list.map(item => {
+            return reqTeacherThing({ userId: item.code });
+          }),
+        ).then(res => {
+          const teacher = res.map((item, index) => {
+            return {
+              ...item.data,
+              code: list[index].code,
+            };
+          });
+          return teacher;
+        });
+        console.log(response, 'rm,');
+        yield put({
+          type: 'saveTeacher',
+          payload: {
+            response,
+          },
+        });
       }
     },
 
@@ -879,6 +929,9 @@ const Model = {
     },
     saveReportToAgree(state, { payload }) {
       return { ...state, reportToAgree: payload };
+    },
+    saveTeacher(state, { payload }) {
+      return { ...state, teachersList: payload.response };
     },
   },
 };

@@ -129,8 +129,8 @@ class CollegeApproval extends Component {
             width="450px"
           >
             <Form {...formLayout}>
-              <Form.Item label="用户ID">
-                {getFieldDecorator('userId')(<Input placeholder="请输入用户id"></Input>)}
+              <Form.Item label="工号">
+                {getFieldDecorator('userId')(<Input placeholder="请输入用户工号"></Input>)}
               </Form.Item>
               <Form.Item label="角色">
                 {getFieldDecorator('roleId')(

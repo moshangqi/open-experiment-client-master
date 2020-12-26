@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { Card, Button, Upload, Icon, Modal, Form, Input, message, Spin } from 'antd';
 import { connect } from 'dva';
 import { saveAs } from 'file-saver';
-import { applyModel, major as MAJOR, grade as GRADE, majorCollege, myMajor } from '@/utils/constant';
+import {
+  applyModel,
+  major as MAJOR,
+  grade as GRADE,
+  majorCollege,
+  myMajor,
+} from '@/utils/constant';
 import baidu from 'baidu-template-pro';
 import { head } from 'lodash';
 
@@ -14,6 +20,7 @@ const FormItem = Form.Item;
   loading: loading.models.detail,
   budget: detail.budget,
   membersInfo: detail.membersInfo,
+  teacherList: detail.teachersList,
 }))
 class Preview extends Component {
   constructor(props) {
@@ -88,26 +95,48 @@ class Preview extends Component {
     //   ],
     // };
     const { isPreview } = this.state;
-    const { detail, fileList, loading, budget = {}, membersInfo = {} } = this.props;
+    const { detail, fileList, loading, budget = {}, membersInfo = {}, teacherList } = this.props;
     const students = detail.list.filter(item => item.memberRole !== 1);
     const teachers = detail.list.filter(item => item.memberRole === 1);
-    
+    teachers.map(item => {
+      teacherList.map(list => {
+        console.log(list.code === item.code, list.code, list, item.code);
+        if (list.code === item.code) {
+          item.professional = list.professional;
+          item.collegeName = list.collegeName;
+          // item = {...item, ...list}
+          // console.log(item)
+        }
+      });
+    });
+
+    console.log(teachers);
+
     // const major = [...new Set(students.map(item => (MAJOR[ item.major - 1] || {}) .mName))].join('、');
-    const  major = [...new Set(students.map(item => ( (myMajor[item.institute] || []).find( mItem => mItem.mId === item.major) || {}).mName ))].join('、')
+    const major = [
+      ...new Set(
+        students.map(
+          item =>
+            ((myMajor[item.institute] || []).find(mItem => mItem.mId === item.major) || {}).mName,
+        ),
+      ),
+    ].join('、');
     const grade = [...new Set(students.map(item => item.grade + '级'))].join('、');
 
-
-    console.log(major,students)
+    console.log(major, students, teacherList);
     const data = {
       projectName: detail.projectName,
       projectType: detail.projectType === 1 ? '普通' : '重点',
       applyFunds: detail.applyFunds,
+      serialNumber: detail.serialNumber,
       major,
       grade,
       MAJOR,
       GRADE,
-      students: students.map(item =>  ({...item ,
-        majorName: ( (myMajor[item.institute] || []).find( mItem => mItem.mId === item.major) || {}).mName 
+      students: students.map(item => ({
+        ...item,
+        majorName: ((myMajor[item.institute] || []).find(mItem => mItem.mId === item.major) || {})
+          .mName,
       })),
       teachers,
       belongCollege: detail.subordinateCollege
@@ -116,7 +145,7 @@ class Preview extends Component {
       membersInfo: membersInfo || {},
       budget: budget || {},
     };
-    console.log(data)
+    console.log(data);
     let html = baidu.template(applyModel, data);
     var blob = new Blob([html], { type: 'application/msword' });
     //saveAs(blob,'重点项目申请书.doc')
@@ -140,7 +169,7 @@ class Preview extends Component {
           message.warning('请先填写成员简介');
           return false;
         }
-        console.log(headFile,file)
+        console.log(headFile, file);
         dispatch({
           type: 'detail/uploadApplyFile',
           payload: {

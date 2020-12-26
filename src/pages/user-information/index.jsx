@@ -138,6 +138,19 @@ class BasicForm extends Component {
                 initialValue: currentUser.realName,
               })(<Input placeholder="姓名" disabled />)}
             </FormItem>
+            {currentUser.userType === 2 && (
+              <FormItem {...formItemLayout} label={<Label>所属单位</Label>}>
+                {getFieldDecorator('realCollege', {
+                  rules: [
+                    // {
+                    //   required: true,
+                    //   message: '请输入所属单位',
+                    // },
+                  ],
+                  initialValue: currentUser.collegeName,
+                })(<Input placeholder="所属单位" disabled />)}
+              </FormItem>
+            )}
             <FormItem {...formItemLayout} label={<Label>性别</Label>}>
               {getFieldDecorator('sex', {
                 rules: [
@@ -149,8 +162,8 @@ class BasicForm extends Component {
                 initialValue: currentUser.sex,
               })(
                 <Radio.Group>
-                  <Radio value="1">男</Radio>
-                  <Radio value="2">女</Radio>
+                  <Radio value="1">女</Radio>
+                  <Radio value="2">男</Radio>
                 </Radio.Group>,
               )}
             </FormItem>

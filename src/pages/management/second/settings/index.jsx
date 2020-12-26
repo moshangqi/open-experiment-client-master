@@ -53,14 +53,14 @@ class Settings extends Component {
       title: '开始时间',
       dataIndex: 'startTime',
       render: time => {
-        return moment(time).format('YYYY-MM-DD');
+        return moment(time).format('YYYY-MM-DD HH:mm:ss');
       },
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       render: time => {
-        return moment(time).format('YYYY-MM-DD');
+        return moment(time).format('YYYY-MM-DD HH:mm:ss');
       },
     },
     {
@@ -177,7 +177,7 @@ class Settings extends Component {
             onCancel={this.hideModal}
             title={isUpdate ? '修改时间限制' : '添加时间限制'}
             visible={mVisible}
-            width="450px"
+            width="600px"
           >
             <Form {...formLayout}>
               {isUpdate ? (
@@ -217,7 +217,7 @@ class Settings extends Component {
                   initialValue: isUpdate
                     ? [moment(limit.startTime), moment(limit.endTime)]
                     : undefined,
-                })(<RangePicker />)}
+                })(<RangePicker showTime />)}
               </Form.Item>
             </Form>
           </Modal>

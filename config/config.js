@@ -118,6 +118,7 @@ const proxyKeys = [
   '/homePage/getHomePageNewsList',
   '/homePage/getHomePageAnnouncementList',
   '/homePage/getPublishedAchievementShowList',
+  '/user/getInfoByUserId',
   // '/announcement/getList'
 ];
 const proxyOptions = {

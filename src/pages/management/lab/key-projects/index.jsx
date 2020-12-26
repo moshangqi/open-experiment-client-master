@@ -25,7 +25,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import StandardTable from './components/StandardTable';
 import UpdateForm from './components/UpdateForm';
 import { experimentType } from '@/utils/constant';
-import { projectType } from '@/utils/constant';
+import { projectType, statusType } from '@/utils/constant';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -40,7 +40,25 @@ const getValue = obj =>
 
 const statusMap = ['default', 'processing', 'success', 'error'];
 const status = ['待审核', '待上报', '已上报', '已驳回'];
-
+const keyStatus = {
+  '-9': '职能部门立项审核退回修改',
+  '-8': '实验室审核通过，立项评审中',
+  '-7': '职能部门结题审核退回修改',
+  '-6': '学院结题审核退回修改',
+  '-5': '中期打回修改',
+  '-4': '重点申请',
+  '-3': '项目已被终止',
+  '-2': '驳回修改',
+  '-1': '待指导老师确认',
+  '0': '指导老师确认',
+  '1': '拟题审核通过', //'实验室待上报',
+  '2': '实验室已上报',
+  '3': '二级单位待上报',
+  '4': '二级单位已上报',
+  '5': '职能部门审核通过，立项',
+  '6': '学院结题提交',
+  '7': '项目结题',
+};
 /* eslint react/no-multi-comp:0 */
 @connect(({ lab, loading, labKeyProjects }) => ({
   labProjects: labKeyProjects.labProjects,
@@ -135,6 +153,100 @@ class TableList extends Component {
       ),
     },
   ];
+
+  allColumns = [
+    {
+      title: '项目名称',
+      dataIndex: 'projectName',
+    },
+    {
+      title: '指导老师',
+      dataIndex: 'guidanceTeachers',
+      render: t => {
+        return t ? t.map(item => item.userName).join('、') : '';
+      },
+    },
+    {
+      title: '实验室',
+      dataIndex: 'labName',
+    },
+    {
+      title: '项目级别',
+      dataIndex: 'projectType',
+      render: type => (type === 1 ? '普通' : '重点'),
+      filters: [
+        {
+          text: '普通',
+          value: 1,
+        },
+        {
+          text: '重点',
+          value: 2,
+        },
+      ],
+      onFilter: (value, record) => record.projectType === value,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render: (text, record) => {
+        // console.log(text,record)
+        //key -1 待确认
+        //key 0 指导老师确认
+        // status 0 申报
+        console.log(record.keyStatus, record.status);
+        return (
+          <span>
+            {record.keyStatus !== null
+              ? keyStatus[record.keyStatus]
+              : record.status
+              ? statusType[record.status]
+              : ''}
+          </span>
+        );
+      },
+    },
+    {
+      title: '实验类型',
+      dataIndex: 'experimentType',
+      render: type => experimentType[type],
+      filters: Object.keys(experimentType).map(item => {
+        return {
+          text: experimentType[item],
+          value: item,
+        };
+      }),
+      onFilter: (value, record) => record.experimentType == value,
+    },
+    {
+      title: '已选人数',
+      dataIndex: 'numberOfTheSelected',
+    },
+
+    {
+      title: '计划实验时间',
+      render: project => (
+        <span>
+          {moment(project.startTime).format('YYYY-MM-DD') +
+            '~' +
+            moment(project.endTime).format('YYYY-MM-DD')}
+        </span>
+      ),
+    },
+    {
+      title: '操作',
+      dataIndex: 'id',
+      render: id => (
+        <Fragment>
+          {/* <a onClick={() => this.editWarning()}>编辑</a>
+          
+          <Divider type="vertical" /> */}
+          <a onClick={() => this.handleDetailClick(id)}>查看详情</a>
+        </Fragment>
+      ),
+    },
+  ];
+
   handleDetailClick = id => {
     const { dispatch } = this.props;
     dispatch({
@@ -440,10 +552,10 @@ class TableList extends Component {
             key: '0',
             tab: '待审批',
           },
-          // {
-          //   key: '1',
-          //   tab: '待上报',
-          // },
+          {
+            key: '1',
+            tab: '查看所有',
+          },
           {
             key: '3',
             tab: '已通过',
@@ -511,9 +623,11 @@ class TableList extends Component {
                   修改审批意见
                 </Button>
               </span>} */}
-                <Button disabled={btnDisable} onClick={() => this.showApprovalModal(0)}>
-                  驳回
-                </Button>
+                {tabActiveKey !== '1' && (
+                  <Button disabled={btnDisable} onClick={() => this.showApprovalModal(0)}>
+                    驳回
+                  </Button>
+                )}
                 {tabActiveKey === '0' && (
                   <Button
                     type="primary"
@@ -535,7 +649,7 @@ class TableList extends Component {
               selectedRows={selectedRows}
               loading={loading}
               dataSource={projects}
-              columns={this.columns}
+              columns={tabActiveKey === '1' ? this.allColumns : this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               pagination={{ pageSize: 12 }}

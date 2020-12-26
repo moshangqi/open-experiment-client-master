@@ -15,7 +15,7 @@ class Member extends Component {
       title: '性别',
       dataIndex: 'sex',
       render(sex) {
-        return sex === '1' ? '男' : '女';
+        return sex === '1' ? '女' : '男';
       },
     },
     {
